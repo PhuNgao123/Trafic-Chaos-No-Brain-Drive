@@ -68,8 +68,8 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\FenceData.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\LightSourceObject.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
-    <Compile Include="Assets\Scripts\VehicleSpawner.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\AnInspector.cs" />
+    <Compile Include="Assets\Scripts\VehicleSpawner.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\IgnoreInInspectorAttribute.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\ArrayArrangement.cs" />
     <Compile Include="Assets\Scripts\GroundSpawner.cs" />
