@@ -2,27 +2,21 @@
 
 public class CameraFunctions : MonoBehaviour
 {
+    [Header("=== TARGET ===")]
     public Transform target;
+
+    [Header("=== OFFSET ===")]
+    public Vector3 offset = new Vector3(0, 5, -10);
+
+    [Header("=== SMOOTHNESS ===")]
     public float followSpeed = 5f;
-
-    private float fixedY;
-    private float fixedZ;
-
-    void Start()
-    {
-        fixedY = transform.position.y;
-        fixedZ = transform.position.z;
-    }
 
     void LateUpdate()
     {
         if (target == null) return;
 
-        Vector3 pos = transform.position;
-        pos.x = Mathf.Lerp(pos.x, target.position.x, followSpeed * Time.deltaTime);
-        pos.y = fixedY;
-        pos.z = fixedZ;
-
-        transform.position = pos;
+        Vector3 targetPos = target.position + offset;
+        transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
+        transform.LookAt(target);
     }
 }
