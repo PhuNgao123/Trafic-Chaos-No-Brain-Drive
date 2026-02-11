@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Road
   - Vehicle
+  - Barrier
   layers:
   - Default
   - TransparentFX

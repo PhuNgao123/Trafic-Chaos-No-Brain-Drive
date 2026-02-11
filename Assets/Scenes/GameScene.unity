@@ -269,9 +269,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 856bd6ac779ccb14a846133ce22ffe73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFunctions
-  target: {fileID: 1984345905}
+  target: {fileID: 1226427297}
   offset: {x: 0, y: 5, z: -10}
-  followSpeed: 5
+  followSpeed: 10
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,15 +454,15 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1796257001}
     m_Modifications:
     - target: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.24
       objectReference: {fileID: 0}
     - target: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       propertyPath: m_LocalPosition.z
@@ -474,15 +474,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -498,6 +498,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2490279088512872922, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       propertyPath: m_Name
+      value: CarPhysic
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490279088512872922, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4196004970586252768, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
@@ -536,10 +540,7 @@ PrefabInstance:
     - {fileID: 934823701629149968, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
     m_RemovedGameObjects:
     - {fileID: 657252026470191731, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1226427297}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2490279088512872922, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       insertIndex: -1
@@ -549,7 +550,7 @@ PrefabInstance:
       addedObject: {fileID: 1984345907}
     - targetCorrespondingSourceObject: {fileID: 2490279088512872922, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1984345906}
+      addedObject: {fileID: 1984345909}
   m_SourcePrefab: {fileID: 100100000, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
 --- !u!4 &1226427297 stripped
 Transform:
@@ -562,7 +563,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1984345905}
+    m_TransformParent: {fileID: 1796257001}
     m_Modifications:
     - target: {fileID: 1807256897596988560, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
       propertyPath: m_LocalPosition.x
@@ -582,15 +583,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1807256897596988560, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1807256897596988560, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1807256897596988560, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1807256897596988560, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -611,8 +612,65 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7769690492283750692, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1499976469}
   m_SourcePrefab: {fileID: 100100000, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
+--- !u!1 &1499976466 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7769690492283750692, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
+  m_PrefabInstance: {fileID: 1420786649}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1499976469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499976466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34afcb39266fa4f47b68e2e725df1340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerVisual
+  physicsTarget: {fileID: 1984345905}
+  positionSmooth: 50
+  rotationSmooth: 50
+  driftAngle: 10
+--- !u!1 &1796256999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1796257001}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1796257001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796256999}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1984345905}
+  - {fileID: 1226427297}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1818000425
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -624,6 +682,10 @@ PrefabInstance:
     - target: {fileID: 471791136462141662, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
       propertyPath: m_Name
       value: Road1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 471791136462141662, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2189963455899361524, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -665,8 +727,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 6702427407753297122, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
+      propertyPath: EndPoint
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6702427407753297122, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
+      propertyPath: StartPoint
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6702427407753297122, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 6416141431750619606, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
+    - {fileID: 5410765025159627302, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
+    - {fileID: 7873088904945416504, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
+    - {fileID: 7368567877427665742, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
@@ -701,17 +776,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoadSpawner
   road1Prefab: {fileID: 471791136462141662, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
   road2Prefab: {fileID: 4439314474837478132, guid: dd2aad3928e01164e964764ca702c849, type: 3}
-  roadCrossPrefab: {fileID: 6554867643883600274, guid: 92090365f5ce48b4cbf974502806ff29, type: 3}
+  specialRoadPrefabs:
+  - {fileID: 6554867643883600274, guid: 92090365f5ce48b4cbf974502806ff29, type: 3}
   segmentLength: 15
+  overlapOffset: -0.5
   visibleSegments: 20
   deleteDistance: -30
-  curveFrequency: 0.02
-  curveAmplitude: 4
+  curveFrequency: 0.015
+  curveAmplitude: 2
   elevationFrequency: 0.015
   elevationAmplitude: 2
   baseHeight: 0
-  minNormalBeforeCross: 10
-  maxNormalBeforeCross: 20
+  minNormalBeforeSpecial: 10
+  maxNormalBeforeSpecial: 20
 --- !u!4 &1853180303
 Transform:
   m_ObjectHideFlags: 0
@@ -721,7 +798,7 @@ Transform:
   m_GameObject: {fileID: 1853180300}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 7.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -737,27 +814,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2253552307844183626, guid: f8b76e11eb48ed64f874ae8ec0e367df, type: 3}
   m_PrefabInstance: {fileID: 1151055353}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1984345906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1984345901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  roadSpawner: {fileID: 1853180302}
-  currentSpeed: 20
-  minSpeed: 20
-  maxSpeed: 50
-  acceleration: 10
-  deceleration: 5
-  steerSpeed: 10
-  maxSteerOffset: 3
-  driftAngle: 20
 --- !u!65 &1984345907
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -777,8 +833,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9962015, y: 1.6895368, z: 3.7815046}
-  m_Center: {x: -0.0035948753, y: 0.84870994, z: 0.1075837}
+  m_Size: {x: 1.9962015, y: 1.5943848, z: 3.7815046}
+  m_Center: {x: -0.0035948753, y: 0.80113393, z: 0.10758376}
 --- !u!54 &1984345908
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -806,6 +862,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1984345909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984345901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fe65cd02c5651346bc5d76d750d6bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPhysics
+  roadSpawner: {fileID: 1853180302}
+  roadMover: {fileID: 2079384911}
+  currentSpeed: 20
+  minSpeed: 20
+  maxSpeed: 50
+  acceleration: 10
+  deceleration: 5
+  steerForce: 2000
+  fixedZ: 0
+  zNormalizeSpeed: 5
 --- !u!1 &2079384908
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,6 +893,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2079384910}
+  - component: {fileID: 2079384911}
   m_Layer: 0
   m_Name: RoadContainer
   m_TagString: Untagged
@@ -838,6 +917,19 @@ Transform:
   - {fileID: 1853180303}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2079384911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079384908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dfb0fec953f402478eff23ab9a7ed27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoadMover
+  playerPhysics: {fileID: 1984345909}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -847,4 +939,4 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 2079384910}
   - {fileID: 1818000425}
-  - {fileID: 1151055353}
+  - {fileID: 1796257001}

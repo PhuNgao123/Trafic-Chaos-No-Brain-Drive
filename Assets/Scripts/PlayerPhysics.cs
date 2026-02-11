@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerPhysics : MonoBehaviour
 {
     [Header("=== REFERENCES ===")]
     public RoadSpawner roadSpawner;
@@ -14,15 +14,12 @@ public class PlayerController : MonoBehaviour
     public float deceleration = 5f;
 
     [Header("=== STEERING ===")]
-    public float steerSpeed = 5f;
-    public float driftAngle = 20f;
+    public float steerForce = 500f;
 
     [Header("=== POSITION ===")]
     public float fixedZ = 0f;
-    public float heightOffset = 0.5f; // Offset Y để xe sát đường
+    public float zNormalizeSpeed = 5f; 
 
-    private float laneOffset = 0f;
-    private float currentDrift = 0f;
     private Rigidbody rb;
 
     void Start()
@@ -39,12 +36,13 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleSpeed();
-        HandleSteering();
     }
 
     void FixedUpdate()
     {
-        UpdatePosition();
+        HandleSteering();
+        NormalizeZ();
+        NormalizeWithRoad();
     }
 
     void HandleSpeed()
@@ -58,17 +56,35 @@ public class PlayerController : MonoBehaviour
 
     void HandleSteering()
     {
-        float h = Input.GetAxis("Horizontal");
-        laneOffset += h * steerSpeed * Time.deltaTime;
+        if (rb == null) return;
 
-        currentDrift = Mathf.Lerp(currentDrift, -h * driftAngle, 8f * Time.deltaTime);
+        float h = Input.GetAxis("Horizontal");
+        
+        // Thêm lực trái/phải - physics tự xử lý
+        Vector3 steerDirection = transform.right * h;
+        rb.AddForce(steerDirection * steerForce * Time.fixedDeltaTime, ForceMode.Force);
     }
 
-    void UpdatePosition()
+    void NormalizeZ()
+    {
+        if (rb == null) return;
+
+        // Nếu Z lệch khỏi fixedZ, kéo dần về
+        float currentZ = rb.position.z;
+        float zDiff = fixedZ - currentZ;
+
+        if (Mathf.Abs(zDiff) > 0.01f)
+        {
+            // Thêm lực kéo về fixedZ
+            Vector3 normalizeForce = Vector3.forward * zDiff * zNormalizeSpeed;
+            rb.AddForce(normalizeForce, ForceMode.Force);
+        }
+    }
+
+    void NormalizeWithRoad()
     {
         if (roadSpawner == null || rb == null) return;
 
-        // Tính vị trí curve tương ứng với xe
         float curveZ = fixedZ;
         
         if (roadMover != null)
@@ -76,29 +92,12 @@ public class PlayerController : MonoBehaviour
             curveZ = fixedZ - roadMover.transform.position.z;
         }
 
-        // Lấy vị trí trung tâm đường tại curveZ
-        Vector3 centerPos = roadSpawner.GetPositionAtZ(curveZ);
+        // Lấy hướng đường để normalize rotation
         Vector3 direction = roadSpawner.GetDirectionAtZ(curveZ);
-
-        // Tính vector vuông góc (trái/phải)
-        Vector3 right = Vector3.Cross(direction, Vector3.up).normalized;
-
-        // Vị trí xe = offset trái/phải từ trung tâm + height offset
-        Vector3 targetPos = new Vector3(
-            centerPos.x + right.x * laneOffset,
-            centerPos.y + heightOffset,
-            fixedZ
-        );
-
-        // Dùng MovePosition thay vì transform.position để giữ physics
-        rb.MovePosition(targetPos);
-
-        // Rotation: hướng theo đường + drift
         Quaternion roadRotation = Quaternion.LookRotation(direction, Vector3.up);
-        Quaternion driftRotation = Quaternion.Euler(0, 0, currentDrift);
         
-        // Dùng MoveRotation thay vì transform.rotation
-        rb.MoveRotation(roadRotation * driftRotation);
+        // Chỉ normalize rotation, không động vào position
+        rb.MoveRotation(roadRotation);
     }
 
     public float GetCurrentSpeed()
