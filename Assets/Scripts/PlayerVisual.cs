@@ -10,7 +10,7 @@ public class PlayerVisual : MonoBehaviour
     public float rotationSmooth = 20f; // Tăng để rotation nhanh hơn
 
     [Header("=== DRIFT EFFECT ===")]
-    public float driftAngle = 20f;
+    public float driftAngle = 15f; // Góc nghiêng Z khi drift
 
     private float currentDrift = 0f;
 

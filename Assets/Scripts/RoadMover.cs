@@ -6,6 +6,7 @@ public class RoadMover : MonoBehaviour
     public PlayerPhysics playerPhysics;
 
     private float currentZ = 0f;
+    public float speed = 10f;
 
     void Start()
     {
@@ -18,9 +19,9 @@ public class RoadMover : MonoBehaviour
         if (playerPhysics == null) return;
 
         // Di chuyển RoadContainer ngược lại với tốc độ xe
-        float speed = playerPhysics.GetCurrentSpeed();
+        speed = playerPhysics.GetCurrentSpeed();
         currentZ -= speed * Time.deltaTime;
 
-        transform.position = new Vector3(0, 0, currentZ);
+        transform.Translate(Vector3.back * speed * Time.deltaTime);
     }
 }
