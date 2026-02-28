@@ -5,22 +5,22 @@ public class RoadMover : MonoBehaviour
     [Header("=== REFERENCES ===")]
     public PlayerPhysics playerPhysics;
 
-    private float currentZ = 0f;
+    private float _currentZ = 0f;
     public float speed = 10f;
 
     void Start()
     {
         if (playerPhysics == null)
-            playerPhysics = FindObjectOfType<PlayerPhysics>();
+            playerPhysics = FindFirstObjectByType<PlayerPhysics>();
     }
 
     void Update()
     {
         if (playerPhysics == null) return;
 
-        // Di chuyển RoadContainer ngược lại với tốc độ xe
+        // Move road container backward based on player speed
         speed = playerPhysics.GetCurrentSpeed();
-        currentZ -= speed * Time.deltaTime;
+        _currentZ -= speed * Time.deltaTime;
 
         transform.Translate(Vector3.back * speed * Time.deltaTime);
     }

@@ -4,7 +4,7 @@ public class CameraFunctions : MonoBehaviour
 {
     [Header("=== TARGET ===")]
     public Transform target;
-    public PlayerPhysics playerPhysics; // Để lấy speed
+    public PlayerPhysics playerPhysics; // To get player speed
 
     [Header("=== OFFSET ===")]
     public Vector3 offset = new Vector3(0, 5, -10);
@@ -21,31 +21,31 @@ public class CameraFunctions : MonoBehaviour
     public float fovSmoothSpeed = 3f;
 
     [Header("=== SHAKE REDUCTION ===")]
-    public float shakeReduction = 0.95f; // 0-1, càng cao càng mượt
+    public float shakeReduction = 0.95f; // 0-1, higher = smoother
 
-    private Vector3 velocity = Vector3.zero;
-    private Vector3 lastTargetPos;
-    private float currentFOV;
+    private Vector3 _velocity = Vector3.zero;
+    private Vector3 _lastTargetPos;
+    private float _currentFOV;
 
     void Start()
     {
         if (cam == null)
             cam = GetComponent<Camera>();
 
-        // Tự động tìm PlayerPhysics nếu chưa set
+        // Auto-find PlayerPhysics if not set
         if (playerPhysics == null)
-            playerPhysics = FindObjectOfType<PlayerPhysics>();
+            playerPhysics = FindFirstObjectByType<PlayerPhysics>();
 
-        // Nếu target chưa set, dùng PlayerPhysics làm target
+        // Use PlayerPhysics as target if not set
         if (target == null && playerPhysics != null)
             target = playerPhysics.transform;
 
         if (target != null)
-            lastTargetPos = target.position;
+            _lastTargetPos = target.position;
 
-        currentFOV = baseFOV;
+        _currentFOV = baseFOV;
         if (cam != null)
-            cam.fieldOfView = currentFOV;
+            cam.fieldOfView = _currentFOV;
     }
 
     void LateUpdate()
@@ -61,30 +61,30 @@ public class CameraFunctions : MonoBehaviour
     {
         if (cam == null || playerPhysics == null) return;
 
-        // Tính FOV dựa trên tốc độ
+        // Calculate FOV based on speed
         float speed = playerPhysics.GetCurrentSpeed();
         float maxSpeed = playerPhysics.maxSpeed;
         float speedRatio = Mathf.Clamp01(speed / maxSpeed);
 
         float targetFOV = Mathf.Lerp(baseFOV, maxFOV, speedRatio);
-        currentFOV = Mathf.Lerp(currentFOV, targetFOV, fovSmoothSpeed * Time.deltaTime);
+        _currentFOV = Mathf.Lerp(_currentFOV, targetFOV, fovSmoothSpeed * Time.deltaTime);
 
-        cam.fieldOfView = currentFOV;
+        cam.fieldOfView = _currentFOV;
     }
 
     void UpdatePosition()
     {
-        // Tính vận tốc của target để giảm shake
-        Vector3 targetVelocity = (target.position - lastTargetPos) / Time.deltaTime;
-        lastTargetPos = target.position;
+        // Calculate target velocity to reduce shake
+        Vector3 targetVelocity = (target.position - _lastTargetPos) / Time.deltaTime;
+        _lastTargetPos = target.position;
 
-        // Smooth velocity để giảm rung
-        velocity = Vector3.Lerp(velocity, targetVelocity, shakeReduction);
+        // Smooth velocity to reduce shake
+        _velocity = Vector3.Lerp(_velocity, targetVelocity, shakeReduction);
 
-        // Vị trí mục tiêu với offset
+        // Target position with offset
         Vector3 targetPos = target.position + target.TransformDirection(offset);
 
-        // Smooth follow với SmoothDamp để mượt hơn
+        // Smooth follow for smoother camera movement
         transform.position = Vector3.Lerp(
             transform.position,
             targetPos,
@@ -94,7 +94,7 @@ public class CameraFunctions : MonoBehaviour
 
     void UpdateRotation()
     {
-        // Luôn nhìn về target
+        // Always look at target
         Vector3 lookDirection = target.position - transform.position;
         
         if (lookDirection != Vector3.zero)

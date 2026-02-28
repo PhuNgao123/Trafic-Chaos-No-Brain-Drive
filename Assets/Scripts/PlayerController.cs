@@ -15,25 +15,23 @@ public class PlayerController : MonoBehaviour
 
     [Header("=== STEERING ===")]
     public float steerSpeed = 5f;
-    public float driftAngle = 20f;
 
     [Header("=== POSITION ===")]
     public float fixedZ = 0f;
-    public float heightOffset = 0.5f; // Offset Y để xe sát đường
+    public float heightOffset = 0.5f; // Y offset to keep player close to road
 
-    private float laneOffset = 0f;
-    private float currentDrift = 0f;
-    private Rigidbody rb;
+    private float _laneOffset = 0f;
+    private Rigidbody _rb;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody>();
         
         if (roadSpawner == null)
-            roadSpawner = FindObjectOfType<RoadSpawner>();
+            roadSpawner = FindFirstObjectByType<RoadSpawner>();
         
         if (roadMover == null)
-            roadMover = FindObjectOfType<RoadMover>();
+            roadMover = FindFirstObjectByType<RoadMover>();
     }
 
     void Update()
@@ -59,16 +57,14 @@ public class PlayerController : MonoBehaviour
     void HandleSteering()
     {
         float h = Input.GetAxis("Horizontal");
-        laneOffset += h * steerSpeed * Time.deltaTime;
-
-        currentDrift = Mathf.Lerp(currentDrift, -h * driftAngle, 8f * Time.deltaTime);
+        _laneOffset += h * steerSpeed * Time.deltaTime;
     }
 
     void UpdatePosition()
     {
-        if (roadSpawner == null || rb == null) return;
+        if (roadSpawner == null || _rb == null) return;
 
-        // Tính vị trí curve tương ứng với xe
+        // Calculate curve position relative to player
         float curveZ = fixedZ;
         
         if (roadMover != null)
@@ -76,29 +72,21 @@ public class PlayerController : MonoBehaviour
             curveZ = fixedZ - roadMover.transform.position.z;
         }
 
-        // Lấy vị trí trung tâm đường tại curveZ
-        Vector3 centerPos = roadSpawner.GetPositionAtZ(curveZ);
-        Vector3 direction = roadSpawner.GetDirectionAtZ(curveZ);
+        // Get elevation (Y) at this position - no X curve
+        float roadY = roadSpawner.GetElevationAtZ(curveZ);
 
-        // Tính vector vuông góc (trái/phải)
-        Vector3 right = Vector3.Cross(direction, Vector3.up).normalized;
-
-        // Vị trí xe = offset trái/phải từ trung tâm + height offset
+        // Player position = X from steering + Y from road elevation + fixed Z
         Vector3 targetPos = new Vector3(
-            centerPos.x + right.x * laneOffset,
-            centerPos.y + heightOffset,
+            _laneOffset,  // Simple X steering, no curve following
+            roadY + heightOffset,
             fixedZ
         );
 
-        // Dùng MovePosition thay vì transform.position để giữ physics
-        rb.MovePosition(targetPos);
+        // Use MovePosition to maintain physics
+        _rb.MovePosition(targetPos);
 
-        // Rotation: hướng theo đường + drift
-        Quaternion roadRotation = Quaternion.LookRotation(direction, Vector3.up);
-        Quaternion driftRotation = Quaternion.Euler(0, 0, currentDrift);
-        
-        // Dùng MoveRotation thay vì transform.rotation
-        rb.MoveRotation(roadRotation * driftRotation);
+        // No rotation - straight roads, player always faces forward (Z+)
+        _rb.MoveRotation(Quaternion.identity);
     }
 
     public float GetCurrentSpeed()
