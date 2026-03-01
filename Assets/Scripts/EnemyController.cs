@@ -10,6 +10,9 @@ public class EnemyController : MonoBehaviour
     public PlayerPhysics playerPhysics;
     public List<VehicleSpawner> spawners = new List<VehicleSpawner>();
 
+    [Header("Vehicle Prefabs")]
+    public List<GameObject> vehiclePrefabs = new List<GameObject>();
+
     [Header("Spawn Settings")]
     public float baseMinInterval = 2f;
     public float baseMaxInterval = 4f;
@@ -53,6 +56,7 @@ public class EnemyController : MonoBehaviour
 
             spawner.playerPhysics = playerPhysics;
             spawner.enemyController = this;
+            spawner.vehiclePrefabs = vehiclePrefabs;
             spawner.baseMinInterval = baseMinInterval;
             spawner.baseMaxInterval = baseMaxInterval;
             spawner.spawnCheckDistance = spawnCheckDistance;

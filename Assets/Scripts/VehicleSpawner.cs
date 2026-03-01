@@ -1,18 +1,19 @@
 ﻿﻿using UnityEngine;
+using System.Collections.Generic;
 
 // Spawns enemy vehicles at calculated intervals
-// Only needs to define prefab and direction - all other settings injected by EnemyController
+// Only needs to define direction - all other settings injected by EnemyController
 public class VehicleSpawner : MonoBehaviour
 {
     [Header("References")]
     [HideInInspector] public PlayerPhysics playerPhysics;
     [HideInInspector] public EnemyController enemyController;
 
-    [Header("Prefab & Direction")]
-    public GameObject vehiclePrefab;
+    [Header("Direction")]
     public int direction = 1; // 1 = opposite direction, -1 = same direction
 
     [Header("Settings (Injected by EnemyController)")]
+    [HideInInspector] public List<GameObject> vehiclePrefabs;
     [HideInInspector] public float baseMinInterval;
     [HideInInspector] public float baseMaxInterval;
     [HideInInspector] public float spawnCheckDistance;
@@ -92,10 +93,20 @@ public class VehicleSpawner : MonoBehaviour
     }
 
     // Spawns vehicle with calculated speed and proper rotation
+    // Randomly selects prefab from controller's list
     // Speed = base + player speed + direction multiplier + randomness
     void Spawn()
     {
-        GameObject vehicle = Instantiate(vehiclePrefab, transform.position, Quaternion.identity, transform);
+        // Check if prefabs list is valid
+        if (vehiclePrefabs == null || vehiclePrefabs.Count == 0)
+            return;
+
+        // Randomly select a prefab
+        GameObject prefab = vehiclePrefabs[Random.Range(0, vehiclePrefabs.Count)];
+        if (prefab == null)
+            return;
+
+        GameObject vehicle = Instantiate(prefab, transform.position, Quaternion.identity, transform);
 
         // Calculate vehicle speed
         float vehicleSpeed = baseSpeed;

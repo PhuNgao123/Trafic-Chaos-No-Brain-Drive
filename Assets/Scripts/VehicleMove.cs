@@ -47,15 +47,19 @@ public class VehicleMove : MonoBehaviour
 
         if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, detectDistance))
         {
+            Debug.DrawRay(rayOrigin, rayDirection * hit.distance, Color.green);
+
             if (hit.collider.CompareTag("Vehicle") || hit.collider.CompareTag("Player"))
             {
                 // Adjust speed based on direction
-                if (direction == -1)
+                if (direction == 1)
                 {
+                    // Opposite direction: slow down to avoid collision
                     _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed * slowDownFactor, Time.deltaTime * 4f);
                 }
                 else
                 {
+                    // Same direction: speed up to overtake
                     _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed * (1f + (1f - slowDownFactor)), Time.deltaTime * 4f);
                 }
 
@@ -69,6 +73,8 @@ public class VehicleMove : MonoBehaviour
         }
         else
         {
+            Debug.DrawRay(rayOrigin, rayDirection * detectDistance, Color.red);
+
             // No obstacle: return to base speed
             _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed, Time.deltaTime * 2f);
         }
