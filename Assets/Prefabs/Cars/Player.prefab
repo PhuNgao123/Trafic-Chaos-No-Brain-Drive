@@ -218,9 +218,11 @@ GameObject:
   - component: {fileID: 1508748240120141953}
   - component: {fileID: 2291370315505891442}
   - component: {fileID: 9028503359767048064}
+  - component: {fileID: 3232874493984327143}
+  - component: {fileID: 810263476913908201}
   m_Layer: 0
-  m_Name: 'CarPhysic (Missing Prefab with guid: f8b76e11eb48ed64f874ae8ec0e367df)'
-  m_TagString: Untagged
+  m_Name: CarPhysic
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -286,8 +288,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9962015, y: 1.68, z: 3.7815046}
-  m_Center: {x: -0.0035948753, y: 0.80113393, z: 0.10758376}
+  m_Size: {x: 1.9962015, y: 1.68, z: 3.6425712}
+  m_Center: {x: -0.0035948753, y: 0.80113393, z: 0.03811705}
 --- !u!114 &9028503359767048064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,9 +304,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPhysics
   roadSpawner: {fileID: 0}
   roadMover: {fileID: 0}
-  currentSpeed: 20
-  minSpeed: 20
-  maxSpeed: 50
+  currentSpeed: 30
+  minSpeed: 30
+  maxSpeed: 60
   acceleration: 10
   deceleration: 5
   steerSpeed: 20
@@ -314,6 +316,39 @@ MonoBehaviour:
   zNormalizeSpeed: 5
   lookAheadDistance: 10
   rotationSmoothSpeed: 10
+--- !u!65 &3232874493984327143
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919171530381997405}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7467594, y: 0.99454486, z: 0.32815337}
+  m_Center: {x: 0.011763096, y: 0.49866575, z: 1.779667}
+--- !u!114 &810263476913908201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919171530381997405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!1 &2637822479185982824
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,6 +20,7 @@ public class VehicleMove : MonoBehaviour
     private float _targetX;
     private bool _isChangingLane;
     private float _lastLaneChangeAttempt;
+    private bool _hasBounced = false; // Track if vehicle has bounced
 
     void Awake()
     {
@@ -42,8 +43,20 @@ public class VehicleMove : MonoBehaviour
     // Otherwise: return to base speed
     void HandleAI()
     {
+        bool isGameOver = GameLogicController.Instance != null && GameLogicController.Instance.isGameOver;
+        
         Vector3 rayOrigin = _transform.position + Vector3.up * 0.5f;
-        Vector3 rayDirection = _transform.forward;
+        Vector3 rayDirection;
+        
+        // If game over and same direction, raycast forward (Z+) instead of transform.forward
+        if (isGameOver && direction == -1)
+        {
+            rayDirection = Vector3.forward; // Check ahead in Z+ direction
+        }
+        else
+        {
+            rayDirection = _transform.forward; // Normal: use transform forward
+        }
 
         if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, detectDistance))
         {
@@ -59,8 +72,17 @@ public class VehicleMove : MonoBehaviour
                 }
                 else
                 {
-                    // Same direction: speed up to overtake
-                    _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed * (1f + (1f - slowDownFactor)), Time.deltaTime * 4f);
+                    // Same direction: speed up to overtake (or slow down if game over)
+                    if (isGameOver)
+                    {
+                        // Game over: slow down to avoid crashed vehicles ahead
+                        _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed * slowDownFactor, Time.deltaTime * 4f);
+                    }
+                    else
+                    {
+                        // Normal: speed up to overtake
+                        _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed * (1f + (1f - slowDownFactor)), Time.deltaTime * 4f);
+                    }
                 }
 
                 // Try to change lane if cooldown passed
@@ -111,8 +133,22 @@ public class VehicleMove : MonoBehaviour
     // Moves vehicle toward player (Z-) and smoothly changes lanes (X)
     void Move()
     {
-        // All vehicles move toward player regardless of direction
-        _transform.position += Vector3.back * _currentSpeed * Time.deltaTime;
+        // Check if game is over and this is a same-direction vehicle
+        bool isGameOver = GameLogicController.Instance != null && GameLogicController.Instance.isGameOver;
+        
+        Vector3 moveDirection;
+        if (isGameOver && direction == -1)
+        {
+            // Game over + same direction: move forward (Z+) instead of toward player
+            moveDirection = Vector3.forward;
+        }
+        else
+        {
+            // Normal: all vehicles move toward player (Z-)
+            moveDirection = Vector3.back;
+        }
+        
+        _transform.position += moveDirection * _currentSpeed * Time.deltaTime;
 
         // Smooth lane change movement
         Vector3 pos = _transform.position;
@@ -127,8 +163,33 @@ public class VehicleMove : MonoBehaviour
     // Destroys vehicle when it passes behind player
     void CheckDestroy()
     {
-        if (_transform.position.z <= deleteZ)
-            Destroy(gameObject);
+        bool isGameOver = GameLogicController.Instance != null && GameLogicController.Instance.isGameOver;
+        
+        // Debug: log vehicle state
+        if (isGameOver && direction == -1 && _transform.position.z < 0)
+        {
+            Debug.Log($"[VehicleMove] {gameObject.name} - isGameOver={isGameOver}, direction={direction}, Z={_transform.position.z}");
+        }
+        
+        // If game over and same direction vehicle, destroy when too far forward instead
+        if (isGameOver && direction == -1)
+        {
+            // Destroy when vehicle goes too far forward (Z > 170)
+            if (_transform.position.z >= 170f)
+            {
+                Debug.Log($"[VehicleMove] {gameObject.name} destroyed at Z={_transform.position.z} (game over, forward limit)");
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            // Normal: destroy when passes behind player
+            if (_transform.position.z <= deleteZ)
+            {
+                Debug.Log($"[VehicleMove] {gameObject.name} destroyed at Z={_transform.position.z} (normal, behind player) - isGameOver={isGameOver}, direction={direction}");
+                Destroy(gameObject);
+            }
+        }
     }
 
     // Initializes vehicle with speed and direction from spawner
@@ -137,5 +198,22 @@ public class VehicleMove : MonoBehaviour
         baseSpeed = speed;
         _currentSpeed = speed;
         direction = dir;
+    }
+
+    // Handle vehicle-to-vehicle collision
+    void OnCollisionEnter(Collision collision)
+    {
+        // Only bounce once
+        if (_hasBounced) return;
+        
+        if (collision.gameObject.CompareTag("Vehicle"))
+        {
+            _hasBounced = true; // Mark as bounced
+            
+            if (GameLogicController.Instance != null)
+            {
+                GameLogicController.Instance.OnVehicleCollision(gameObject, collision.gameObject);
+            }
+        }
     }
 }

@@ -34,6 +34,16 @@ public class EnemyController : MonoBehaviour
     [Tooltip("Direction -1 (same) - speed multiplier")]
     public float directionMinus1SpeedMultiplier = 0.8f;
 
+    // Public method to stop all spawning
+    public void StopAllSpawning()
+    {
+        foreach (var spawner in spawners)
+        {
+            if (spawner != null)
+                spawner.stopSpawn = true;
+        }
+    }
+
     void Start()
     {
         // Auto-find references if not assigned

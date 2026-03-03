@@ -21,7 +21,12 @@ public class VehicleSpawner : MonoBehaviour
     [HideInInspector] public float speedRandomness;
     [HideInInspector] public float playerSpeedMultiplier;
 
+    [Header("Control")]
+    [HideInInspector] public bool stopSpawn = false;
+
     private float _nextSpawnTime;
+    private int _spawnedAfterGameOver = 0; // Count vehicles spawned after game over
+    private const int MAX_SPAWN_AFTER_GAME_OVER = 5;
 
     void Start()
     {
@@ -30,12 +35,29 @@ public class VehicleSpawner : MonoBehaviour
 
     void Update()
     {
+        if (stopSpawn) return;
+
+        // Check if game over and reached spawn limit - stop checking entirely
+        bool isGameOver = GameLogicController.Instance != null && GameLogicController.Instance.isGameOver;
+        if (isGameOver && _spawnedAfterGameOver >= MAX_SPAWN_AFTER_GAME_OVER)
+        {
+            stopSpawn = true; // Stop all future checks
+            return;
+        }
+
         if (Time.time >= _nextSpawnTime)
         {
             // Only spawn if location is clear
             if (CanSpawn())
             {
                 Spawn();
+                
+                // Increment counter if game over
+                if (isGameOver)
+                {
+                    _spawnedAfterGameOver++;
+                }
+                
                 ScheduleNext();
             }
             else
@@ -81,8 +103,27 @@ public class VehicleSpawner : MonoBehaviour
     // Returns false if another vehicle is in the way
     bool CanSpawn()
     {
+        bool isGameOver = GameLogicController.Instance != null && GameLogicController.Instance.isGameOver;
+        
         Vector3 origin = transform.position + Vector3.up * 0.5f;
-        Vector3 dir = (direction == 1) ? Vector3.back : Vector3.forward;
+        Vector3 dir;
+        
+        // Determine raycast direction based on game state and vehicle direction
+        if (isGameOver && direction == -1)
+        {
+            // Game over + same direction: spawner is behind, check forward (Z+)
+            dir = Vector3.forward;
+        }
+        else if (direction == 1)
+        {
+            // Opposite direction: check backward (Z-)
+            dir = Vector3.back;
+        }
+        else
+        {
+            // Normal same direction: check forward (Z+)
+            dir = Vector3.forward;
+        }
 
         if (Physics.Raycast(origin, dir, out RaycastHit hit, spawnCheckDistance))
         {
@@ -106,7 +147,7 @@ public class VehicleSpawner : MonoBehaviour
         if (prefab == null)
             return;
 
-        GameObject vehicle = Instantiate(prefab, transform.position, Quaternion.identity, transform);
+        GameObject vehicle = Instantiate(prefab, transform.position, Quaternion.identity, null); // No parent!
 
         // Calculate vehicle speed
         float vehicleSpeed = baseSpeed;
@@ -126,7 +167,15 @@ public class VehicleSpawner : MonoBehaviour
         // Initialize vehicle
         VehicleMove vm = vehicle.GetComponent<VehicleMove>();
         if (vm != null)
+        {
             vm.Init(vehicleSpeed, direction);
+            
+            // If game is over, increase detect distance to avoid crashed vehicles
+            if (GameLogicController.Instance != null && GameLogicController.Instance.isGameOver)
+            {
+                vm.detectDistance = 30f;
+            }
+        }
 
         // Set rotation based on direction
         vehicle.transform.rotation = (direction == 1) 

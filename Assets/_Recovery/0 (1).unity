@@ -158,7 +158,6 @@ MonoBehaviour:
   baseSpeed: 15
   speedRandomness: 0.2
   playerSpeedMultiplier: 0
-  stopSpawn: 0
 --- !u!4 &71397557
 Transform:
   m_ObjectHideFlags: 0
@@ -230,7 +229,6 @@ MonoBehaviour:
   baseSpeed: 30
   speedRandomness: 0.2
   playerSpeedMultiplier: 0
-  stopSpawn: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,13 +571,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.11961695, y: 0, z: 0, w: 0.99282014}
+  m_LocalRotation: {x: -0.7974744, y: -0.14603779, z: -0.21368258, w: 0.5450205}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -13.74, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -111.3, y: -30, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,61 +752,6 @@ MonoBehaviour:
   baseSpeed: 15
   speedRandomness: 0.2
   playerSpeedMultiplier: 0
-  stopSpawn: 0
---- !u!1 &509862631
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 509862632}
-  - component: {fileID: 509862633}
-  m_Layer: 0
-  m_Name: Pavement Spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &509862632
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 509862631}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2079384910}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &509862633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 509862631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1f5d4fe6a9fe6b45be1fefa0db4f839, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PavementSpawner
-  pavementPrefabs:
-  - {fileID: 3985855538053175267, guid: c67a88db39ed9544696c34e3ff6afc10, type: 3}
-  - {fileID: 1557401352031150398, guid: 806bcaca56b57b947b17c66ab01b6f6c, type: 3}
-  - {fileID: 8246265682462074660, guid: 43b8c3b2e75f2e94b86cb7ab578c036c, type: 3}
-  - {fileID: 5983815531722904421, guid: e0e5dded4062a5e4ebba9fc9c9200d66, type: 3}
-  segmentLength: 30
-  visibleSegments: 10
-  deleteDistance: -50
-  xOffset: -13.5
-  direction: 1
 --- !u!1 &563556587
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,7 +807,6 @@ MonoBehaviour:
   baseSpeed: 30
   speedRandomness: 0.2
   playerSpeedMultiplier: 0
-  stopSpawn: 0
 --- !u!1001 &796175894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -887,15 +829,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 6.67
       objectReference: {fileID: 0}
     - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.000000091114316
       objectReference: {fileID: 0}
     - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.19
       objectReference: {fileID: 0}
     - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1152,15 +1094,15 @@ MonoBehaviour:
   - {fileID: 1704316676439786267, guid: 1aa595155d6f9b648bdcb2e700cbea99, type: 3}
   - {fileID: 1704316676439786267, guid: 420a45d22a7170e4c94d51a363075df1, type: 3}
   baseMinInterval: 2
-  baseMaxInterval: 5
+  baseMaxInterval: 4
   spawnCheckDistance: 10
-  baseSpeed: 20
-  speedRandomness: 0.3
-  playerSpeedMultiplier: 0.7
-  direction1IntervalMultiplier: 0.5
+  baseSpeed: 15
+  speedRandomness: 0.2
+  playerSpeedMultiplier: 0.5
+  direction1IntervalMultiplier: 0.7
   direction1SpeedMultiplier: 1.5
-  directionMinus1IntervalMultiplier: 1
-  directionMinus1SpeedMultiplier: 0.5
+  directionMinus1IntervalMultiplier: 1.2
+  directionMinus1SpeedMultiplier: 0.8
 --- !u!1 &1079842735
 GameObject:
   m_ObjectHideFlags: 0
@@ -1216,7 +1158,6 @@ MonoBehaviour:
   baseSpeed: 15
   speedRandomness: 0.2
   playerSpeedMultiplier: 0
-  stopSpawn: 0
 --- !u!1 &1321852763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,8 +1289,8 @@ MonoBehaviour:
   maxCurveAmplitude: 50
   elevationChangeInterval: 3
   elevationTransitionSpeed: 1
-  minElevationAmplitude: 3
-  maxElevationAmplitude: 8
+  minElevationAmplitude: 1
+  maxElevationAmplitude: 5
 --- !u!4 &1365376103
 Transform:
   m_ObjectHideFlags: 0
@@ -1420,116 +1361,6 @@ MonoBehaviour:
   baseSpeed: 30
   speedRandomness: 0.2
   playerSpeedMultiplier: 0
-  stopSpawn: 0
---- !u!1 &1585057339
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1585057341}
-  - component: {fileID: 1585057340}
-  m_Layer: 0
-  m_Name: Game Controller
-  m_TagString: Controller
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1585057340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1585057339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a9d0383b3b12be4098940bb747dad57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameLogicController
-  isGameOver: 0
-  roadSpawner: {fileID: 1853180302}
-  roadMover: {fileID: 2079384911}
-  enemyController: {fileID: 976827162}
-  pavementSpawners:
-  - {fileID: 509862633}
-  - {fileID: 1671369942}
-  playerPhysics: {fileID: 1860024013}
-  crashForce: 150
-  bounceForce: 20
-  crashSpeedDecay: 0.95
---- !u!4 &1585057341
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1585057339}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.64746, y: -0, z: 0.25487}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1671369940
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1671369941}
-  - component: {fileID: 1671369942}
-  m_Layer: 0
-  m_Name: Pavement Spawner (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1671369941
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671369940}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2079384910}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1671369942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671369940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1f5d4fe6a9fe6b45be1fefa0db4f839, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PavementSpawner
-  pavementPrefabs:
-  - {fileID: 3985855538053175267, guid: c67a88db39ed9544696c34e3ff6afc10, type: 3}
-  - {fileID: 1557401352031150398, guid: 806bcaca56b57b947b17c66ab01b6f6c, type: 3}
-  - {fileID: 8246265682462074660, guid: 43b8c3b2e75f2e94b86cb7ab578c036c, type: 3}
-  - {fileID: 5983815531722904421, guid: e0e5dded4062a5e4ebba9fc9c9200d66, type: 3}
-  segmentLength: 30
-  visibleSegments: 10
-  deleteDistance: -50
-  xOffset: -13.5
-  direction: -1
 --- !u!1 &1847501759
 GameObject:
   m_ObjectHideFlags: 0
@@ -1809,8 +1640,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1853180303}
-  - {fileID: 509862632}
-  - {fileID: 1671369941}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2079384911
@@ -1825,7 +1654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dfb0fec953f402478eff23ab9a7ed27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoadMover
-  playerPhysics: {fileID: 1860024013}
+  playerPhysics: {fileID: 0}
   speed: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -1834,7 +1663,6 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 832575519}
-  - {fileID: 1585057341}
   - {fileID: 1365376103}
   - {fileID: 976827161}
   - {fileID: 2079384910}
