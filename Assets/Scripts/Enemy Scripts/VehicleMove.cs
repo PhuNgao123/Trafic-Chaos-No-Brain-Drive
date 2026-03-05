@@ -165,19 +165,11 @@ public class VehicleMove : MonoBehaviour
     {
         bool isGameOver = GameLogicController.Instance != null && GameLogicController.Instance.isGameOver;
         
-        // Debug: log vehicle state
-        if (isGameOver && direction == -1 && _transform.position.z < 0)
-        {
-            Debug.Log($"[VehicleMove] {gameObject.name} - isGameOver={isGameOver}, direction={direction}, Z={_transform.position.z}");
-        }
-        
         // If game over and same direction vehicle, destroy when too far forward instead
         if (isGameOver && direction == -1)
         {
-            // Destroy when vehicle goes too far forward (Z > 170)
             if (_transform.position.z >= 170f)
             {
-                Debug.Log($"[VehicleMove] {gameObject.name} destroyed at Z={_transform.position.z} (game over, forward limit)");
                 Destroy(gameObject);
             }
         }
@@ -186,7 +178,6 @@ public class VehicleMove : MonoBehaviour
             // Normal: destroy when passes behind player
             if (_transform.position.z <= deleteZ)
             {
-                Debug.Log($"[VehicleMove] {gameObject.name} destroyed at Z={_transform.position.z} (normal, behind player) - isGameOver={isGameOver}, direction={direction}");
                 Destroy(gameObject);
             }
         }

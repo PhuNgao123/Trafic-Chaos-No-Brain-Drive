@@ -57,6 +57,7 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\GlowLight.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\FriesPostProcessorIdentifier.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\SetupScriptURP.cs" />
+    <Compile Include="Assets\Scripts\UI Scripts\ScoreUI.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\VehicleMove.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\PrefabGroup.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\ObjectMove.cs" />
@@ -75,13 +76,40 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\LightSourceObject.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\RoadSegment.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\CameraFunctions.cs" />
+    <Compile Include="Assets\Scripts\Logic Scripts\NearMissDetector.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\AnInspector.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\IgnoreInInspectorAttribute.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\ArrayArrangement.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\GameLogicController.cs" />
+    <Compile Include="Assets\Scripts\Logic Scripts\ScoreController.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\FencePlacement.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\FakeRoadSpawner.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\KeyValuePairPropertyDrawer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

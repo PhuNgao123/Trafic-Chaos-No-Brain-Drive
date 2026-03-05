@@ -6,6 +6,7 @@ public class GameLogicController : MonoBehaviour
     public static GameLogicController Instance { get; private set; }
 
     [Header("Game State")]
+    public bool isGameStarted = false;
     public bool isGameOver = false;
 
     [Header("References")]
@@ -14,6 +15,7 @@ public class GameLogicController : MonoBehaviour
     public EnemyController enemyController;
     public PavementSpawner[] pavementSpawners;
     public PlayerPhysics playerPhysics;
+    public ScoreController scoreController;
 
     [Header("Crash Settings")]
     public float crashForce = 5f; // Force applied when vehicles crash (reduced)
@@ -51,6 +53,23 @@ public class GameLogicController : MonoBehaviour
         
         if (playerPhysics == null)
             playerPhysics = FindFirstObjectByType<PlayerPhysics>();
+
+        if (scoreController == null)
+            scoreController = FindFirstObjectByType<ScoreController>();
+
+        // Auto-start game for testing
+        StartGame();
+    }
+
+    // Call this to start the game
+    public void StartGame()
+    {
+        isGameStarted = true;
+        isGameOver = false;
+
+        // Start score tracking
+        if (scoreController != null)
+            scoreController.StartGame();
     }
 
     void Update()
@@ -65,7 +84,6 @@ public class GameLogicController : MonoBehaviour
             {
                 playerPhysics.currentSpeed = 0f;
                 _isCrashSlowDown = false;
-                Debug.Log("[GameLogicController] Speed reached zero");
             }
         }
     }
@@ -73,10 +91,14 @@ public class GameLogicController : MonoBehaviour
     // Called when player collides with vehicle
     public void TriggerGameOver(GameObject collidedVehicle, GameObject player)
     {
+        Debug.Log($"[GameLogic] TriggerGameOver called - isGameOver: {isGameOver}");
+
         if (isGameOver) return;
 
         isGameOver = true;
         _isCrashSlowDown = true;
+
+        Debug.Log($"[GameLogic] Game Over! Vehicle: {collidedVehicle.name}, Player: {player.name}");
 
         // Disable player movement input
         if (playerPhysics != null)
@@ -128,13 +150,9 @@ public class GameLogicController : MonoBehaviour
     // Public method for vehicle-to-vehicle collision (no disable, just bounce)
     public void OnVehicleCollision(GameObject vehicle1, GameObject vehicle2)
     {
-        Debug.Log($"[GameLogicController] Vehicle collision: {vehicle1.name} <-> {vehicle2.name}");
-        
         // If game is over, stop both vehicles
         if (isGameOver)
         {
-            Debug.Log("[GameLogicController] Game over - stopping both vehicles");
-            
             VehicleMove vm1 = vehicle1.GetComponent<VehicleMove>();
             if (vm1 != null) vm1.enabled = false;
             
@@ -167,8 +185,6 @@ public class GameLogicController : MonoBehaviour
         // Apply smaller upward force (vehicles can recover)
         rb.AddForce(Vector3.up * (bounceForce * 0.5f), ForceMode.Impulse);
         rb.AddTorque(Random.insideUnitSphere * 2f, ForceMode.Impulse);
-        
-        Debug.Log($"[GameLogicController] Vehicle {vehicle.name} will never sleep (sleepThreshold=0)");
     }
 
     System.Collections.IEnumerator ReEnableKinematic(Rigidbody rb, float delay)
@@ -177,8 +193,7 @@ public class GameLogicController : MonoBehaviour
         if (rb != null)
         {
             rb.isKinematic = true;
-            rb.WakeUp(); // Wake up before making kinematic
-            Debug.Log($"[GameLogicController] Re-enabled kinematic for {rb.gameObject.name}");
+            rb.WakeUp();
         }
     }
 
@@ -189,21 +204,8 @@ public class GameLogicController : MonoBehaviour
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
         Rigidbody vehicleRb = vehicle.GetComponent<Rigidbody>();
         
-        if (playerRb == null)
-        {
-            Debug.LogError("[GameLogicController] Player has no Rigidbody!");
+        if (playerRb == null || vehicleRb == null)
             return;
-        }
-        
-        if (vehicleRb == null)
-        {
-            Debug.LogError("[GameLogicController] Vehicle has no Rigidbody!");
-            return;
-        }
-        
-        Debug.Log($"[GameLogicController] Before crash - Vehicle: isKinematic={vehicleRb.isKinematic}, useGravity={vehicleRb.useGravity}, constraints={vehicleRb.constraints}");
-        
-        // IMPORTANT: VehicleMove already disabled in TriggerGameOver, so constraints won't be reset
         
         // Remove ALL constraints to allow full physics
         playerRb.constraints = RigidbodyConstraints.None;
@@ -217,40 +219,25 @@ public class GameLogicController : MonoBehaviour
         playerRb.useGravity = true;
         vehicleRb.useGravity = true;
         
-        // Wake up rigidbodies to ensure they respond to physics
+        // Wake up rigidbodies
         playerRb.WakeUp();
         vehicleRb.WakeUp();
         
-        // Prevent sleeping - both will stay awake until destroyed
+        // Prevent sleeping
         playerRb.sleepThreshold = 0f;
         vehicleRb.sleepThreshold = 0f;
         
-        Debug.Log($"[GameLogicController] Woke up rigidbodies - Player sleeping: {playerRb.IsSleeping()}, Vehicle sleeping: {vehicleRb.IsSleeping()}");
-        
-        // Calculate crash direction based on vehicle's forward direction (where it's moving)
+        // Calculate crash direction
         Vector3 playerForward = player.transform.forward;
         Vector3 vehicleForward = vehicle.transform.forward;
         
-        // Apply crash forces in the direction vehicles are moving (momentum)
+        // Apply crash forces
         playerRb.AddForce(playerForward * crashForce * 0.3f, ForceMode.Impulse);
-        playerRb.AddForce(Vector3.up * bounceForce * 0.2f, ForceMode.Impulse); // Very small bounce
+        playerRb.AddForce(Vector3.up * bounceForce * 0.2f, ForceMode.Impulse);
         playerRb.AddTorque(Random.insideUnitSphere * 1f, ForceMode.Impulse);
         
         vehicleRb.AddForce(vehicleForward * crashForce * 0.3f, ForceMode.Impulse);
-        vehicleRb.AddForce(Vector3.up * bounceForce * 0.2f, ForceMode.Impulse); // Very small bounce
+        vehicleRb.AddForce(Vector3.up * bounceForce * 0.2f, ForceMode.Impulse);
         vehicleRb.AddTorque(Random.insideUnitSphere * 1f, ForceMode.Impulse);
-        
-        Debug.Log($"[GameLogicController] Applied crash force in movement direction - Player: {playerForward}, Vehicle: {vehicleForward}");
-        
-        Debug.Log($"[GameLogicController] After crash - Vehicle: isKinematic={vehicleRb.isKinematic}, useGravity={vehicleRb.useGravity}, constraints={vehicleRb.constraints}");
-        Debug.Log($"[GameLogicController] Applied crash force in movement direction");
-        
-        // Double check constraints are actually removed
-        Debug.Log($"[GameLogicController] FINAL CHECK - Vehicle constraints: {vehicleRb.constraints}");
-        if (vehicleRb.constraints != RigidbodyConstraints.None)
-        {
-            Debug.LogError($"[GameLogicController] WARNING: Vehicle still has constraints! Forcing to None again...");
-            vehicleRb.constraints = RigidbodyConstraints.None;
-        }
     }
 }

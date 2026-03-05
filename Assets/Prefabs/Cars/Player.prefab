@@ -116,6 +116,73 @@ MonoBehaviour:
   positionSmooth: 50
   rotationSmooth: 50
   driftAngle: 10
+--- !u!1 &1494199249821634230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8714628624804905683}
+  - component: {fileID: 679904717346404792}
+  - component: {fileID: 570700968192633043}
+  m_Layer: 0
+  m_Name: GameOverTrigger
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8714628624804905683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494199249821634230}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2840436660477555405}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &679904717346404792
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494199249821634230}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.65, y: 1, z: 0.3}
+  m_Center: {x: -0.0026392937, y: 0.5, z: 1.75}
+--- !u!114 &570700968192633043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494199249821634230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  showDebugLogs: 1
 --- !u!1 &1614153835364957680
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,8 +285,7 @@ GameObject:
   - component: {fileID: 1508748240120141953}
   - component: {fileID: 2291370315505891442}
   - component: {fileID: 9028503359767048064}
-  - component: {fileID: 3232874493984327143}
-  - component: {fileID: 810263476913908201}
+  - component: {fileID: 7516118503804263046}
   m_Layer: 0
   m_Name: CarPhysic
   m_TagString: Player
@@ -239,7 +305,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8714628624804905683}
+  - {fileID: 1877619223879829791}
   m_Father: {fileID: 8721188832083936239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1508748240120141953
@@ -316,28 +384,7 @@ MonoBehaviour:
   zNormalizeSpeed: 5
   lookAheadDistance: 10
   rotationSmoothSpeed: 10
---- !u!65 &3232874493984327143
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919171530381997405}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.7467594, y: 0.99454486, z: 0.32815337}
-  m_Center: {x: 0.011763096, y: 0.49866575, z: 1.779667}
---- !u!114 &810263476913908201
+--- !u!114 &7516118503804263046
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -349,6 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  showDebugLogs: 0
 --- !u!1 &2637822479185982824
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,6 +713,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8721188832083936239}
+  - component: {fileID: 5296261769043263380}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -689,6 +738,19 @@ Transform:
   - {fileID: 7421065154265976732}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5296261769043263380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5839176311239820667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerGameOverTrigger
+  showDebugLogs: 0
 --- !u!1 &7784582032210581112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,6 +1095,75 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &8186530128732479684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1877619223879829791}
+  - component: {fileID: 7522535679703184094}
+  - component: {fileID: 7397225078937054910}
+  m_Layer: 0
+  m_Name: NearMissTrigger
+  m_TagString: PlayerNearMiss
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1877619223879829791
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186530128732479684}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2840436660477555405}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7522535679703184094
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186530128732479684}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4, y: 1.5980405, z: 4.5}
+  m_Center: {x: -0.000007867813, y: 1, z: 0.10804272}
+--- !u!114 &7397225078937054910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186530128732479684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21b7ad3b25f97a4c864c036b094439c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NearMissDetector
+  nearMissEffectPrefab: {fileID: 0}
+  nearMissSound: {fileID: 0}
+  showDebugLogs: 1
 --- !u!1 &9129116428182388525
 GameObject:
   m_ObjectHideFlags: 0
