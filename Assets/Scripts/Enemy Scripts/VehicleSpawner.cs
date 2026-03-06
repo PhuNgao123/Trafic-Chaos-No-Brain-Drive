@@ -27,6 +27,13 @@ public class VehicleSpawner : MonoBehaviour
     private float _nextSpawnTime;
     private int _spawnedAfterGameOver = 0; // Count vehicles spawned after game over
     private const int MAX_SPAWN_AFTER_GAME_OVER = 5;
+    private bool _hasSpawnedFirst = false; // Track if first spawn happened
+
+    void OnEnable()
+    {
+        // Reset first spawn flag when enabled
+        _hasSpawnedFirst = false;
+    }
 
     void Start()
     {
@@ -36,6 +43,22 @@ public class VehicleSpawner : MonoBehaviour
     void Update()
     {
         if (stopSpawn) return;
+
+        // Don't spawn until game starts
+        if (GameLogicController.Instance == null || !GameLogicController.Instance.isGameStarted)
+            return;
+
+        // Spawn first vehicle immediately when enabled
+        if (!_hasSpawnedFirst)
+        {
+            _hasSpawnedFirst = true;
+            if (CanSpawn())
+            {
+                Spawn();
+                ScheduleNext();
+                return;
+            }
+        }
 
         // Check if game over and reached spawn limit - stop checking entirely
         bool isGameOver = GameLogicController.Instance != null && GameLogicController.Instance.isGameOver;

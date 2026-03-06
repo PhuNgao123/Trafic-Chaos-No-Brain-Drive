@@ -20,6 +20,9 @@ public class ScoreController : MonoBehaviour
     public float minComboTimer = 1f;
     public float comboTimerDecreasePerLevel = 0.2f;
 
+    [Header("Wrong Lane Bonus")]
+    public int wrongLaneComboBonus = 5; // Base combo multiplier when in wrong lane (X < 0)
+
     [Header("Special Bonuses")]
     public float highSpeedThreshold = 0.8f; // 80% of max speed
     public float highSpeedBonus = 0.5f; // +50% score
@@ -30,6 +33,7 @@ public class ScoreController : MonoBehaviour
     private int _currentCombo = 0;
     private float _comboTimer = 0f;
     private bool _isGameStarted = false;
+    private bool _isInWrongLane = false; // Track if player is in wrong lane (X < 0)
 
     // Events for UI updates
     public event Action<float> OnScoreChanged;
@@ -63,8 +67,29 @@ public class ScoreController : MonoBehaviour
         if (!_isGameStarted || (gameLogic != null && gameLogic.isGameOver))
             return;
 
+        CheckWrongLane();
         UpdateScore();
         UpdateComboTimer();
+    }
+
+    // Check if player is in wrong lane (X < 0)
+    void CheckWrongLane()
+    {
+        if (playerPhysics == null) return;
+
+        bool wasInWrongLane = _isInWrongLane;
+        _isInWrongLane = playerPhysics.transform.position.x < 0f;
+
+        // Update UI when lane changes (to show correct multiplier)
+        if (_isInWrongLane != wasInWrongLane && _currentCombo > 0)
+        {
+            int displayCombo = _currentCombo;
+            if (_isInWrongLane)
+            {
+                displayCombo = _currentCombo + wrongLaneComboBonus;
+            }
+            OnComboChanged?.Invoke(displayCombo);
+        }
     }
 
     // Start tracking score
@@ -97,8 +122,14 @@ public class ScoreController : MonoBehaviour
             scoreThisFrame *= (1f + highSpeedBonus);
         }
 
-        // Combo multiplier
-        int comboMultiplier = Mathf.Min(_currentCombo, maxCombo);
+        // Combo multiplier - add wrong lane bonus if in wrong lane
+        int effectiveCombo = _currentCombo;
+        if (_isInWrongLane)
+        {
+            effectiveCombo += wrongLaneComboBonus; // Add bonus (not max)
+        }
+
+        int comboMultiplier = Mathf.Min(effectiveCombo, maxCombo + wrongLaneComboBonus);
         if (comboMultiplier > 0)
         {
             scoreThisFrame *= comboMultiplier;
@@ -113,10 +144,12 @@ public class ScoreController : MonoBehaviour
     {
         if (_currentCombo > 0)
         {
+            float maxTimer = GetComboTimerDuration();
+
+            // Normal timer decrease (always decrease, even in wrong lane)
             _comboTimer -= Time.deltaTime;
 
             // Notify UI of timer change
-            float maxTimer = GetComboTimerDuration();
             OnComboTimerChanged?.Invoke(_comboTimer, maxTimer);
 
             // Reset combo if timer expires
@@ -136,7 +169,14 @@ public class ScoreController : MonoBehaviour
         // Reset timer with new duration
         _comboTimer = GetComboTimerDuration();
 
-        OnComboChanged?.Invoke(_currentCombo);
+        // Calculate effective combo for display (add wrong lane bonus)
+        int displayCombo = _currentCombo;
+        if (_isInWrongLane)
+        {
+            displayCombo = _currentCombo + wrongLaneComboBonus;
+        }
+
+        OnComboChanged?.Invoke(displayCombo);
         OnComboTimerChanged?.Invoke(_comboTimer, _comboTimer);
     }
 
@@ -153,7 +193,14 @@ public class ScoreController : MonoBehaviour
         _currentCombo = 0;
         _comboTimer = 0f;
 
-        OnComboChanged?.Invoke(_currentCombo);
+        // If in wrong lane, show base multiplier instead of 0
+        int displayCombo = 0;
+        if (_isInWrongLane)
+        {
+            displayCombo = wrongLaneComboBonus;
+        }
+
+        OnComboChanged?.Invoke(displayCombo);
         OnComboTimerChanged?.Invoke(0f, baseComboTimer);
     }
 

@@ -14,12 +14,17 @@ public class RoadSpawner : MonoBehaviour
     public float segmentLength = 15f;
     public float overlapOffset = 0.5f;
     public int visibleSegments = 25;
-    public float deleteDistance = -30f;
+    public float deleteDistance = -50f;
+    public float menuDeleteDistance = -200f; // Delete distance before game starts
+    public float menuStartZ = -200f; // Starting Z position for menu
 
     [Header("Elevation (Up/Down Slopes)")]
     public float elevationFrequency = 0.015f;
     public float elevationAmplitude = 2f;
     public float baseHeight = 0f;
+    [Tooltip("Adds randomness to elevation using Perlin noise")]
+    public float perlinScale = 0.02f; // Scale for Perlin noise
+    public float perlinInfluence = 0.5f; // How much Perlin affects elevation (0-1)
 
     [Header("Spawn Pattern")]
     public int minNormalBeforeSpecial = 10;
@@ -31,22 +36,22 @@ public class RoadSpawner : MonoBehaviour
     private int _patternIndex;
     private int _normalCount;
     private int _nextSpecialAt;
+    private bool _elevationEnabled = false; // Disable elevation until game starts
+    private float _perlinOffset; // Random offset for Perlin noise
 
     void Start()
     {
         _nextSpecialAt = Random.Range(minNormalBeforeSpecial, maxNormalBeforeSpecial + 1);
-
-        // Spawn first road at origin
-        GameObject first = Instantiate(road1Prefab, transform);
-        first.transform.localPosition = Vector3.zero;
-        first.transform.localRotation = Quaternion.identity;
         
-        _lastEndPoint = first.transform.Find("EndPoint");
-        _roads.Enqueue(first);
-        _currentIndex++;
+        // Random offset for Perlin noise to make each game different
+        _perlinOffset = Random.Range(0f, 1000f);
+
+        // Calculate starting index based on menu start position
+        // This ensures roads spawn from menuStartZ
+        _currentIndex = Mathf.RoundToInt(menuStartZ / (segmentLength + overlapOffset));
 
         // Spawn initial visible segments
-        for (int i = 1; i < visibleSegments; i++)
+        for (int i = 0; i < visibleSegments; i++)
         {
             SpawnSegment(_currentIndex++);
         }
@@ -54,11 +59,22 @@ public class RoadSpawner : MonoBehaviour
 
     void Update()
     {
+        // Enable elevation when game starts
+        if (!_elevationEnabled && GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted)
+        {
+            _elevationEnabled = true;
+        }
+
+        // Determine delete distance based on game state
+        float currentDeleteDistance = (GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted)
+            ? deleteDistance
+            : menuDeleteDistance;
+
         // Continuously cleanup old roads and spawn new ones
         while (_roads.Count > 0)
         {
             GameObject first = _roads.Peek();
-            if (first != null && first.transform.position.z < deleteDistance)
+            if (first != null && first.transform.position.z < currentDeleteDistance)
             {
                 Destroy(_roads.Dequeue());
                 SpawnSegment(_currentIndex++);
@@ -87,7 +103,7 @@ public class RoadSpawner : MonoBehaviour
             return;
         }
 
-        // Calculate position and rotation with elevation
+        // Calculate position and rotation with elevation (only if enabled)
         Vector3 targetPos = GetPositionAtIndex(index);
         Quaternion targetRot = GetRotationAtIndex(index);
 
@@ -114,12 +130,27 @@ public class RoadSpawner : MonoBehaviour
         _roads.Enqueue(road);
     }
 
-    // Calculates position at given index with elevation
+    // Calculates position at given index with elevation (only if enabled)
     Vector3 GetPositionAtIndex(int index)
     {
         float z = index * (segmentLength + overlapOffset);
         float x = 0f; // Straight roads only (no curves)
-        float y = Mathf.Sin(z * elevationFrequency) * elevationAmplitude + baseHeight;
+        
+        // Only apply elevation if game started
+        float y = baseHeight;
+        if (_elevationEnabled)
+        {
+            // Combine sine wave with Perlin noise for more varied elevation
+            float sineWave = Mathf.Sin(z * elevationFrequency) * elevationAmplitude;
+            
+            // Perlin noise for randomness (sample at different position for variation)
+            float perlin = Mathf.PerlinNoise((z + _perlinOffset) * perlinScale, _perlinOffset);
+            perlin = (perlin - 0.5f) * 2f; // Remap from 0-1 to -1 to 1
+            float perlinWave = perlin * elevationAmplitude * perlinInfluence;
+            
+            // Combine both for varied elevation
+            y = baseHeight + sineWave * (1f - perlinInfluence) + perlinWave;
+        }
 
         return new Vector3(x, y, z);
     }
@@ -127,6 +158,10 @@ public class RoadSpawner : MonoBehaviour
     // Calculates rotation at given index based on elevation slope
     Quaternion GetRotationAtIndex(int index)
     {
+        // If elevation disabled, return flat rotation
+        if (!_elevationEnabled)
+            return Quaternion.identity;
+
         Vector3 current = GetPositionAtIndex(index);
         Vector3 next = GetPositionAtIndex(index + 1);
         Vector3 direction = (next - current).normalized;
@@ -162,7 +197,20 @@ public class RoadSpawner : MonoBehaviour
     public Vector3 GetPositionAtZ(float z)
     {
         float x = 0f;
-        float y = Mathf.Sin(z * elevationFrequency) * elevationAmplitude + baseHeight;
+        float y = baseHeight;
+        
+        if (_elevationEnabled)
+        {
+            // Combine sine wave with Perlin noise
+            float sineWave = Mathf.Sin(z * elevationFrequency) * elevationAmplitude;
+            
+            float perlin = Mathf.PerlinNoise((z + _perlinOffset) * perlinScale, _perlinOffset);
+            perlin = (perlin - 0.5f) * 2f;
+            float perlinWave = perlin * elevationAmplitude * perlinInfluence;
+            
+            y = baseHeight + sineWave * (1f - perlinInfluence) + perlinWave;
+        }
+        
         return new Vector3(x, y, z);
     }
 
@@ -177,6 +225,16 @@ public class RoadSpawner : MonoBehaviour
     // Public API: Get elevation (Y) at specific Z coordinate
     public float GetElevationAtZ(float z)
     {
-        return Mathf.Sin(z * elevationFrequency) * elevationAmplitude + baseHeight;
+        if (!_elevationEnabled)
+            return baseHeight;
+            
+        // Combine sine wave with Perlin noise
+        float sineWave = Mathf.Sin(z * elevationFrequency) * elevationAmplitude;
+        
+        float perlin = Mathf.PerlinNoise((z + _perlinOffset) * perlinScale, _perlinOffset);
+        perlin = (perlin - 0.5f) * 2f;
+        float perlinWave = perlin * elevationAmplitude * perlinInfluence;
+        
+        return baseHeight + sineWave * (1f - perlinInfluence) + perlinWave;
     }
 }

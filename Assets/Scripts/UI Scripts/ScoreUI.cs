@@ -9,6 +9,7 @@ public class ScoreUI : MonoBehaviour
     public ScoreController scoreController;
 
     [Header("Score UI")]
+    public GameObject scorePanel; // Main panel containing all score UI
     public TextMeshProUGUI scoreText;
     public string scoreFormat = "Score: {0:N0}";
 
@@ -47,6 +48,10 @@ public class ScoreUI : MonoBehaviour
             comboPanel.SetActive(false); // Hide at start
         }
 
+        // Hide score panel until game starts
+        if (scorePanel != null)
+            scorePanel.SetActive(false);
+
         // Initialize UI
         UpdateScore(0f);
         
@@ -57,19 +62,17 @@ public class ScoreUI : MonoBehaviour
             comboTimerBar.fillAmount = 0f;
     }
 
-    void OnDestroy()
-    {
-        // Unsubscribe from events
-        if (scoreController != null)
-        {
-            scoreController.OnScoreChanged -= UpdateScore;
-            scoreController.OnComboChanged -= UpdateCombo;
-            scoreController.OnComboTimerChanged -= UpdateComboTimer;
-        }
-    }
-
     void Update()
     {
+        // Show score panel when game starts
+        if (scorePanel != null && !scorePanel.activeSelf)
+        {
+            if (GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted)
+            {
+                scorePanel.SetActive(true);
+            }
+        }
+
         // Handle combo scale animation
         if (_isComboScaling)
         {
@@ -91,6 +94,17 @@ public class ScoreUI : MonoBehaviour
 
                 comboPanel.transform.localScale = _comboOriginalScale * scale;
             }
+        }
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from events
+        if (scoreController != null)
+        {
+            scoreController.OnScoreChanged -= UpdateScore;
+            scoreController.OnComboChanged -= UpdateCombo;
+            scoreController.OnComboTimerChanged -= UpdateComboTimer;
         }
     }
 

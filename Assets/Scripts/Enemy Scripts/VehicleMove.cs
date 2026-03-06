@@ -24,6 +24,7 @@ public class VehicleMove : MonoBehaviour
     private int _bounceCount = 0; // Track number of bounces
     private float _lastBounceTime = -999f; // Time of last bounce
     private const float BOUNCE_COOLDOWN = 1f; // Cooldown between bounces
+    private bool _hasCrashed = false; // Track if vehicle has crashed
 
     void Awake()
     {
@@ -161,6 +162,14 @@ public class VehicleMove : MonoBehaviour
         // Mark lane change as complete when reached target
         if (Mathf.Abs(_transform.position.x - _targetX) < 0.05f)
             _isChangingLane = false;
+
+        // Normalize rotation to keep vehicle driving straight (only if not crashed)
+        if (!_hasCrashed)
+        {
+            Vector3 rot = _transform.eulerAngles;
+            rot.y = direction == -1 ? 0f : 180f; // Direction -1 = 0°, Direction 1 = 180°
+            _transform.eulerAngles = rot;
+        }
     }
 
     // Destroys vehicle when it passes behind player
@@ -200,6 +209,8 @@ public class VehicleMove : MonoBehaviour
         // Collision with Player - always trigger (even if max bounces reached)
         if (collision.gameObject.CompareTag("Player"))
         {
+            _hasCrashed = true; // Stop normalizing rotation after crash
+            
             if (GameLogicController.Instance != null)
             {
                 GameLogicController.Instance.OnVehicleCollision(gameObject, collision.gameObject);
@@ -218,6 +229,7 @@ public class VehicleMove : MonoBehaviour
             if (Time.time - _lastBounceTime < BOUNCE_COOLDOWN)
                 return; // Still in cooldown
             
+            _hasCrashed = true; // Stop normalizing rotation after crash
             _lastBounceTime = Time.time;
             _bounceCount++;
             

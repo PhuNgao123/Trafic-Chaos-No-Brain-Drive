@@ -767,7 +767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DayNightCycle
   directionalLight: {fileID: 410087040}
-  rotationSpeed: 5
+  degreesPerSecond: 3
 --- !u!1 &411747750
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,12 +1101,13 @@ MonoBehaviour:
   - {fileID: 8246265682462074660, guid: 43b8c3b2e75f2e94b86cb7ab578c036c, type: 3}
   - {fileID: 5983815531722904421, guid: e0e5dded4062a5e4ebba9fc9c9200d66, type: 3}
   segmentLength: 30
-  visibleSegments: 9
+  visibleSegments: 10
   deleteDistance: -50
   menuDeleteDistance: -200
-  menuStartZ: -200
   xOffset: -13.5
   direction: 1
+  backgroundSegments: 20
+  backgroundStartZ: -200
 --- !u!1 &563556587
 GameObject:
   m_ObjectHideFlags: 0
@@ -2190,13 +2191,13 @@ MonoBehaviour:
   mainRoadSpawner: {fileID: 1853180302}
   road1Prefab: {fileID: 471791136462141662, guid: e49f2b6b003275c419a31853a5e452b7, type: 3}
   road2Prefab: {fileID: 4439314474837478132, guid: dd2aad3928e01164e964764ca702c849, type: 3}
-  fakeSegmentCount: 15
+  fakeSegmentCount: 10
   segmentLength: 15
   startOffsetDistance: 200
   curveChangeInterval: 5
   curveTransitionSpeed: 0.1
-  minCurveAmplitude: 50
-  maxCurveAmplitude: 70
+  minCurveAmplitude: 70
+  maxCurveAmplitude: 100
   elevationChangeInterval: 3
   elevationTransitionSpeed: 1
   minElevationAmplitude: 10
@@ -2581,12 +2582,13 @@ MonoBehaviour:
   - {fileID: 8246265682462074660, guid: 43b8c3b2e75f2e94b86cb7ab578c036c, type: 3}
   - {fileID: 5983815531722904421, guid: e0e5dded4062a5e4ebba9fc9c9200d66, type: 3}
   segmentLength: 30
-  visibleSegments: 9
+  visibleSegments: 10
   deleteDistance: -50
   menuDeleteDistance: -200
-  menuStartZ: -200
   xOffset: -13.5
   direction: -1
+  backgroundSegments: 20
+  backgroundStartZ: -200
 --- !u!1 &1764908268
 GameObject:
   m_ObjectHideFlags: 0
@@ -2854,7 +2856,6 @@ MonoBehaviour:
   visibleSegments: 15
   deleteDistance: -50
   menuDeleteDistance: -200
-  menuStartZ: -200
   elevationFrequency: 0.03
   elevationAmplitude: 1
   baseHeight: 0
@@ -2862,6 +2863,8 @@ MonoBehaviour:
   perlinInfluence: 0.5
   minNormalBeforeSpecial: 10
   maxNormalBeforeSpecial: 20
+  backgroundSegments: 20
+  backgroundStartZ: -200
 --- !u!4 &1853180303
 Transform:
   m_ObjectHideFlags: 0

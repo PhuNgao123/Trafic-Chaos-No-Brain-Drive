@@ -57,8 +57,8 @@ public class GameLogicController : MonoBehaviour
         if (scoreController == null)
             scoreController = FindFirstObjectByType<ScoreController>();
 
-        // Auto-start game for testing
-        StartGame();
+        // Don't auto-start anymore - wait for menu button
+        // StartGame();
     }
 
     // Call this to start the game
@@ -66,6 +66,10 @@ public class GameLogicController : MonoBehaviour
     {
         isGameStarted = true;
         isGameOver = false;
+
+        // Enable enemy spawner
+        if (enemyController != null)
+            enemyController.enabled = true;
 
         // Start score tracking
         if (scoreController != null)

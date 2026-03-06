@@ -11,7 +11,9 @@ public class PavementSpawner : MonoBehaviour
     [Header("Pavement Settings")]
     public float segmentLength = 30f;   // Length of each prefab
     public int visibleSegments = 25;
-    public float deleteDistance = -30f;
+    public float deleteDistance = -50f;
+    public float menuDeleteDistance = -200f; // Delete distance before game starts
+    public float menuStartZ = -200f; // Starting Z position for menu
 
     [Header("Position Settings")]
     public float xOffset = 0f;
@@ -24,9 +26,13 @@ public class PavementSpawner : MonoBehaviour
     {
         direction = direction >= 0 ? 1 : -1;
 
+        // Spawn from menu start position
+        float currentZ = menuStartZ;
+
         for (int i = 0; i < visibleSegments; i++)
         {
-            SpawnSegment();
+            SpawnSegmentAt(currentZ);
+            currentZ += segmentLength;
         }
     }
 
@@ -35,15 +41,30 @@ public class PavementSpawner : MonoBehaviour
         if (pavements.Count == 0)
             return;
 
+        // Determine delete distance based on game state
+        float currentDeleteDistance = (GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted)
+            ? deleteDistance
+            : menuDeleteDistance;
+
         GameObject first = pavements.Peek();
-        if (first != null && first.transform.position.z < deleteDistance)
+        if (first != null && first.transform.position.z < currentDeleteDistance)
         {
             Destroy(pavements.Dequeue());
-            SpawnSegment();
+            
+            // Spawn next segment after the last one
+            if (pavements.Count > 0)
+            {
+                GameObject last = pavements.ToArray()[pavements.Count - 1];
+                if (last != null)
+                {
+                    float nextZ = last.transform.position.z + segmentLength;
+                    SpawnSegmentAt(nextZ);
+                }
+            }
         }
     }
 
-    void SpawnSegment()
+    void SpawnSegmentAt(float zPosition)
     {
         if (pavementPrefabs == null || pavementPrefabs.Count == 0)
             return;
@@ -52,21 +73,10 @@ public class PavementSpawner : MonoBehaviour
         if (prefab == null)
             return;
 
-        // Calculate spawn position based on last pavement
-        float spawnZ = 0f;
-        if (pavements.Count > 0)
-        {
-            GameObject last = pavements.ToArray()[pavements.Count - 1];
-            if (last != null)
-            {
-                spawnZ = last.transform.position.z + segmentLength;
-            }
-        }
-
         Vector3 spawnPos = new Vector3(
             xOffset * direction,
             0f,
-            spawnZ
+            zPosition
         );
 
         Quaternion rot = direction == 1

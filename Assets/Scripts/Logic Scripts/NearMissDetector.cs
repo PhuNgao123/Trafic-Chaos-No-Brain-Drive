@@ -62,6 +62,11 @@ public class NearMissDetector : MonoBehaviour
         if (showDebugLogs)
             Debug.Log($"[NearMiss] Detected vehicle: {vehicle.name}");
 
+        // Trigger camera shake
+        CameraFunctions cam = FindFirstObjectByType<CameraFunctions>();
+        if (cam != null)
+            cam.TriggerNearMissShake();
+
         // Check if within simultaneous window
         if (Time.time - _lastNearMissTime <= _simultaneousWindow)
         {

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Enemy Scripts\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\VehicleSpawner.cs" />
+    <Compile Include="Assets\Scripts\Logic Scripts\DayNightCycle.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\KiiValuePair.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\RoadSpawner.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\RoadMover.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\GlowLight.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\FriesPostProcessorIdentifier.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\SetupScriptURP.cs" />
+    <Compile Include="Assets\Scripts\UI Scripts\StartMenuUI.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\ScoreUI.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\VehicleMove.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\PrefabGroup.cs" />
