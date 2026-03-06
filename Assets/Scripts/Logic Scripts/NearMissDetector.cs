@@ -59,9 +59,6 @@ public class NearMissDetector : MonoBehaviour
 
         _triggeredVehicles.Add(vehicle);
 
-        if (showDebugLogs)
-            Debug.Log($"[NearMiss] Detected vehicle: {vehicle.name}");
-
         // Trigger camera shake
         CameraFunctions cam = FindFirstObjectByType<CameraFunctions>();
         if (cam != null)
@@ -105,9 +102,6 @@ public class NearMissDetector : MonoBehaviour
         if (ScoreController.Instance == null)
             return;
 
-        if (showDebugLogs)
-            Debug.Log($"[NearMiss] Processing {_simultaneousNearMiss} simultaneous near miss(es)");
-
         // Add combo based on number of simultaneous near misses
         ScoreController.Instance.AddCombo(_simultaneousNearMiss);
 
@@ -116,9 +110,6 @@ public class NearMissDetector : MonoBehaviour
         {
             float bonus = ScoreController.Instance.perfectOvertakeBonus * _simultaneousNearMiss;
             ScoreController.Instance.AddBonusScore(bonus);
-
-            if (showDebugLogs)
-                Debug.Log($"[NearMiss] Perfect overtake! Bonus: {bonus}");
         }
 
         // Reset counter

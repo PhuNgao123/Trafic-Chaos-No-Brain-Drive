@@ -95,14 +95,10 @@ public class GameLogicController : MonoBehaviour
     // Called when player collides with vehicle
     public void TriggerGameOver(GameObject collidedVehicle, GameObject player)
     {
-        Debug.Log($"[GameLogic] TriggerGameOver called - isGameOver: {isGameOver}");
-
         if (isGameOver) return;
 
         isGameOver = true;
         _isCrashSlowDown = true;
-
-        Debug.Log($"[GameLogic] Game Over! Vehicle: {collidedVehicle.name}, Player: {player.name}");
 
         // Disable player movement input
         if (playerPhysics != null)

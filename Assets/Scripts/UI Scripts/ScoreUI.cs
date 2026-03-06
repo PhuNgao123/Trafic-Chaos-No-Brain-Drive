@@ -120,16 +120,11 @@ public class ScoreUI : MonoBehaviour
     // Update combo display with animation
     void UpdateCombo(int combo)
     {
-        Debug.Log($"[ScoreUI] UpdateCombo called: {combo}");
-
         if (combo <= 0)
         {
             // Hide combo panel
             if (comboPanel != null)
-            {
                 comboPanel.SetActive(false);
-                Debug.Log("[ScoreUI] Combo panel hidden");
-            }
             
             // Clear text
             if (comboText != null)
@@ -140,24 +135,15 @@ public class ScoreUI : MonoBehaviour
 
         // Show combo panel
         if (comboPanel != null)
-        {
             comboPanel.SetActive(true);
-            Debug.Log("[ScoreUI] Combo panel shown");
-        }
 
-        // Update combo text - FORCE visible
+        // Update combo text
         if (comboText != null)
         {
             string newText = string.Format(comboFormat, combo);
             comboText.text = newText;
-            comboText.enabled = true; // Force enable
-            comboText.ForceMeshUpdate(); // Force update mesh
-            
-            Debug.Log($"[ScoreUI] Combo text updated: {newText} | Enabled: {comboText.enabled} | GameObject active: {comboText.gameObject.activeSelf}");
-        }
-        else
-        {
-            Debug.LogError("[ScoreUI] ComboText is NULL!");
+            comboText.enabled = true;
+            comboText.ForceMeshUpdate();
         }
 
         // Trigger scale animation
@@ -172,8 +158,6 @@ public class ScoreUI : MonoBehaviour
             float fillAmount = max > 0 ? current / max : 0f;
             comboTimerBar.fillAmount = fillAmount;
 
-            Debug.Log($"[ScoreUI] Timer: {current:F2}/{max:F2} = {fillAmount:F2} | FillAmount set to: {comboTimerBar.fillAmount}");
-
             // Change bar color based on urgency
             if (fillAmount < 0.3f)
                 comboTimerBar.color = Color.red;
@@ -181,10 +165,6 @@ public class ScoreUI : MonoBehaviour
                 comboTimerBar.color = Color.yellow;
             else
                 comboTimerBar.color = Color.green;
-        }
-        else
-        {
-            Debug.LogError("[ScoreUI] ComboTimerBar is NULL!");
         }
     }
 
