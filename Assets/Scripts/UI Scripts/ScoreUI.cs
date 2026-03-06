@@ -158,6 +158,8 @@ public class ScoreUI : MonoBehaviour
             float fillAmount = max > 0 ? current / max : 0f;
             comboTimerBar.fillAmount = fillAmount;
 
+            Debug.Log($"[ScoreUI] Timer: {current:F2}/{max:F2} = {fillAmount:F2} | FillAmount set to: {comboTimerBar.fillAmount}");
+
             // Change bar color based on urgency
             if (fillAmount < 0.3f)
                 comboTimerBar.color = Color.red;
@@ -165,6 +167,10 @@ public class ScoreUI : MonoBehaviour
                 comboTimerBar.color = Color.yellow;
             else
                 comboTimerBar.color = Color.green;
+        }
+        else
+        {
+            Debug.LogError("[ScoreUI] ComboTimerBar is NULL!");
         }
     }
 

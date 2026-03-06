@@ -160,7 +160,8 @@ public class GameLogicController : MonoBehaviour
             if (vm2 != null) vm2.enabled = false;
         }
         
-        // Make both vehicles bounce but keep movement enabled (if not game over)
+        // Make both vehicles bounce
+        // Each vehicle checks its own bounce state internally
         MakeVehicleBounce(vehicle1);
         MakeVehicleBounce(vehicle2);
     }
@@ -182,9 +183,18 @@ public class GameLogicController : MonoBehaviour
         rb.useGravity = true;
         rb.WakeUp();
 
+        // Calculate force based on mass (heavier = more force needed)
+        float massMultiplier = rb.mass / 10f; // Normalize to mass 10
+        
+        // Apply force in vehicle's forward direction (momentum)
+        Vector3 forwardForce = vehicle.transform.forward * (crashForce * 0.3f * massMultiplier);
+        rb.AddForce(forwardForce, ForceMode.Impulse);
+        
         // Apply smaller upward force (vehicles can recover)
-        rb.AddForce(Vector3.up * (bounceForce * 0.5f), ForceMode.Impulse);
-        rb.AddTorque(Random.insideUnitSphere * 2f, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * (bounceForce * 0.5f * massMultiplier), ForceMode.Impulse);
+        
+        // Add slight rotation
+        rb.AddTorque(Random.insideUnitSphere * (2f * massMultiplier), ForceMode.Impulse);
     }
 
     System.Collections.IEnumerator ReEnableKinematic(Rigidbody rb, float delay)

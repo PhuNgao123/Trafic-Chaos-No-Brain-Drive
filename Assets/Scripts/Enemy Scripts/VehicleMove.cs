@@ -14,13 +14,16 @@ public class VehicleMove : MonoBehaviour
     public float laneWidth = 4f;
     public float laneChangeSpeed = 4f;
     public float laneChangeCooldown = 1f;
+    public int maxBounces = 2; // Maximum number of bounces allowed
 
     private float _currentSpeed;
     private Transform _transform;
     private float _targetX;
     private bool _isChangingLane;
     private float _lastLaneChangeAttempt;
-    private bool _hasBounced = false; // Track if vehicle has bounced
+    private int _bounceCount = 0; // Track number of bounces
+    private float _lastBounceTime = -999f; // Time of last bounce
+    private const float BOUNCE_COOLDOWN = 1f; // Cooldown between bounces
 
     void Awake()
     {
@@ -191,15 +194,32 @@ public class VehicleMove : MonoBehaviour
         direction = dir;
     }
 
-    // Handle vehicle-to-vehicle collision
+    // Handle collision with vehicles and player
     void OnCollisionEnter(Collision collision)
     {
-        // Only bounce once
-        if (_hasBounced) return;
+        // Collision with Player - always trigger (even if max bounces reached)
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (GameLogicController.Instance != null)
+            {
+                GameLogicController.Instance.OnVehicleCollision(gameObject, collision.gameObject);
+            }
+            return;
+        }
         
+        // Collision with Vehicle - check bounce limit and cooldown
         if (collision.gameObject.CompareTag("Vehicle"))
         {
-            _hasBounced = true; // Mark as bounced
+            // Check if max bounces reached
+            if (_bounceCount >= maxBounces)
+                return; // No more bounces allowed
+            
+            // Check cooldown
+            if (Time.time - _lastBounceTime < BOUNCE_COOLDOWN)
+                return; // Still in cooldown
+            
+            _lastBounceTime = Time.time;
+            _bounceCount++;
             
             if (GameLogicController.Instance != null)
             {
