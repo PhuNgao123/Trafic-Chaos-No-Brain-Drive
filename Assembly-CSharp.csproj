@@ -56,6 +56,7 @@
     <Compile Include="Assets\Scripts\Road Scripts\RoadMover.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\RotatableObject.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\GlowLight.cs" />
+    <Compile Include="Assets\Scripts\UI Scripts\NitroUI.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\FriesPostProcessorIdentifier.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\SetupScriptURP.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\StartMenuUI.cs" />
@@ -77,10 +78,12 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\FenceData.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\LightSourceObject.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\RoadSegment.cs" />
+    <Compile Include="Assets\Scripts\Player Scripts\NitroStackZone.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\CameraFunctions.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\NearMissDetector.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\AnInspector.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\IgnoreInInspectorAttribute.cs" />
+    <Compile Include="Assets\Scripts\Player Scripts\NitroController.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\ArrayArrangement.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\GameLogicController.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\ScoreController.cs" />

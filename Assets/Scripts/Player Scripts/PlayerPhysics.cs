@@ -13,6 +13,9 @@ public class PlayerPhysics : MonoBehaviour
     public float acceleration = 5f;
     public float deceleration = 5f;
 
+    [HideInInspector]
+    public float speedMultiplier = 1f; // Used by NitroController for 2x speed
+
     [Header("=== STEERING (ARCADE) ===")]
     public float steerSpeed = 8f;
     public float maxSteerVelocity = 15f;
@@ -63,11 +66,11 @@ public class PlayerPhysics : MonoBehaviour
         else if (v < 0) currentSpeed -= deceleration * Time.deltaTime;
 
         currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, maxSpeed);
-        
-        // Control road movement speed
+
+        // Control road movement speed (speedMultiplier = 2 when nitro is active)
         if (roadMover != null)
         {
-            roadMover.speed = currentSpeed;
+            roadMover.speed = currentSpeed * speedMultiplier;
         }
     }
 
