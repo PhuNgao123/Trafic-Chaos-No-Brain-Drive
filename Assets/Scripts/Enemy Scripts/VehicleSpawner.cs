@@ -130,6 +130,13 @@ public class VehicleSpawner : MonoBehaviour
             if (hit.collider.CompareTag("Vehicle"))
                 return false;
         }
+
+        // Prevent side-by-side wall spawning by checking the global spawn timer
+        if (enemyController != null && Time.time - enemyController.lastGlobalSpawnTime < enemyController.minGlobalSpawnInterval)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -138,6 +145,12 @@ public class VehicleSpawner : MonoBehaviour
     // Speed = base + player speed + direction multiplier + randomness
     void Spawn()
     {
+        // Update global spawn time to prevent other spawners from spawning immediately
+        if (enemyController != null)
+        {
+            enemyController.lastGlobalSpawnTime = Time.time;
+        }
+
         // Check if prefabs list is valid
         if (vehiclePrefabs == null || vehiclePrefabs.Count == 0)
             return;

@@ -42,7 +42,7 @@ public class VehicleMove : MonoBehaviour
     // Handles AI behavior: raycast forward to detect obstacles
     // If vehicle or player detected: adjust speed based on direction
     // Direction 1 (opposite): decrease speed to avoid collision
-    // Direction -1 (same): increase speed to overtake
+    // Direction -1 (same): increase speed to overtake, ALSO check backward for player to yield
     // Otherwise: return to base speed
     void HandleAI()
     {
@@ -61,12 +61,15 @@ public class VehicleMove : MonoBehaviour
             rayDirection = _transform.forward; // Normal: use transform forward
         }
 
+        bool obstacleFront = false;
+
         if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, detectDistance))
         {
             Debug.DrawRay(rayOrigin, rayDirection * hit.distance, Color.green);
 
             if (hit.collider.CompareTag("Vehicle") || hit.collider.CompareTag("Player"))
             {
+                obstacleFront = true;
                 // Adjust speed based on direction
                 if (direction == 1)
                 {
@@ -83,7 +86,7 @@ public class VehicleMove : MonoBehaviour
                     }
                     else
                     {
-                        // Normal: speed up to overtake
+                        // Normal: speed up to overtake (actually means slowing down on road, so increasing approach speed)
                         _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed * (1f + (1f - slowDownFactor)), Time.deltaTime * 4f);
                     }
                 }
@@ -99,14 +102,40 @@ public class VehicleMove : MonoBehaviour
         else
         {
             Debug.DrawRay(rayOrigin, rayDirection * detectDistance, Color.red);
+        }
 
+        // Check behind if same direction (yielding to fast approaching player)
+        bool yieldingToPlayer = false;
+        if (direction == -1 && !isGameOver)
+        {
+            Vector3 backwardRay = -_transform.forward;
+            if (Physics.Raycast(rayOrigin, backwardRay, out RaycastHit backHit, detectDistance * 2f)) // Look further back
+            {
+                Debug.DrawRay(rayOrigin, backwardRay * backHit.distance, Color.yellow);
+                if (backHit.collider.CompareTag("Player"))
+                {
+                    yieldingToPlayer = true;
+                    // Speed up on the road to get out of the player's way (decrease approach speed)
+                    _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed * 0.5f, Time.deltaTime * 4f);
+                    
+                    if (Time.time - _lastLaneChangeAttempt > laneChangeCooldown * 0.5f) // Faster lane change response for player
+                    {
+                        TryChangeLane();
+                        _lastLaneChangeAttempt = Time.time;
+                    }
+                }
+            }
+        }
+
+        if (!obstacleFront && !yieldingToPlayer)
+        {
             // No obstacle: return to base speed
             _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed, Time.deltaTime * 2f);
         }
     }
 
     // Attempts to change lane by trying both left and right directions
-    // Checks if new lane position is within road bounds (-15 to +15)
+    // Checks if new lane position is within road bounds (-15 to +15) and not occupied
     void TryChangeLane()
     {
         float[] directions = { 1f, -1f };
@@ -126,9 +155,29 @@ public class VehicleMove : MonoBehaviour
             // Check if within road bounds
             if (newTargetX >= -15f && newTargetX <= 15f)
             {
-                _targetX = newTargetX;
-                _isChangingLane = true;
-                return;
+                // Check if the target lane is clear
+                Vector3 checkPos = new Vector3(newTargetX, _transform.position.y, _transform.position.z);
+                Vector3 boxHalfExtents = new Vector3(laneWidth * 0.4f, 1f, 10f);
+                
+                // Use OverlapBox to ensure no vehicles or player in the target lane area
+                Collider[] colliders = Physics.OverlapBox(checkPos, boxHalfExtents, Quaternion.identity);
+                bool isClear = true;
+                
+                foreach (var col in colliders)
+                {
+                    if (col.CompareTag("Vehicle") || col.CompareTag("Player"))
+                    {
+                        isClear = false;
+                        break;
+                    }
+                }
+                
+                if (isClear)
+                {
+                    _targetX = newTargetX;
+                    _isChangingLane = true;
+                    return;
+                }
             }
         }
     }
