@@ -65,6 +65,9 @@ public class AudioManager : MonoBehaviour
             s.source.Stop(); // Stop any currently playing music
         }
 
+        // Start with a random song
+        currentBgmIndex = UnityEngine.Random.Range(0, bgmSounds.Length);
+
         if (playlistCoroutine != null) StopCoroutine(playlistCoroutine);
         playlistCoroutine = StartCoroutine(PlaylistRoutine());
     }
@@ -79,12 +82,19 @@ public class AudioManager : MonoBehaviour
             // Wait until the current clip finishes playing (checking time or isPlaying)
             yield return new WaitWhile(() => s.source.isPlaying);
 
-            // Move to the next song in the array
-            currentBgmIndex++;
-            if (currentBgmIndex >= bgmSounds.Length)
+            // Move to a random next song
+            int nextIndex = UnityEngine.Random.Range(0, bgmSounds.Length);
+            
+            // Try to avoid playing the same song twice in a row if there's more than 1 song
+            if (bgmSounds.Length > 1)
             {
-                currentBgmIndex = 0; // loop back to the first song
+                while (nextIndex == currentBgmIndex)
+                {
+                    nextIndex = UnityEngine.Random.Range(0, bgmSounds.Length);
+                }
             }
+            
+            currentBgmIndex = nextIndex;
         }
     }
 

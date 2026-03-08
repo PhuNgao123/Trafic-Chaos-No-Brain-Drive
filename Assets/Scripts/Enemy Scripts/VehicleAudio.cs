@@ -6,6 +6,10 @@ public class VehicleAudio : MonoBehaviour
     private AudioSource engineAudioSource;
     public AudioClip engineClip;
 
+    [Header("Engine Audio Settings")]
+    [Range(0f, 1f)]
+    public float volume = 1f;
+
     [Header("Engine Pitch Settings")]
     public float minPitch = 0.8f;
     public float maxPitch = 1.5f;
@@ -20,6 +24,7 @@ public class VehicleAudio : MonoBehaviour
             engineAudioSource.spatialBlend = 1f; // 3D sound for enemies
             engineAudioSource.minDistance = 2f;
             engineAudioSource.maxDistance = 30f;
+            engineAudioSource.volume = volume;
             
             engineAudioSource.pitch = Random.Range(minPitch, maxPitch);
             

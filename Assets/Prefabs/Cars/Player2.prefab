@@ -160,6 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAudio
   engineStartClip: {fileID: 8300000, guid: b7b216f953d4db3419e1eb1b43feaa54, type: 3}
   engineRevClip: {fileID: 8300000, guid: d3b4ff9959c6dcc4a80b066c137c3838, type: 3}
+  volume: 0.7
   minPitch: 0.8
   maxPitch: 2
 --- !u!1 &1493601748268640175

@@ -91,8 +91,8 @@ public class VehicleMove : MonoBehaviour
                     }
                 }
 
-                // Try to change lane if cooldown passed
-                if (Time.time - _lastLaneChangeAttempt > laneChangeCooldown)
+                // Try to change lane if cooldown passed (only for vehicles, not player)
+                if (hit.collider.CompareTag("Vehicle") && Time.time - _lastLaneChangeAttempt > laneChangeCooldown)
                 {
                     TryChangeLane();
                     _lastLaneChangeAttempt = Time.time;
@@ -116,13 +116,8 @@ public class VehicleMove : MonoBehaviour
                 {
                     yieldingToPlayer = true;
                     // Speed up on the road to get out of the player's way (decrease approach speed)
+                    // Note: No longer changing lanes to dodge player, to keep their path predictable.
                     _currentSpeed = Mathf.Lerp(_currentSpeed, baseSpeed * 0.5f, Time.deltaTime * 4f);
-                    
-                    if (Time.time - _lastLaneChangeAttempt > laneChangeCooldown * 0.5f) // Faster lane change response for player
-                    {
-                        TryChangeLane();
-                        _lastLaneChangeAttempt = Time.time;
-                    }
                 }
             }
         }

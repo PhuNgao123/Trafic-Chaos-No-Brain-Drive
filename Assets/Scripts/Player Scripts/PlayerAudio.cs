@@ -8,6 +8,10 @@ public class PlayerAudio : MonoBehaviour
     public AudioClip engineStartClip;
     public AudioClip engineRevClip;
 
+    [Header("Engine Audio Settings")]
+    [Range(0f, 1f)]
+    public float volume = 1f;
+
     [Header("Engine Pitch Settings")]
     public float minPitch = 0.8f;
     public float maxPitch = 2.0f;
@@ -29,7 +33,8 @@ public class PlayerAudio : MonoBehaviour
         {
             engineAudioSource.clip = engineStartClip;
             engineAudioSource.loop = false; 
-            engineAudioSource.spatialBlend = 0f; 
+            engineAudioSource.spatialBlend = 0f;
+            engineAudioSource.volume = volume;
             engineAudioSource.Play();
             
             // Wait for the exact length of the start clip
@@ -42,6 +47,7 @@ public class PlayerAudio : MonoBehaviour
         {
             engineAudioSource.clip = engineRevClip;
             engineAudioSource.loop = true; // Rev sound continuously loops
+            engineAudioSource.volume = volume;
             engineAudioSource.Play();
         }
     }
