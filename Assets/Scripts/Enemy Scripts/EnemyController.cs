@@ -79,20 +79,44 @@ public class EnemyController : MonoBehaviour
     // Returns spawn interval multiplier based on vehicle direction
     // Direction 1 (opposite): spawns more frequently
     // Direction -1 (same): spawns less frequently
+    // Also applies difficulty scaling
     public float GetIntervalMultiplier(int direction)
     {
-        if (direction == 1) return direction1IntervalMultiplier;
-        if (direction == -1) return directionMinus1IntervalMultiplier;
-        return 1f;
+        float baseMultiplier = 1f;
+        
+        if (direction == 1) 
+            baseMultiplier = direction1IntervalMultiplier;
+        else if (direction == -1) 
+            baseMultiplier = directionMinus1IntervalMultiplier;
+
+        // Apply difficulty scaling
+        if (DifficultyController.Instance != null)
+        {
+            baseMultiplier *= DifficultyController.Instance.GetSpawnRateMultiplier();
+        }
+
+        return baseMultiplier;
     }
 
     // Returns speed multiplier based on vehicle direction
     // Direction 1 (opposite): moves faster (more challenging)
     // Direction -1 (same): moves slower (less challenging)
+    // Also applies difficulty scaling
     public float GetSpeedMultiplier(int direction)
     {
-        if (direction == 1) return direction1SpeedMultiplier;
-        if (direction == -1) return directionMinus1SpeedMultiplier;
-        return 1f;
+        float baseMultiplier = 1f;
+        
+        if (direction == 1) 
+            baseMultiplier = direction1SpeedMultiplier;
+        else if (direction == -1) 
+            baseMultiplier = directionMinus1SpeedMultiplier;
+
+        // Apply difficulty scaling
+        if (DifficultyController.Instance != null)
+        {
+            baseMultiplier *= DifficultyController.Instance.GetSpeedMultiplier();
+        }
+
+        return baseMultiplier;
     }
 }
