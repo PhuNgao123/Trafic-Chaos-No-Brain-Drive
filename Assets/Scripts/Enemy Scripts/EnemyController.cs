@@ -34,10 +34,6 @@ public class EnemyController : MonoBehaviour
     [Tooltip("Direction -1 (same) - speed multiplier")]
     public float directionMinus1SpeedMultiplier = 0.8f;
 
-    [Header("Anti-Wall Spawn Settings")]
-    public float minGlobalSpawnInterval = 0.5f; // Prevents spawners from spawning side-by-side walls
-    [HideInInspector] public float lastGlobalSpawnTime = -999f;
-
     // Public method to stop all spawning
     public void StopAllSpawning()
     {
@@ -83,44 +79,20 @@ public class EnemyController : MonoBehaviour
     // Returns spawn interval multiplier based on vehicle direction
     // Direction 1 (opposite): spawns more frequently
     // Direction -1 (same): spawns less frequently
-    // Also applies difficulty scaling
     public float GetIntervalMultiplier(int direction)
     {
-        float baseMultiplier = 1f;
-        
-        if (direction == 1) 
-            baseMultiplier = direction1IntervalMultiplier;
-        else if (direction == -1) 
-            baseMultiplier = directionMinus1IntervalMultiplier;
-
-        // Apply difficulty scaling
-        if (DifficultyController.Instance != null)
-        {
-            baseMultiplier *= DifficultyController.Instance.GetSpawnRateMultiplier();
-        }
-
-        return baseMultiplier;
+        if (direction == 1) return direction1IntervalMultiplier;
+        if (direction == -1) return directionMinus1IntervalMultiplier;
+        return 1f;
     }
 
     // Returns speed multiplier based on vehicle direction
     // Direction 1 (opposite): moves faster (more challenging)
     // Direction -1 (same): moves slower (less challenging)
-    // Also applies difficulty scaling
     public float GetSpeedMultiplier(int direction)
     {
-        float baseMultiplier = 1f;
-        
-        if (direction == 1) 
-            baseMultiplier = direction1SpeedMultiplier;
-        else if (direction == -1) 
-            baseMultiplier = directionMinus1SpeedMultiplier;
-
-        // Apply difficulty scaling
-        if (DifficultyController.Instance != null)
-        {
-            baseMultiplier *= DifficultyController.Instance.GetSpeedMultiplier();
-        }
-
-        return baseMultiplier;
+        if (direction == 1) return direction1SpeedMultiplier;
+        if (direction == -1) return directionMinus1SpeedMultiplier;
+        return 1f;
     }
 }
