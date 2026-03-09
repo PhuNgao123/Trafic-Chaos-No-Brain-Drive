@@ -284,7 +284,6 @@ GameObject:
   - component: {fileID: 1508748240120141953}
   - component: {fileID: 2291370315505891442}
   - component: {fileID: 9028503359767048064}
-  - component: {fileID: 7516118503804263046}
   m_Layer: 0
   m_Name: CarPhysic
   m_TagString: Player
@@ -383,18 +382,6 @@ MonoBehaviour:
   zNormalizeSpeed: 5
   lookAheadDistance: 10
   rotationSmoothSpeed: 10
---- !u!114 &7516118503804263046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919171530381997405}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!1 &2637822479185982824
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,7 +698,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8721188832083936239}
-  - component: {fileID: 5296261769043263380}
   - component: {fileID: -7920032609380989232}
   - component: {fileID: -4420474176937859152}
   m_Layer: 0
@@ -738,18 +724,6 @@ Transform:
   - {fileID: 7421065154265976732}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5296261769043263380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5839176311239820667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerGameOverTrigger
 --- !u!82 &-7920032609380989232
 AudioSource:
   m_ObjectHideFlags: 0

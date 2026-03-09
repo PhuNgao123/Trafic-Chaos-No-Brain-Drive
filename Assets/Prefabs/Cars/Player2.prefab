@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2866000225697755331}
-  - component: {fileID: 2875146114979899918}
   - component: {fileID: 3847440406755737646}
   - component: {fileID: 1694649570672773543}
   m_Layer: 0
@@ -36,19 +35,6 @@ Transform:
   - {fileID: 1658228440751557426}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2875146114979899918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 16396815157493227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerGameOverTrigger
-  showDebugLogs: 0
 --- !u!82 &3847440406755737646
 AudioSource:
   m_ObjectHideFlags: 0
@@ -229,7 +215,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  showDebugLogs: 1
 --- !u!1 &1958387103794034699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,7 +1100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  showDebugLogs: 0
 --- !u!1 &7114020193263446000
 GameObject:
   m_ObjectHideFlags: 0
