@@ -112,35 +112,6 @@ public class GameLogicController : MonoBehaviour
             AudioManager.Instance.StopBGMPlaylist();
         }
 
-        // Log game over info
-        Debug.Log("========== GAME OVER ==========");
-        
-        // Log difficulty info
-        if (DifficultyController.Instance != null)
-        {
-            Debug.Log($"[GameOver] Difficulty: {DifficultyController.Instance.GetDifficultyName()} | Survival Time: {DifficultyController.Instance.GetSurvivalTime():F1}s");
-        }
-
-        // Save score and convert to coins
-        if (scoreController != null && CurrencyManager.Instance != null)
-        {
-            float finalScore = scoreController.GetCurrentScore();
-            Debug.Log($"[GameOver] Final Score: {finalScore:F0}");
-            
-            // Update high score
-            bool isNewHighScore = CurrencyManager.Instance.UpdateHighScore(finalScore);
-            
-            // Convert score to coins
-            int coinsEarned = CurrencyManager.Instance.ConvertScoreToCoins(finalScore);
-            
-            if (isNewHighScore)
-            {
-                Debug.Log("[GameOver] 🏆 NEW HIGH SCORE! 🏆");
-            }
-        }
-        
-        Debug.Log("===============================");
-
         // Disable player movement input
         if (playerPhysics != null)
         {

@@ -57,7 +57,6 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\RotatableObject.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\GlowLight.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\FriesPostProcessorIdentifier.cs" />
-    <Compile Include="Assets\Scripts\Logic Scripts\CurrencyManager.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\SetupScriptURP.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\StartMenuUI.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\ScoreUI.cs" />
@@ -67,8 +66,6 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\SetupScriptBRP.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\AButtonAttribute.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\PavementSpawner.cs" />
-    <Compile Include="Assets\Scripts\Logic Scripts\DifficultyController.cs" />
-    <Compile Include="Assets\Scripts\UI Scripts\DeathScreenUI.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\PlayerAudio.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\FriesManagerURP.cs" />
     <Compile Include="Assets\Scripts\Audio Scripts\Sound.cs" />
