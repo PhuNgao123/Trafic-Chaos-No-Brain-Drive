@@ -1,18 +1,24 @@
 using UnityEngine;
 
-// Nitro: activate with Space. 2x speed while active and front collider disabled (invincible).
+// Nitro: activate with Space. 5x speed while active and front collider disabled (invincible).
 // Nitro stacks from side slipstream (close to bot cars on left/right) or NitroPickup power-ups.
+// During nitro, player becomes much heavier and pushes cars out of the way.
 public class NitroController : MonoBehaviour
 {
     [Header("References")]
     public Collider frontTriggerCollider;  // GameOverTrigger collider - disabled during nitro
     public PlayerPhysics playerPhysics;
+    public Rigidbody playerRigidbody;
 
     [Header("Nitro Amount")]
     public float maxNitroAmount = 100f;
-    public float nitroDrainPerSecond = 25f;
-    public float nitroSlipstreamAddPerSecond = 15f;  // When bot car is in side zones
+    public float nitroDrainPerSecond = 10f;
+    public float nitroSlipstreamAddPerSecond = 50f;  // When bot car is in side zones
     public float nitroPickupAmount = 50f;
+
+    [Header("Nitro Power")]
+    public float nitroSpeedMultiplier = 5f;  // 5x speed during nitro
+    public float nitroMassMultiplier = 10f;  // 10x heavier to push cars
 
     [Header("Optional: Side zones (auto-created if missing)")]
     public NitroStackZone nitroStackZone;
@@ -20,6 +26,7 @@ public class NitroController : MonoBehaviour
     private float _nitroAmount;
     private bool _isNitroActive;
     private bool _frontColliderWasEnabled = true;
+    private float _originalMass = 1f;
 
     void Start()
     {
@@ -34,6 +41,13 @@ public class NitroController : MonoBehaviour
 
         if (playerPhysics == null)
             playerPhysics = GetComponent<PlayerPhysics>();
+
+        if (playerRigidbody == null)
+            playerRigidbody = GetComponent<Rigidbody>();
+
+        // Store original mass
+        if (playerRigidbody != null)
+            _originalMass = playerRigidbody.mass;
 
         if (nitroStackZone == null)
         {
@@ -110,8 +124,16 @@ public class NitroController : MonoBehaviour
     void StartNitro()
     {
         _isNitroActive = true;
+        
+        // 5x speed boost
         if (playerPhysics != null)
-            playerPhysics.speedMultiplier = 2f;
+            playerPhysics.speedMultiplier = nitroSpeedMultiplier;
+        
+        // Make player much heavier to push cars
+        if (playerRigidbody != null)
+            playerRigidbody.mass = _originalMass * nitroMassMultiplier;
+        
+        // Disable front collision trigger (invincible)
         if (frontTriggerCollider != null)
         {
             _frontColliderWasEnabled = frontTriggerCollider.enabled;
@@ -122,8 +144,16 @@ public class NitroController : MonoBehaviour
     void EndNitro()
     {
         _isNitroActive = false;
+        
+        // Restore normal speed
         if (playerPhysics != null)
             playerPhysics.speedMultiplier = 1f;
+        
+        // Restore original mass
+        if (playerRigidbody != null)
+            playerRigidbody.mass = _originalMass;
+        
+        // Re-enable front collision trigger
         if (frontTriggerCollider != null)
             frontTriggerCollider.enabled = _frontColliderWasEnabled;
     }
