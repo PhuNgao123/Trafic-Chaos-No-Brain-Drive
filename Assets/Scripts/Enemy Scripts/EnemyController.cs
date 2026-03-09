@@ -34,6 +34,10 @@ public class EnemyController : MonoBehaviour
     [Tooltip("Direction -1 (same) - speed multiplier")]
     public float directionMinus1SpeedMultiplier = 0.8f;
 
+    [Header("Anti-Wall Spawn Settings")]
+    public float minGlobalSpawnInterval = 0.5f; // Prevents spawners from spawning side-by-side walls
+    [HideInInspector] public float lastGlobalSpawnTime = -999f;
+
     // Public method to stop all spawning
     public void StopAllSpawning()
     {

@@ -13,15 +13,27 @@ public class PlayerVisual : MonoBehaviour
     public float driftAngle = 15f; // Góc nghiêng Z khi drift
 
     private float currentDrift = 0f;
+    private Quaternion initialRotation;
+    private Vector3 initialLocalOffset;
+
+    void Start()
+    {
+        initialRotation = transform.localRotation;
+        if (physicsTarget != null)
+        {
+            initialLocalOffset = physicsTarget.InverseTransformPoint(transform.position);
+        }
+    }
 
     void LateUpdate()
     {
         if (physicsTarget == null) return;
 
-        // Smooth follow position
+        // Smooth follow position with initial offset
+        Vector3 targetPos = physicsTarget.TransformPoint(initialLocalOffset);
         transform.position = Vector3.Lerp(
             transform.position,
-            physicsTarget.position,
+            targetPos,
             positionSmooth * Time.deltaTime
         );
 
@@ -29,8 +41,8 @@ public class PlayerVisual : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         currentDrift = Mathf.Lerp(currentDrift, -h * driftAngle, 8f * Time.deltaTime);
 
-        // Rotation = physics rotation + drift effect
-        Quaternion targetRotation = physicsTarget.rotation * Quaternion.Euler(0, 0, currentDrift);
+        // Rotation = physics rotation * initial offset + drift effect
+        Quaternion targetRotation = physicsTarget.rotation * initialRotation * Quaternion.Euler(0, 0, currentDrift);
         
         transform.rotation = Quaternion.Slerp(
             transform.rotation,

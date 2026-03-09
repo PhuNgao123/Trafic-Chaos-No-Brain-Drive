@@ -74,6 +74,12 @@ public class GameLogicController : MonoBehaviour
         // Start score tracking
         if (scoreController != null)
             scoreController.StartGame();
+            
+        // Start background music playlist when game starts
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayBGMPlaylist();
+        }
     }
 
     void Update()
@@ -99,6 +105,12 @@ public class GameLogicController : MonoBehaviour
 
         isGameOver = true;
         _isCrashSlowDown = true;
+        
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX("PlayerCrash");
+            AudioManager.Instance.StopBGMPlaylist();
+        }
 
         // Log game over info
         Debug.Log("========== GAME OVER ==========");
@@ -179,6 +191,11 @@ public class GameLogicController : MonoBehaviour
     // Public method for vehicle-to-vehicle collision (no disable, just bounce)
     public void OnVehicleCollision(GameObject vehicle1, GameObject vehicle2)
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX("VehicleCrash");
+        }
+
         // If game is over, stop both vehicles
         if (isGameOver)
         {

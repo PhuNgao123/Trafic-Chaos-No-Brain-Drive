@@ -2311,7 +2311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb77dd0bf2bd9e847ba14f90303cfcca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreController
-  playerPhysics: {fileID: 1860024013}
+  playerPhysics: {fileID: 0}
   gameLogic: {fileID: 1585057340}
   baseScorePerSecond: 10
   speedBonusMultiplier: 1.5
@@ -2335,31 +2335,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerLogicController
       objectReference: {fileID: 0}
-    - target: {fileID: 1919171530381997405, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_Name
-      value: CarPhysic
-      objectReference: {fileID: 0}
-    - target: {fileID: 1919171530381997405, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 3232874493984327143, guid: 21b2658e975af0545a489e08c5613681, type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5839176311239820667, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5839176311239820667, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_TagString
-      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 7516118503804263046, guid: 21b2658e975af0545a489e08c5613681, type: 3}
       propertyPath: showDebugLogs
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8186530128732479684, guid: 21b2658e975af0545a489e08c5613681, type: 3}
+    - target: {fileID: 546588166328261097, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
       propertyPath: m_TagString
       value: PlayerNearMiss
       objectReference: {fileID: 0}
@@ -2379,42 +2363,98 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8721188832083936239, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9028503359767048064, guid: 21b2658e975af0545a489e08c5613681, type: 3}
+    - target: {fileID: 3907434505756603792, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
       propertyPath: roadMover
       value: 
       objectReference: {fileID: 2079384911}
-    - target: {fileID: 9028503359767048064, guid: 21b2658e975af0545a489e08c5613681, type: 3}
+    - target: {fileID: 3907434505756603792, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
       propertyPath: roadSpawner
       value: 
       objectReference: {fileID: 1853180302}
+    - target: {fileID: 4871419498508124253, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_Name
+      value: Player 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871419498508124253, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5903907633463965745, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5903907633463965745, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5903907633463965745, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5903907633463965745, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5903907633463965745, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844310199112222395, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6907355243209671309, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_Name
+      value: CarPhysic
+      objectReference: {fileID: 0}
+    - target: {fileID: 6907355243209671309, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910598347319766722, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 810263476913908201, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-    - {fileID: 5296261769043263380, guid: 21b2658e975af0545a489e08c5613681, type: 3}
-    - {fileID: 7516118503804263046, guid: 21b2658e975af0545a489e08c5613681, type: 3}
+    - {fileID: 6639654104004398075, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+    - {fileID: 1365713800933824729, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3109,7 +3149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9c8d291df1d02341b252cda59e79959, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
-  playerPhysics: {fileID: 1860024013}
+  playerPhysics: {fileID: 0}
   spawners:
   - {fileID: 71397556}
   - {fileID: 1079842737}
@@ -3143,6 +3183,8 @@ MonoBehaviour:
   direction1SpeedMultiplier: 1.5
   directionMinus1IntervalMultiplier: 1
   directionMinus1SpeedMultiplier: 0.5
+  minGlobalSpawnInterval: 0.5
+  lastGlobalSpawnTime: -999
 --- !u!1 &1036376659
 GameObject:
   m_ObjectHideFlags: 0
@@ -6158,7 +6200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dfb0fec953f402478eff23ab9a7ed27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoadMover
-  playerPhysics: {fileID: 1860024013}
+  playerPhysics: {fileID: 0}
   speed: 10
 --- !u!1 &2128641824
 GameObject:
@@ -6205,3 +6247,6 @@ SceneRoots:
   - {fileID: 253946344}
   - {fileID: 1365376103}
   - {fileID: 796175894}
+  - {fileID: 1499749053}
+  - {fileID: 2002950579}
+  - {fileID: 887442882}
