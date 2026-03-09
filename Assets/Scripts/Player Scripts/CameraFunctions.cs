@@ -9,13 +9,6 @@ public class CameraFunctions : MonoBehaviour
     [Header("=== OFFSET ===")]
     public Vector3 offset = new Vector3(0, 5, -10);
     public float offsetSmoothSpeed = 5f;
-    
-    [Header("=== NITRO ZOOM ===")]
-    public NitroController nitroController;
-    public float nitroZoomMultiplier = 1.5f; // How much farther to zoom out (1.5 = 50% farther)
-    public float nitroZoomSpeed = 3f; // How fast to zoom in/out
-    
-    private float _currentZoomMultiplier = 1f;
 
     [Header("=== SMOOTHNESS ===")]
     public float positionSmooth = 8f;
@@ -63,10 +56,6 @@ public class CameraFunctions : MonoBehaviour
         if (playerPhysics == null)
             playerPhysics = FindFirstObjectByType<PlayerPhysics>();
 
-        // Auto-find NitroController if not set
-        if (nitroController == null)
-            nitroController = FindFirstObjectByType<NitroController>();
-
         // Use PlayerPhysics as target if not set
         if (target == null && playerPhysics != null)
             target = playerPhysics.transform;
@@ -77,8 +66,6 @@ public class CameraFunctions : MonoBehaviour
         _currentFOV = baseFOV;
         if (cam != null)
             cam.fieldOfView = _currentFOV;
-        
-        _currentZoomMultiplier = 1f;
 
         // Set initial menu position
         transform.position = menuPosition;
@@ -101,7 +88,6 @@ public class CameraFunctions : MonoBehaviour
             OnGameOver();
         }
 
-        UpdateNitroZoom();
         UpdateFOV();
         UpdateShake();
         
@@ -170,19 +156,6 @@ public class CameraFunctions : MonoBehaviour
         cam.fieldOfView = _currentFOV;
     }
 
-    void UpdateNitroZoom()
-    {
-        // Zoom out when nitro is active
-        float targetZoom = 1f;
-        
-        if (nitroController != null && nitroController.IsNitroActive)
-        {
-            targetZoom = nitroZoomMultiplier;
-        }
-        
-        _currentZoomMultiplier = Mathf.Lerp(_currentZoomMultiplier, targetZoom, nitroZoomSpeed * Time.deltaTime);
-    }
-
     void UpdateShake()
     {
         if (_shakeTimer > 0f)
@@ -217,11 +190,8 @@ public class CameraFunctions : MonoBehaviour
         // Smooth velocity to reduce shake
         _velocity = Vector3.Lerp(_velocity, targetVelocity, shakeReduction);
 
-        // Apply nitro zoom to offset (zoom out by moving camera farther back)
-        Vector3 zoomedOffset = offset * _currentZoomMultiplier;
-
-        // Target position with zoomed offset
-        Vector3 targetPos = target.position + target.TransformDirection(zoomedOffset);
+        // Target position with offset
+        Vector3 targetPos = target.position + target.TransformDirection(offset);
 
         // Smooth follow for smoother camera movement
         Vector3 smoothPos = Vector3.Lerp(
