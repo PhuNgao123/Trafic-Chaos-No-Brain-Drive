@@ -7,6 +7,7 @@ public class ScoreUI : MonoBehaviour
 {
     [Header("References")]
     public ScoreController scoreController;
+    public Canvas gameUICanvas; // Main canvas containing all game UI
 
     [Header("Score UI")]
     public GameObject scorePanel; // Main panel containing all score UI
@@ -33,6 +34,10 @@ public class ScoreUI : MonoBehaviour
         if (scoreController == null)
             scoreController = FindFirstObjectByType<ScoreController>();
 
+        // Auto-find canvas if not assigned
+        if (gameUICanvas == null)
+            gameUICanvas = GetComponentInParent<Canvas>();
+
         // Subscribe to events
         if (scoreController != null)
         {
@@ -47,6 +52,10 @@ public class ScoreUI : MonoBehaviour
             _comboOriginalScale = comboPanel.transform.localScale;
             comboPanel.SetActive(false); // Hide at start
         }
+
+        // Hide entire game UI canvas until game starts
+        if (gameUICanvas != null)
+            gameUICanvas.enabled = false;
 
         // Hide score panel until game starts
         if (scorePanel != null)
@@ -64,6 +73,15 @@ public class ScoreUI : MonoBehaviour
 
     void Update()
     {
+        // Show game UI canvas when game starts
+        if (gameUICanvas != null && !gameUICanvas.enabled)
+        {
+            if (GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted)
+            {
+                gameUICanvas.enabled = true;
+            }
+        }
+
         // Show score panel when game starts
         if (scorePanel != null && !scorePanel.activeSelf)
         {
