@@ -286,6 +286,7 @@ GameObject:
   - component: {fileID: 2291370315505891442}
   - component: {fileID: 9028503359767048064}
   - component: {fileID: 7516118503804263046}
+  - component: {fileID: 9028503359767048065}
   m_Layer: 0
   m_Name: CarPhysic
   m_TagString: Player
@@ -397,6 +398,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   showDebugLogs: 0
+--- !u!114 &9028503359767048065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919171530381997405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f60718293a4b5c6d7e8f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NitroController
+  frontTriggerCollider: {fileID: 679904717346404792}
+  playerPhysics: {fileID: 9028503359767048064}
+  maxNitroAmount: 100
+  nitroDrainPerSecond: 25
+  nitroSlipstreamAddPerSecond: 15
+  nitroPickupAmount: 50
+  nitroStackZone: {fileID: 0}
 --- !u!1 &2637822479185982824
 GameObject:
   m_ObjectHideFlags: 0
