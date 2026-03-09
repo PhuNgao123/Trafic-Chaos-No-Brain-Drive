@@ -2653,10 +2653,6 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 887442882}
-  - component: {fileID: 887442883}
-  m_Layer: 0
-  m_Name: Audio Manager
   - component: {fileID: 834925425}
   - component: {fileID: 834925427}
   - component: {fileID: 834925426}
@@ -2667,24 +2663,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &887442882
-Transform:
 --- !u!224 &834925425
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 887442881}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &887442883
   m_GameObject: {fileID: 834925424}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -2704,56 +2688,6 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 887442881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06aa08251a4e5fc4dad93242cbabace4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
-  bgmSounds:
-  - name: TokyoDrift
-    clip: {fileID: 8300000, guid: b71933bd0b7afb144a949b33260dd05d, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: SeeYouAgain
-    clip: {fileID: 8300000, guid: 37e3d4496b4b41a43be921ddca169a79, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: LostMyMind
-    clip: {fileID: 8300000, guid: 5be2499a37f5e3a45a61f69b2870ac1a, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Forza6OST
-    clip: {fileID: 8300000, guid: 6dc5c32949c10c6449cca8f98fffc5c7, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: MoonWave
-    clip: {fileID: 8300000, guid: e8d9b2547d7e8354daca175c9fbc3916, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  sfxSounds:
-  - name: PlayerCrash
-    clip: {fileID: 8300000, guid: 042b4da070551a94f924d67a6dcf5a1b, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: CarCrash
-    clip: {fileID: 8300000, guid: 042b4da070551a94f924d67a6dcf5a1b, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
   m_GameObject: {fileID: 834925424}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -4682,7 +4616,7 @@ MonoBehaviour:
   pavementSpawners:
   - {fileID: 509862633}
   - {fileID: 1671369942}
-  playerPhysics: {fileID: 0}
+  playerPhysics: {fileID: 1860024013}
   scoreController: {fileID: 0}
   crashForce: 250
   bounceForce: 20
