@@ -182,7 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  showDebugLogs: 1
 --- !u!1 &1614153835364957680
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,7 +395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  showDebugLogs: 0
 --- !u!1 &2637822479185982824
 GameObject:
   m_ObjectHideFlags: 0
@@ -752,7 +750,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerGameOverTrigger
-  showDebugLogs: 0
 --- !u!82 &-7920032609380989232
 AudioSource:
   m_ObjectHideFlags: 0

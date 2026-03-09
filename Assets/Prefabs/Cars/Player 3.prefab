@@ -68,7 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NearMissDetector
   nearMissEffectPrefab: {fileID: 0}
   nearMissSound: {fileID: 0}
-  showDebugLogs: 1
+  showDebugLogs: 0
 --- !u!1 &1348526485880473046
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,7 +389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  showDebugLogs: 1
 --- !u!1 &4871419498508124253
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,7 +398,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7910598347319766722}
-  - component: {fileID: 6639654104004398075}
   - component: {fileID: 6844310199112222395}
   - component: {fileID: 1739305991768024942}
   m_Layer: 0
@@ -426,19 +424,6 @@ Transform:
   - {fileID: 8460370203030670553}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6639654104004398075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4871419498508124253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerGameOverTrigger
-  showDebugLogs: 0
 --- !u!82 &6844310199112222395
 AudioSource:
   m_ObjectHideFlags: 0
@@ -692,7 +677,6 @@ GameObject:
   - component: {fileID: 7092978647106851093}
   - component: {fileID: 6830204036832931317}
   - component: {fileID: 3907434505756603792}
-  - component: {fileID: 1365713800933824729}
   m_Layer: 0
   m_Name: CarPhysic
   m_TagString: Player
@@ -791,19 +775,6 @@ MonoBehaviour:
   zNormalizeSpeed: 5
   lookAheadDistance: 10
   rotationSmoothSpeed: 10
---- !u!114 &1365713800933824729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6907355243209671309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  showDebugLogs: 0
 --- !u!1 &7867640636775205520
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,4 +1015,4 @@ MonoBehaviour:
   physicsTarget: {fileID: 4812385128118640862}
   positionSmooth: 60
   rotationSmooth: 60
-  driftAngle: 15
+  driftAngle: 5
