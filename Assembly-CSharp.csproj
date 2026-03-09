@@ -58,6 +58,7 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\GlowLight.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\NitroUI.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\FriesPostProcessorIdentifier.cs" />
+    <Compile Include="Assets\Scripts\Logic Scripts\CurrencyManager.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\SetupScriptURP.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\StartMenuUI.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\ScoreUI.cs" />
@@ -67,14 +68,18 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\SetupScriptBRP.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\AButtonAttribute.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\PavementSpawner.cs" />
+    <Compile Include="Assets\Scripts\Logic Scripts\DifficultyController.cs" />
+    <Compile Include="Assets\Scripts\UI Scripts\DeathScreenUI.cs" />
+    <Compile Include="Assets\Scripts\Player Scripts\PlayerAudio.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\FriesManagerURP.cs" />
+    <Compile Include="Assets\Scripts\Audio Scripts\Sound.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\PlayerPhysics.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Setup\FriesManagerBRP.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\MaterialHider.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\PlayerVisual.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Rotatable.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
-    <Compile Include="Assets\Scripts\Player Scripts\NitroCollisionHandler.cs" />
+    <Compile Include="Assets\Scripts\Audio Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\PlayerController.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\FenceData.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\LightSourceObject.cs" />
@@ -85,6 +90,7 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\AnInspector.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\IgnoreInInspectorAttribute.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\NitroController.cs" />
+    <Compile Include="Assets\Scripts\Enemy Scripts\VehicleAudio.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\ArrayArrangement.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\GameLogicController.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\ScoreController.cs" />
