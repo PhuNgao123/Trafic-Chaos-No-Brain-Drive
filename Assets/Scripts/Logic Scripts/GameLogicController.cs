@@ -38,6 +38,13 @@ public class GameLogicController : MonoBehaviour
 
     void Start()
     {
+        RefreshPlayerReference();
+        // Don't auto-start anymore - wait for menu button
+        // StartGame();
+    }
+    
+    public void RefreshPlayerReference()
+    {
         // Auto-find references if not assigned
         if (roadSpawner == null)
             roadSpawner = FindFirstObjectByType<RoadSpawner>();
@@ -56,9 +63,8 @@ public class GameLogicController : MonoBehaviour
 
         if (scoreController == null)
             scoreController = FindFirstObjectByType<ScoreController>();
-
-        // Don't auto-start anymore - wait for menu button
-        // StartGame();
+            
+        Debug.Log("GameLogicController: Refreshed player references");
     }
 
     // Call this to start the game

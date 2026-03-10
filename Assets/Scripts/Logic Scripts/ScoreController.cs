@@ -54,12 +54,19 @@ public class ScoreController : MonoBehaviour
 
     void Start()
     {
+        RefreshPlayerReference();
+    }
+    
+    public void RefreshPlayerReference()
+    {
         // Auto-find references
         if (playerPhysics == null)
             playerPhysics = FindFirstObjectByType<PlayerPhysics>();
 
         if (gameLogic == null)
             gameLogic = FindFirstObjectByType<GameLogicController>();
+            
+        Debug.Log("ScoreController: Refreshed player references");
     }
 
     void Update()

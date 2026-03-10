@@ -50,15 +50,24 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
+        RefreshPlayerReference();
+        // Inject settings into all spawners
+        InjectSettings();
+    }
+    
+    public void RefreshPlayerReference()
+    {
         // Auto-find references if not assigned
         if (playerPhysics == null)
             playerPhysics = FindFirstObjectByType<PlayerPhysics>();
 
         if (spawners.Count == 0)
             spawners.AddRange(FindObjectsByType<VehicleSpawner>(FindObjectsSortMode.None));
-
-        // Inject settings into all spawners
+            
+        // Re-inject settings to all spawners with new player reference
         InjectSettings();
+        
+        Debug.Log("EnemyController: Refreshed player references");
     }
 
     // Injects all settings into spawners so they don't need individual configuration

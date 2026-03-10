@@ -56,20 +56,10 @@ public class CameraFunctions : MonoBehaviour
 
     void Start()
     {
+        RefreshPlayerReference();
+        
         if (cam == null)
             cam = GetComponent<Camera>();
-
-        // Auto-find PlayerPhysics if not set
-        if (playerPhysics == null)
-            playerPhysics = FindFirstObjectByType<PlayerPhysics>();
-
-        // Auto-find NitroController if not set
-        if (nitroController == null)
-            nitroController = FindFirstObjectByType<NitroController>();
-
-        // Use PlayerPhysics as target if not set
-        if (target == null && playerPhysics != null)
-            target = playerPhysics.transform;
 
         if (target != null)
             _lastTargetPos = target.position;
@@ -83,6 +73,23 @@ public class CameraFunctions : MonoBehaviour
         // Set initial menu position
         transform.position = menuPosition;
         transform.eulerAngles = menuRotation;
+    }
+    
+    public void RefreshPlayerReference()
+    {
+        // Auto-find PlayerPhysics if not set
+        if (playerPhysics == null)
+            playerPhysics = FindFirstObjectByType<PlayerPhysics>();
+
+        // Auto-find NitroController if not set
+        if (nitroController == null)
+            nitroController = FindFirstObjectByType<NitroController>();
+
+        // Use PlayerPhysics as target if not set
+        if (target == null && playerPhysics != null)
+            target = playerPhysics.transform;
+            
+        Debug.Log("CameraFunctions: Refreshed player references");
     }
 
     void LateUpdate()

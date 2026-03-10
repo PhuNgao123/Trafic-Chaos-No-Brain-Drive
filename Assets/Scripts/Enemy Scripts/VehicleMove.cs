@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 // Controls enemy vehicle movement, AI behavior, and lane changing
 public class VehicleMove : MonoBehaviour

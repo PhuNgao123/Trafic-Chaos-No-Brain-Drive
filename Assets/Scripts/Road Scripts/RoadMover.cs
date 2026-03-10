@@ -10,8 +10,15 @@ public class RoadMover : MonoBehaviour
 
     void Start()
     {
+        RefreshPlayerReference();
+    }
+    
+    public void RefreshPlayerReference()
+    {
         if (playerPhysics == null)
             playerPhysics = FindFirstObjectByType<PlayerPhysics>();
+            
+        Debug.Log("RoadMover: Refreshed player references");
     }
 
     void Update()

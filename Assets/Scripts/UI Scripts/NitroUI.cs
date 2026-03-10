@@ -26,6 +26,17 @@ public class NitroUI : MonoBehaviour
 
     void Start()
     {
+        RefreshPlayerReference();
+        SetCornerGlows(false);
+        
+        if (enableDebugLogs)
+        {
+            Debug.Log($"NitroUI: Initialized. Fill Image: {(nitroFillImage != null ? "OK" : "NULL")}");
+        }
+    }
+    
+    public void RefreshPlayerReference()
+    {
         if (nitroController == null)
         {
             nitroController = FindFirstObjectByType<NitroController>();
@@ -37,13 +48,8 @@ public class NitroUI : MonoBehaviour
                     Debug.LogError("NitroUI: Could not find NitroController!");
             }
         }
-
-        SetCornerGlows(false);
         
-        if (enableDebugLogs)
-        {
-            Debug.Log($"NitroUI: Initialized. Fill Image: {(nitroFillImage != null ? "OK" : "NULL")}");
-        }
+        Debug.Log("NitroUI: Refreshed player references");
     }
 
     void Update()

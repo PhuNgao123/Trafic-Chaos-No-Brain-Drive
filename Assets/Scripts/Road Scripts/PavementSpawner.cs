@@ -20,7 +20,19 @@ public class PavementSpawner : MonoBehaviour
     [Tooltip("1 = normal, -1 = rotated 180 degrees")]
     public int direction = 1;
 
+    [Header("Time-Based Spawning")]
+    [Tooltip("Thời gian (giây) spawn Pavement 1-4 (City)")]
+    public float cityTimer = 20f;
+    [Tooltip("Thời gian (giây) spawn Pavement 5-7 (Forest)")]
+    public float forestTimer = 10f;
+    [Tooltip("Bật/tắt chế độ luân phiên City/Forest")]
+    public bool enableTimedSpawning = true;
+
     private Queue<GameObject> pavements = new Queue<GameObject>();
+    private float gameStartTime;
+    private float phaseStartTime;
+    private bool gameStarted = false;
+    private bool isForestPhase = false; // false = City (1-4), true = Forest (5-7)
 
     void Start()
     {
@@ -38,6 +50,28 @@ public class PavementSpawner : MonoBehaviour
 
     void Update()
     {
+        // Track when game starts
+        if (!gameStarted && GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted)
+        {
+            gameStarted = true;
+            gameStartTime = Time.time;
+            phaseStartTime = Time.time;
+        }
+
+        // Check if need to switch phase
+        if (gameStarted && enableTimedSpawning)
+        {
+            float currentPhaseDuration = isForestPhase ? forestTimer : cityTimer;
+            float elapsedPhaseTime = Time.time - phaseStartTime;
+
+            if (elapsedPhaseTime >= currentPhaseDuration)
+            {
+                // Switch phase
+                isForestPhase = !isForestPhase;
+                phaseStartTime = Time.time;
+            }
+        }
+
         if (pavements.Count == 0)
             return;
 
@@ -69,7 +103,7 @@ public class PavementSpawner : MonoBehaviour
         if (pavementPrefabs == null || pavementPrefabs.Count == 0)
             return;
 
-        GameObject prefab = pavementPrefabs[Random.Range(0, pavementPrefabs.Count)];
+        GameObject prefab = GetPavementPrefab();
         if (prefab == null)
             return;
 
@@ -85,5 +119,36 @@ public class PavementSpawner : MonoBehaviour
 
         GameObject pavement = Instantiate(prefab, spawnPos, rot, transform);
         pavements.Enqueue(pavement);
+    }
+
+    // Get pavement prefab based on game time
+    GameObject GetPavementPrefab()
+    {
+        if (!enableTimedSpawning || pavementPrefabs.Count < 7)
+        {
+            // Random spawn from all available prefabs
+            return pavementPrefabs[Random.Range(0, pavementPrefabs.Count)];
+        }
+
+        // Check if game has started
+        if (!gameStarted)
+        {
+            // Before game starts: spawn City (Pavement 1-4)
+            return pavementPrefabs[Random.Range(0, Mathf.Min(4, pavementPrefabs.Count))];
+        }
+
+        // Alternate between City and Forest phases
+        if (isForestPhase)
+        {
+            // Forest phase: spawn Pavement 5-7
+            int startIndex = Mathf.Min(4, pavementPrefabs.Count - 1);
+            int endIndex = Mathf.Min(7, pavementPrefabs.Count);
+            return pavementPrefabs[Random.Range(startIndex, endIndex)];
+        }
+        else
+        {
+            // City phase: spawn Pavement 1-4
+            return pavementPrefabs[Random.Range(0, Mathf.Min(4, pavementPrefabs.Count))];
+        }
     }
 }

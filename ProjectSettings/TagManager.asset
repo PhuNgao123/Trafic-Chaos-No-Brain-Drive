@@ -9,6 +9,12 @@ TagManager:
   - Barrier
   - Controller
   - PlayerNearMiss
+  - Enemy
+  - Score
+  - Dificulty
+  - Garage
+  - Car
+  - Car Hit
   layers:
   - Default
   - TransparentFX

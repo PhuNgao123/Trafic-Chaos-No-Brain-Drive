@@ -6,6 +6,10 @@ public class CurrencyManager : MonoBehaviour
 {
     public static CurrencyManager Instance { get; private set; }
 
+    [Header("Testing (Editor Only)")]
+    [SerializeField] private int testCoins = 1000;
+    [SerializeField] private bool applyTestCoins = false;
+
     private const string COIN_KEY = "PlayerCoins";
     private const string HIGHSCORE_KEY = "HighScore";
     private const float SCORE_TO_COIN_RATIO = 100f; // 100 score = 1 coin
@@ -24,6 +28,17 @@ public class CurrencyManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    void Update()
+    {
+        // Apply test coins when checkbox is checked (Editor only)
+        if (applyTestCoins)
+        {
+            applyTestCoins = false;
+            SetCoins(testCoins);
+            Debug.Log($"Applied test coins: {testCoins}");
         }
     }
 
@@ -108,5 +123,19 @@ public class CurrencyManager : MonoBehaviour
         _currentCoins = 0;
         _currentHighScore = 0f;
         SaveData();
+    }
+
+    // Set coins for testing (Editor only)
+    public void SetCoins(int amount)
+    {
+        _currentCoins = amount;
+        SaveData();
+        Debug.Log($"[Currency] Set coins to {amount} (for testing)");
+    }
+
+    // Add coins directly (for testing)
+    public void AddCoinsForTesting(int amount)
+    {
+        AddCoins(amount);
     }
 }
