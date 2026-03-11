@@ -360,6 +360,7 @@ GameObject:
   - component: {fileID: 2291080008777600158}
   - component: {fileID: 7503024430502589311}
   - component: {fileID: 2653623475063180634}
+  - component: {fileID: -134374324863792319}
   m_Layer: 0
   m_Name: Hatchback 2
   m_TagString: Vehicle
@@ -630,6 +631,19 @@ MonoBehaviour:
   volume: 0.5
   minPitch: 0.8
   maxPitch: 1.5
+--- !u!114 &-134374324863792319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3929797632545920828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3543fb1ab2c4043ba3d1fc7445c52c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleDamage
+  damage: 20
 --- !u!1 &3932772849925833839
 GameObject:
   m_ObjectHideFlags: 0

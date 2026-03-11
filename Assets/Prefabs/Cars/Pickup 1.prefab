@@ -577,6 +577,7 @@ GameObject:
   - component: {fileID: 60435733005974479}
   - component: {fileID: 2527463060163838960}
   - component: {fileID: 1440942069153953274}
+  - component: {fileID: 6551436169094354901}
   m_Layer: 0
   m_Name: Pickup 1
   m_TagString: Vehicle
@@ -847,6 +848,19 @@ MonoBehaviour:
   volume: 0.5
   minPitch: 0.8
   maxPitch: 1.5
+--- !u!114 &6551436169094354901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6078927281117040608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3543fb1ab2c4043ba3d1fc7445c52c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleDamage
+  damage: 40
 --- !u!1 &7100916350813954754
 GameObject:
   m_ObjectHideFlags: 0

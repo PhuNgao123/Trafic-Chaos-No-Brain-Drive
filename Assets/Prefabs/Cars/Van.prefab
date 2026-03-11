@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 942287151284052843}
   - component: {fileID: 1341358460631346112}
   - component: {fileID: 891598372711822541}
+  - component: {fileID: -5893787979570005409}
   m_Layer: 0
   m_Name: Van
   m_TagString: Vehicle
@@ -466,6 +467,19 @@ MonoBehaviour:
   volume: 0.5
   minPitch: 0.8
   maxPitch: 1.5
+--- !u!114 &-5893787979570005409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750388907831170028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3543fb1ab2c4043ba3d1fc7445c52c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleDamage
+  damage: 80
 --- !u!1 &4859476356216450331
 GameObject:
   m_ObjectHideFlags: 0
