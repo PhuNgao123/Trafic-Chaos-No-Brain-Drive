@@ -37,14 +37,22 @@ public class PlayerSpawner : MonoBehaviour
         // Get selected vehicle from garage
         if (GarageManager.Instance == null)
         {
-            Debug.LogError("GarageManager not found!");
+            Debug.LogError("[PlayerSpawner] GarageManager.Instance is null");
             return;
         }
 
         GameObject selectedPrefab = GarageManager.Instance.GetSelectedVehiclePrefab();
         if (selectedPrefab == null)
         {
-            Debug.LogError("No vehicle selected or prefab missing!");
+            Debug.LogError("[PlayerSpawner] Selected prefab is null");
+            return;
+        }
+
+        // Check if selected vehicle is owned
+        VehicleInfo prefabInfo = selectedPrefab.GetComponent<VehicleInfo>();
+        if (prefabInfo != null && !prefabInfo.isOwned)
+        {
+            Debug.LogError($"[PlayerSpawner] Cannot spawn vehicle {prefabInfo.vehicleName} - not owned!");
             return;
         }
 
@@ -89,7 +97,33 @@ public class PlayerSpawner : MonoBehaviour
         VehicleInfo info = spawnedPlayer.GetComponent<VehicleInfo>();
         if (info != null)
         {
-            Debug.Log($"Spawned {info.vehicleName}");
+            Debug.Log($"[PlayerSpawner] Successfully spawned {info.vehicleName} (owned: {info.isOwned})");
+        }
+
+        // Notify all controllers about the new player
+        NotifyControllersOfPlayerChange();
+    }
+
+    private void NotifyControllersOfPlayerChange()
+    {
+        // Find all controllers that need to refresh their player references
+        var enemyControllers = FindObjectsByType<EnemyController>(FindObjectsSortMode.None);
+        foreach (var controller in enemyControllers)
+        {
+            if (controller != null)
+                controller.RefreshPlayerReference();
+        }
+
+        var nitroUI = FindFirstObjectByType<NitroUI>();
+        if (nitroUI != null)
+            nitroUI.RefreshPlayerReference();
+
+        // Find NitroController in the new player and refresh its references
+        if (spawnedPlayer != null)
+        {
+            var nitroController = spawnedPlayer.GetComponentInChildren<NitroController>();
+            if (nitroController != null)
+                nitroController.RefreshPlayerReference();
         }
     }
 

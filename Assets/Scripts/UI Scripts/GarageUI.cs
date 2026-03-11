@@ -16,7 +16,6 @@ public class GarageUI : MonoBehaviour
     public Button previousButton;
     public Button nextButton;
     public Button purchaseButton;
-    public Button selectButton;
     
     [Header("Format Strings")]
     public string maxSpeedFormat = "Max Speed: {0}";
@@ -42,9 +41,6 @@ public class GarageUI : MonoBehaviour
         if (purchaseButton != null)
             purchaseButton.onClick.AddListener(PurchaseCurrentVehicle);
         
-        if (selectButton != null)
-            selectButton.onClick.AddListener(SelectCurrentVehicle);
-        
         // Load current selection
         if (GarageManager.Instance != null)
         {
@@ -63,8 +59,15 @@ public class GarageUI : MonoBehaviour
         if (currentIndex < 0)
             currentIndex = GarageManager.Instance.GetVehicleCount() - 1;
         
+        // Auto-select if owned
+        if (GarageManager.Instance.IsVehicleOwned(currentIndex))
+        {
+            GarageManager.Instance.SelectVehicle(currentIndex);
+        }
+        
         UpdateDisplay();
         SwapVehicle();
+        NotifyStartMenuUpdate();
     }
 
     void NextVehicle()
@@ -75,20 +78,67 @@ public class GarageUI : MonoBehaviour
         if (currentIndex >= GarageManager.Instance.GetVehicleCount())
             currentIndex = 0;
         
+        // Auto-select if owned
+        if (GarageManager.Instance.IsVehicleOwned(currentIndex))
+        {
+            GarageManager.Instance.SelectVehicle(currentIndex);
+        }
+        
         UpdateDisplay();
         SwapVehicle();
+        NotifyStartMenuUpdate();
     }
 
     void PurchaseCurrentVehicle()
     {
         if (GarageManager.Instance == null) return;
         
+        // Check if already owned
+        if (GarageManager.Instance.IsVehicleOwned(currentIndex))
+        {
+            // Already owned, just select it
+            GarageManager.Instance.SelectVehicle(currentIndex);
+            UpdateDisplay();
+            return;
+        }
+        
+        // Get vehicle info to check price
+        VehicleInfo info = GarageManager.Instance.GetVehicleInfoAt(currentIndex);
+        if (info == null) 
+        {
+            Debug.LogError("Vehicle info is null for index: " + currentIndex);
+            return;
+        }
+        
+        // Check if player has enough coins
+        if (CurrencyManager.Instance == null)
+        {
+            Debug.LogError("CurrencyManager.Instance is null");
+            return;
+        }
+        
+        int currentCoins = CurrencyManager.Instance.GetCoins();
+        Debug.Log($"[Purchase] Attempting to buy {info.vehicleName} for {info.price} coins. Player has {currentCoins} coins");
+        
+        if (currentCoins < info.price)
+        {
+            Debug.Log($"[Purchase] Not enough coins! Need {info.price}, have {currentCoins}");
+            return;
+        }
+        
+        // Attempt purchase
         bool success = GarageManager.Instance.PurchaseVehicle(currentIndex);
         
         if (success)
         {
+            Debug.Log($"[Purchase] Successfully purchased {info.vehicleName}!");
             // Auto select after purchase
             GarageManager.Instance.SelectVehicle(currentIndex);
+            NotifyStartMenuUpdate();
+        }
+        else
+        {
+            Debug.LogError($"[Purchase] Failed to purchase {info.vehicleName}");
         }
         
         UpdateDisplay();
@@ -96,13 +146,7 @@ public class GarageUI : MonoBehaviour
 
     void SelectCurrentVehicle()
     {
-        if (GarageManager.Instance == null) return;
-        
-        if (GarageManager.Instance.IsVehicleUnlocked(currentIndex))
-        {
-            GarageManager.Instance.SelectVehicle(currentIndex);
-            UpdateDisplay();
-        }
+        // Method removed - auto-select when browsing unlocked vehicles
     }
 
     void SwapVehicle()
@@ -229,7 +273,6 @@ public class GarageUI : MonoBehaviour
         
         if (info == null)
         {
-            Debug.LogError($"Vehicle at index {currentIndex} missing VehicleInfo component!");
             return;
         }
         
@@ -253,34 +296,51 @@ public class GarageUI : MonoBehaviour
                 handlingText.text = string.Format(handlingFormat, physics.maxSteerVelocity);
         }
         
-        // Update purchase/select buttons
-        bool isUnlocked = GarageManager.Instance.IsVehicleUnlocked(currentIndex);
+        // Update purchase button and status
+        bool isOwned = GarageManager.Instance.IsVehicleOwned(currentIndex);
         bool isSelected = currentIndex == GarageManager.Instance.selectedVehicleIndex;
+        
+        bool hasEnoughCoins = info != null && CurrencyManager.Instance != null && CurrencyManager.Instance.GetCoins() >= info.price;
         
         if (purchaseButton != null)
         {
-            purchaseButton.gameObject.SetActive(!isUnlocked);
-        }
-        
-        if (selectButton != null)
-        {
-            selectButton.gameObject.SetActive(isUnlocked && !isSelected);
+            if (isOwned)
+            {
+                // Vehicle is owned - hide purchase button
+                purchaseButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                // Vehicle is not owned - show purchase button
+                purchaseButton.gameObject.SetActive(true);
+                purchaseButton.interactable = hasEnoughCoins;
+                
+                // Update button text based on affordability
+                TextMeshProUGUI buttonText = purchaseButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (buttonText != null)
+                {
+                    buttonText.text = hasEnoughCoins ? "Purchase" : "Not Enough Coins";
+                }
+            }
         }
         
         // Show status text
-        if (priceText != null)
+        if (priceText != null && info != null)
         {
             if (isSelected)
             {
                 priceText.text = selectedText;
+                priceText.color = Color.green;
             }
-            else if (isUnlocked)
+            else if (isOwned)
             {
                 priceText.text = unlockedText;
+                priceText.color = Color.cyan;
             }
             else
             {
                 priceText.text = string.Format(priceFormat, info.price);
+                priceText.color = hasEnoughCoins ? Color.white : Color.red;
             }
         }
     }
@@ -289,5 +349,14 @@ public class GarageUI : MonoBehaviour
     public void RefreshDisplay()
     {
         UpdateDisplay();
+    }
+    
+    void NotifyStartMenuUpdate()
+    {
+        StartMenuUI startMenu = FindFirstObjectByType<StartMenuUI>();
+        if (startMenu != null)
+        {
+            startMenu.RefreshDisplay();
+        }
     }
 }

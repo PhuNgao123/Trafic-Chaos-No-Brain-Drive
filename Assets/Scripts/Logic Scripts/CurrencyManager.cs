@@ -72,10 +72,13 @@ public class CurrencyManager : MonoBehaviour
     {
         if (_currentCoins >= amount)
         {
+            int previousCoins = _currentCoins;
             _currentCoins -= amount;
             SaveData();
+            Debug.Log($"[Currency] -{amount} coins | Total: {_currentCoins} coins (was {previousCoins})");
             return true;
         }
+        Debug.Log($"[Currency] Cannot spend {amount} coins - only have {_currentCoins} coins");
         return false;
     }
 
@@ -123,6 +126,12 @@ public class CurrencyManager : MonoBehaviour
         _currentCoins = 0;
         _currentHighScore = 0f;
         SaveData();
+    }
+    
+    // Force reload data from PlayerPrefs
+    public void ReloadData()
+    {
+        LoadData();
     }
 
     // Set coins for testing (Editor only)

@@ -16,6 +16,9 @@ public class VehicleMove : MonoBehaviour
     public float laneChangeCooldown = 1f;
     public int maxBounces = 2; // Maximum number of bounces allowed
 
+    [Header("Audio")]
+    public AudioSource vehicleAudioSource;
+
     private float _currentSpeed;
     private Transform _transform;
     private float _targetX;
@@ -31,6 +34,12 @@ public class VehicleMove : MonoBehaviour
         _transform = transform;
         _currentSpeed = baseSpeed;
         _targetX = _transform.position.x;
+        
+        // Auto-find audio source if not assigned
+        if (vehicleAudioSource == null)
+        {
+            vehicleAudioSource = GetComponentInChildren<AudioSource>();
+        }
     }
 
     void Update()
@@ -254,6 +263,7 @@ public class VehicleMove : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             _hasCrashed = true; // Stop normalizing rotation after crash
+            MuteAudio(); // Mute audio when crashed
             
             if (GameLogicController.Instance != null)
             {
@@ -276,11 +286,22 @@ public class VehicleMove : MonoBehaviour
             _hasCrashed = true; // Stop normalizing rotation after crash
             _lastBounceTime = Time.time;
             _bounceCount++;
+            MuteAudio(); // Mute audio when crashed
             
             if (GameLogicController.Instance != null)
             {
                 GameLogicController.Instance.OnVehicleCollision(gameObject, collision.gameObject);
             }
+        }
+    }
+
+    // Mute vehicle audio when crashed
+    void MuteAudio()
+    {
+        if (vehicleAudioSource != null)
+        {
+            vehicleAudioSource.volume = 0f;
+            Debug.Log($"[VehicleMove] Muted audio for {gameObject.name}");
         }
     }
 }

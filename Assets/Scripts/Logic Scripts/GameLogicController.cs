@@ -70,6 +70,32 @@ public class GameLogicController : MonoBehaviour
     // Call this to start the game
     public void StartGame()
     {
+        // Find current vehicle in scene with tag "Car"
+        GameObject currentVehicle = GameObject.FindGameObjectWithTag("Car");
+        
+        if (currentVehicle != null)
+        {
+            VehicleInfo vehicleInfo = currentVehicle.GetComponent<VehicleInfo>();
+            if (vehicleInfo != null)
+            {
+                if (!vehicleInfo.isOwned)
+                {
+                    Debug.LogError($"[GameLogic] Cannot start game - current vehicle {vehicleInfo.vehicleName} is not owned!");
+                    return;
+                }
+                
+                Debug.Log($"[GameLogic] Starting game with owned vehicle: {vehicleInfo.vehicleName}");
+            }
+            else
+            {
+                Debug.LogWarning("[GameLogic] Current vehicle has no VehicleInfo component");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[GameLogic] No vehicle with tag 'Car' found in scene");
+        }
+        
         isGameStarted = true;
         isGameOver = false;
 
@@ -123,13 +149,23 @@ public class GameLogicController : MonoBehaviour
             AudioManager.Instance.StopBGMPlaylist();
         }
 
+        // Mute audio for crashed vehicles (player muted on game over, enemy muted on crash)
+        Debug.Log($"[GameLogic] Game over - attempting to mute player audio. Player object: {(player != null ? player.name : "NULL")}");
+        MuteVehicleAudio(player); // Player audio muted when game over
+        
+        if (collidedVehicle != null && !collidedVehicle.CompareTag("Player"))
+        {
+            Debug.Log($"[GameLogic] Also muting enemy vehicle: {collidedVehicle.name}");
+            MuteVehicleAudio(collidedVehicle); // Enemy audio muted when crashed
+        }
+
         // Log game over info
         Debug.Log("========== GAME OVER ==========");
         
-        // Log difficulty info
-        if (DifficultyController.Instance != null)
+        // Log difficulty info from EnemyController
+        if (enemyController != null)
         {
-            Debug.Log($"[GameOver] Difficulty: {DifficultyController.Instance.GetDifficultyName()} | Survival Time: {DifficultyController.Instance.GetSurvivalTime():F1}s");
+            Debug.Log($"[GameOver] {enemyController.GetDifficultyInfo()}");
         }
 
         // Save score and convert to coins
@@ -205,6 +241,16 @@ public class GameLogicController : MonoBehaviour
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlaySFX("VehicleCrash");
+        }
+
+        // Only mute enemy vehicles when they crash (not player)
+        if (!vehicle1.CompareTag("Player"))
+        {
+            MuteVehicleAudio(vehicle1);
+        }
+        if (!vehicle2.CompareTag("Player"))
+        {
+            MuteVehicleAudio(vehicle2);
         }
 
         // If game is over, stop both vehicles
@@ -306,5 +352,35 @@ public class GameLogicController : MonoBehaviour
         vehicleRb.AddForce(vehicleForward * crashForce * 0.3f, ForceMode.Impulse);
         vehicleRb.AddForce(Vector3.up * bounceForce * 0.2f, ForceMode.Impulse);
         vehicleRb.AddTorque(Random.insideUnitSphere * 1f, ForceMode.Impulse);
+    }
+
+    // Mute audio for a crashed vehicle
+    void MuteVehicleAudio(GameObject vehicle)
+    {
+        if (vehicle == null) 
+        {
+            Debug.LogWarning("[GameLogic] Cannot mute audio - vehicle is null");
+            return;
+        }
+        
+        // Simple approach: find and mute all audio sources on the vehicle
+        AudioSource[] audioSources = vehicle.GetComponentsInChildren<AudioSource>();
+        
+        Debug.Log($"[GameLogic] Attempting to mute audio for {vehicle.name} - found {audioSources.Length} audio sources");
+        
+        foreach (AudioSource source in audioSources)
+        {
+            if (source != null)
+            {
+                float originalVolume = source.volume;
+                source.volume = 0f;
+                Debug.Log($"[GameLogic] Muted audio source on {source.gameObject.name} (was {originalVolume:F2}, now {source.volume:F2})");
+            }
+        }
+        
+        if (audioSources.Length == 0)
+        {
+            Debug.LogWarning($"[GameLogic] No audio sources found on {vehicle.name} or its children");
+        }
     }
 }

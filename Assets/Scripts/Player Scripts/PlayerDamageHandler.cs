@@ -14,18 +14,8 @@ public class PlayerDamageHandler : MonoBehaviour
 
     void Awake()
     {
-        Debug.Log($"[PlayerDamageHandler] Awake called on {gameObject.name}");
-        
         // Get reference to PlayerPhysics component on the same GameObject
         playerPhysics = GetComponent<PlayerPhysics>();
-        if (playerPhysics == null)
-        {
-            Debug.LogError("[PlayerDamageHandler] PlayerPhysics component not found!");
-        }
-        else
-        {
-            Debug.Log($"[PlayerDamageHandler] PlayerPhysics found! Max health: {playerPhysics.maxHealth}");
-        }
 
         // Get reference to PlayerInvincibility component (optional)
         playerInvincibility = GetComponent<PlayerInvincibility>();
@@ -65,36 +55,22 @@ public class PlayerDamageHandler : MonoBehaviour
     /// </summary>
     public void HandleCollision(Collision collision)
     {
-        // Debug: Log all collisions with detailed info
-        Debug.Log($"[PlayerDamageHandler] ===== COLLISION DETECTED =====");
-        Debug.Log($"[PlayerDamageHandler] GameObject: {collision.gameObject.name}");
-        Debug.Log($"[PlayerDamageHandler] Tag: {collision.gameObject.tag}");
-        Debug.Log($"[PlayerDamageHandler] Layer: {LayerMask.LayerToName(collision.gameObject.layer)}");
-        Debug.Log($"[PlayerDamageHandler] Contact points: {collision.contactCount}");
-
         // Try to find "Vehicle" tag on the collider's GameObject or its parent
         GameObject vehicleObject = null;
         if (collision.gameObject.CompareTag("Vehicle"))
         {
             vehicleObject = collision.gameObject;
-            Debug.Log($"[PlayerDamageHandler] ✓ Found Vehicle tag on collision object");
         }
         else if (collision.transform.parent != null && collision.transform.parent.CompareTag("Vehicle"))
         {
             vehicleObject = collision.transform.parent.gameObject;
-            Debug.Log($"[PlayerDamageHandler] ✓ Found Vehicle tag on parent object");
-        }
-        else
-        {
-            Debug.Log($"[PlayerDamageHandler] ✗ No Vehicle tag found (not an enemy vehicle)");
         }
 
         if (vehicleObject != null)
         {
-            // Kiểm tra invincibility - nếu đang bất tử thì bỏ qua damage
+            // Check invincibility - if invincible then ignore damage
             if (playerInvincibility != null && playerInvincibility.IsInvincible)
             {
-                Debug.Log("[PlayerDamageHandler] Player is invincible! Damage ignored.");
                 return;
             }
 
@@ -108,22 +84,12 @@ public class PlayerDamageHandler : MonoBehaviour
                 vehicleDamage = vehicleObject.GetComponentInChildren<VehicleDamage>();
             }
 
-            if (vehicleDamage != null)
+            if (vehicleDamage != null && playerPhysics != null)
             {
-                Debug.Log($"[PlayerDamageHandler] ✓ VehicleDamage found! Damage value: {vehicleDamage.damage}");
-                
                 // Apply damage to player health
                 playerPhysics.TakeDamage(vehicleDamage.damage);
-                
-                Debug.Log($"[PlayerDamageHandler] ✓ Player took {vehicleDamage.damage} damage from {vehicleObject.name}. Current health: {playerPhysics.currentHealth}");
-            }
-            else
-            {
-                Debug.LogWarning($"[PlayerDamageHandler] ✗ Vehicle {vehicleObject.name} has no VehicleDamage component!");
             }
         }
-
-        Debug.Log($"[PlayerDamageHandler] ===== END COLLISION =====");
     }
 
     /// <summary>
@@ -131,17 +97,11 @@ public class PlayerDamageHandler : MonoBehaviour
     /// </summary>
     private void HandleHealthDepleted()
     {
-        Debug.Log("[PlayerDamageHandler] Health depleted! Triggering game over...");
-
         // Trigger game over through GameLogicController
         if (GameLogicController.Instance != null)
         {
             // Pass the last collided vehicle and this GameObject (player) to TriggerGameOver
             GameLogicController.Instance.TriggerGameOver(lastCollidedVehicle, gameObject);
-        }
-        else
-        {
-            Debug.LogError("[PlayerDamageHandler] GameLogicController.Instance is null!");
         }
     }
 }

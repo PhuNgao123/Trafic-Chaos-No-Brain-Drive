@@ -31,8 +31,6 @@ public class ShieldPowerUp : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"[ShieldPowerUp] Trigger entered by: {other.gameObject.name}");
-        
         // Check if player picked up the shield
         PlayerPhysics playerPhysics = other.GetComponent<PlayerPhysics>();
         if (playerPhysics == null)
@@ -43,8 +41,6 @@ public class ShieldPowerUp : MonoBehaviour
 
         if (playerPhysics != null)
         {
-            Debug.Log("[ShieldPowerUp] Player detected!");
-            
             // Get PlayerInvincibility component
             PlayerInvincibility invincibility = playerPhysics.GetComponent<PlayerInvincibility>();
             
@@ -52,7 +48,6 @@ public class ShieldPowerUp : MonoBehaviour
             {
                 // Activate shield
                 invincibility.ActivateInvincibility(shieldDuration);
-                Debug.Log($"[ShieldPowerUp] ✓ Shield activated for {shieldDuration} seconds!");
 
                 // Play pickup sound
                 if (AudioManager.Instance != null && !string.IsNullOrEmpty(pickupSoundName))
@@ -62,10 +57,6 @@ public class ShieldPowerUp : MonoBehaviour
 
                 // Destroy the power-up
                 Destroy(gameObject);
-            }
-            else
-            {
-                Debug.LogWarning("[ShieldPowerUp] PlayerInvincibility component not found on player! Please add it to CarPhysic GameObject.");
             }
         }
     }

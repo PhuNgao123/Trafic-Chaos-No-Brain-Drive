@@ -13,8 +13,7 @@ public class GarageManager : MonoBehaviour
     public int selectedVehicleIndex = 0;
     
     private const string SELECTED_VEHICLE_KEY = "SelectedVehicle";
-    private const string UNLOCKED_VEHICLES_KEY = "UnlockedVehicles";
-    private HashSet<int> unlockedVehicles = new HashSet<int>();
+    private const string OWNED_VEHICLES_KEY = "OwnedVehicles";
 
     void Awake()
     {
@@ -32,36 +31,58 @@ public class GarageManager : MonoBehaviour
 
     void LoadData()
     {
-        // Load selected vehicle
         selectedVehicleIndex = PlayerPrefs.GetInt(SELECTED_VEHICLE_KEY, 0);
         
-        // Load unlocked vehicles
-        string unlockedData = PlayerPrefs.GetString(UNLOCKED_VEHICLES_KEY, "0"); // First vehicle unlocked by default
-        string[] unlockedIndices = unlockedData.Split(',');
+        // Ensure first vehicle is always owned
+        SetVehicleOwned(0, true);
         
-        unlockedVehicles.Clear();
-        foreach (string indexStr in unlockedIndices)
+        // Load owned vehicles
+        LoadOwnedVehicles();
+        
+        // Ensure selected vehicle is owned
+        if (!IsVehicleOwned(selectedVehicleIndex))
         {
-            if (int.TryParse(indexStr, out int index))
+            selectedVehicleIndex = 0;
+            SaveData();
+        }
+    }
+    
+    void LoadOwnedVehicles()
+    {
+        string ownedData = PlayerPrefs.GetString(OWNED_VEHICLES_KEY, "");
+        if (!string.IsNullOrEmpty(ownedData))
+        {
+            string[] ownedIndices = ownedData.Split(',');
+            foreach (string indexStr in ownedIndices)
             {
-                unlockedVehicles.Add(index);
+                if (int.TryParse(indexStr, out int index))
+                {
+                    SetVehicleOwned(index, true);
+                }
             }
         }
     }
 
     void SaveData()
     {
-        // Save selected vehicle
         PlayerPrefs.SetInt(SELECTED_VEHICLE_KEY, selectedVehicleIndex);
-        
-        // Save unlocked vehicles
-        List<string> unlockedIndices = new List<string>();
-        foreach (int index in unlockedVehicles)
-        {
-            unlockedIndices.Add(index.ToString());
-        }
-        PlayerPrefs.SetString(UNLOCKED_VEHICLES_KEY, string.Join(",", unlockedIndices));
+        SaveOwnedVehicles();
         PlayerPrefs.Save();
+    }
+    
+    void SaveOwnedVehicles()
+    {
+        List<string> ownedIndices = new List<string>();
+        for (int i = 0; i < vehiclePrefabs.Count; i++)
+        {
+            if (IsVehicleOwned(i))
+            {
+                ownedIndices.Add(i.ToString());
+            }
+        }
+        
+        string ownedData = string.Join(",", ownedIndices);
+        PlayerPrefs.SetString(OWNED_VEHICLES_KEY, ownedData);
     }
 
     public GameObject GetSelectedVehiclePrefab()
@@ -85,37 +106,73 @@ public class GarageManager : MonoBehaviour
     public bool PurchaseVehicle(int index)
     {
         if (index < 0 || index >= vehiclePrefabs.Count)
+        {
+            Debug.LogError($"[Purchase] Invalid vehicle index: {index}");
             return false;
+        }
 
-        // Already unlocked
-        if (IsVehicleUnlocked(index))
+        // Already owned
+        if (IsVehicleOwned(index))
+        {
+            Debug.Log($"[Purchase] Vehicle at index {index} is already owned");
             return true;
+        }
 
-        GameObject prefab = vehiclePrefabs[index];
-        VehicleInfo info = prefab.GetComponent<VehicleInfo>();
-        
+        VehicleInfo info = GetVehicleInfoAt(index);
         if (info == null)
         {
-            Debug.LogError($"Vehicle prefab at index {index} missing VehicleInfo component!");
+            Debug.LogError($"[Purchase] No VehicleInfo found at index {index}");
+            return false;
+        }
+
+        // Check if player has enough coins
+        if (CurrencyManager.Instance == null)
+        {
+            Debug.LogError("[Purchase] CurrencyManager.Instance is null");
+            return false;
+        }
+        
+        int currentCoins = CurrencyManager.Instance.GetCoins();
+        Debug.Log($"[Purchase] Checking purchase: {info.vehicleName} costs {info.price}, player has {currentCoins} coins");
+        
+        if (currentCoins < info.price)
+        {
+            Debug.Log($"[Purchase] Insufficient funds: need {info.price}, have {currentCoins}");
             return false;
         }
 
         // Try to spend coins
-        if (CurrencyManager.Instance != null && CurrencyManager.Instance.SpendCoins(info.price))
+        bool spendSuccess = CurrencyManager.Instance.SpendCoins(info.price);
+        if (spendSuccess)
         {
-            unlockedVehicles.Add(index);
+            SetVehicleOwned(index, true);
             SaveData();
-            Debug.Log($"Purchased {info.vehicleName} for {info.price} coins");
+            Debug.Log($"[Purchase] Successfully purchased {info.vehicleName} for {info.price} coins!");
             return true;
         }
-
-        Debug.Log($"Not enough coins to purchase {info.vehicleName}");
-        return false;
+        else
+        {
+            Debug.LogError($"[Purchase] Failed to spend {info.price} coins for {info.vehicleName}");
+            return false;
+        }
     }
 
-    public bool IsVehicleUnlocked(int index)
+    public bool IsVehicleOwned(int index)
     {
-        return unlockedVehicles.Contains(index);
+        if (index < 0 || index >= vehiclePrefabs.Count)
+            return false;
+            
+        VehicleInfo info = GetVehicleInfoAt(index);
+        return info != null ? info.isOwned : false;
+    }
+    
+    void SetVehicleOwned(int index, bool owned)
+    {
+        VehicleInfo info = GetVehicleInfoAt(index);
+        if (info != null)
+        {
+            info.isOwned = owned;
+        }
     }
 
     public int GetVehicleCount()
@@ -132,17 +189,33 @@ public class GarageManager : MonoBehaviour
         return null;
     }
     
-    // Helper: lấy VehicleInfo từ prefab
     public VehicleInfo GetVehicleInfoAt(int index)
     {
         GameObject prefab = GetVehiclePrefabAt(index);
         return prefab != null ? prefab.GetComponent<VehicleInfo>() : null;
     }
     
-    // Helper: lấy PlayerPhysics từ prefab
     public PlayerPhysics GetVehiclePhysicsAt(int index)
     {
         GameObject prefab = GetVehiclePrefabAt(index);
         return prefab != null ? prefab.GetComponentInChildren<PlayerPhysics>() : null;
+    }
+    
+    public void ReloadData()
+    {
+        LoadData();
+    }
+    
+    public void ResetData()
+    {
+        selectedVehicleIndex = 0;
+        
+        // Reset all vehicles to not owned except first one
+        for (int i = 0; i < vehiclePrefabs.Count; i++)
+        {
+            SetVehicleOwned(i, i == 0);
+        }
+        
+        SaveData();
     }
 }

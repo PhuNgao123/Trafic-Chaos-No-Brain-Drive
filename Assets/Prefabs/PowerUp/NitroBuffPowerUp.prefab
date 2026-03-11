@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 1250263209886490906}
   - component: {fileID: 7213679886501596135}
   - component: {fileID: 5320656779419071479}
+  - component: {fileID: -4137240164382847232}
   m_Layer: 0
   m_Name: NitroBuffPowerUp
-  m_TagString: Untagged
+  m_TagString: NitroPickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,3 +149,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8adff1cc3902c49813a2d0b6e95034, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Billboard
+--- !u!114 &-4137240164382847232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8614604038955318261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a39c22f2f465e204b89b694b421a3af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerUpMover
+  fallSpeed: 0.2
+  minHeight: 0.5
+  enableRotation: 1
+  rotationSpeed: 90
+  enableBobbing: 1
+  bobbingAmount: 0.3
+  bobbingSpeed: 2

@@ -20,61 +20,78 @@ public class NitroUI : MonoBehaviour
     public Color fillReadyColor = Color.cyan;
     public Color frameNormalColor = Color.white;
     public Color frameActiveColor = Color.yellow;
-    
-    [Header("Debug")]
-    public bool enableDebugLogs = false; // Enable to see debug messages
 
     void Start()
     {
-        RefreshPlayerReference();
         SetCornerGlows(false);
         
-        if (enableDebugLogs)
+        // Force initial update
+        if (nitroFillImage != null)
         {
-            Debug.Log($"NitroUI: Initialized. Fill Image: {(nitroFillImage != null ? "OK" : "NULL")}");
+            nitroFillImage.fillAmount = 0f;
+            nitroFillImage.color = fillNormalColor;
         }
     }
     
     public void RefreshPlayerReference()
     {
-        if (nitroController == null)
+        // Find object with tag "Player" and get NitroController from it
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
         {
-            nitroController = FindFirstObjectByType<NitroController>();
-            if (enableDebugLogs)
-            {
-                if (nitroController != null)
-                    Debug.Log("NitroUI: Found NitroController automatically");
-                else
-                    Debug.LogError("NitroUI: Could not find NitroController!");
-            }
+            nitroController = player.GetComponent<NitroController>();
         }
-        
-        Debug.Log("NitroUI: Refreshed player references");
     }
 
     void Update()
     {
+        // Try to find NitroController if not found yet
         if (nitroController == null)
         {
-            if (enableDebugLogs)
-                Debug.LogWarning("NitroUI: nitroController is null in Update!");
+            // Find object with tag "Player" and get NitroController from it
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                nitroController = player.GetComponent<NitroController>();
+            }
+            
+            if (nitroController == null)
+            {
+                // Still not found, skip this frame
+                return;
+            }
+        }
+
+        if (nitroFillImage == null)
+        {
             return;
         }
 
         float percent = nitroController.NitroPercent;
 
         // Update bar fill and color
-        if (nitroFillImage != null)
+        nitroFillImage.fillAmount = percent;
+        
+        // Color logic: gradual color change based on percentage
+        if (nitroController.IsNitroActive)
         {
-            nitroFillImage.fillAmount = percent;
-            nitroFillImage.color = nitroController.IsNitroReady ? fillReadyColor : fillNormalColor;
-            
-            if (enableDebugLogs && percent > 0)
-                Debug.Log($"NitroUI: Updating fill to {percent * 100f}%");
+            // Active: use frame active color (yellow)
+            nitroFillImage.color = frameActiveColor;
         }
-        else if (enableDebugLogs)
+        else if (nitroController.IsNitroReady)
         {
-            Debug.LogError("NitroUI: nitroFillImage is null!");
+            // Ready (100%): use ready color (cyan)
+            nitroFillImage.color = fillReadyColor;
+        }
+        else if (percent > 0.01f)
+        {
+            // Filling (1-99%): lerp between normal and ready color
+            nitroFillImage.color = Color.Lerp(fillNormalColor, fillReadyColor, percent);
+        }
+        else
+        {
+            // Empty (0%): use normal color (gray)
+            nitroFillImage.color = fillNormalColor;
         }
 
         // Frame color: glow when nitro is active

@@ -1,14 +1,14 @@
 using UnityEngine;
 
-// Nitro: activate with Space. 5x speed while active and front collider disabled (invincible).
+// Nitro: activate with Space. 5x speed while active and invincibility through PlayerInvincibility.
 // Nitro stacks from side slipstream (close to bot cars on left/right) or NitroPickup power-ups.
 // During nitro, player becomes much heavier and pushes cars out of the way.
 public class NitroController : MonoBehaviour
 {
     [Header("References")]
-    public Collider frontTriggerCollider;  // GameOverTrigger collider - disabled during nitro
     public PlayerPhysics playerPhysics;
     public Rigidbody playerRigidbody;
+    public PlayerInvincibility playerInvincibility;
 
     [Header("Nitro Amount")]
     public float maxNitroAmount = 100f;
@@ -19,31 +19,27 @@ public class NitroController : MonoBehaviour
     [Header("Nitro Power")]
     public float nitroSpeedMultiplier = 5f;  // 5x speed during nitro
     public float nitroMassMultiplier = 10f;  // 10x heavier to push cars
+    public float nitroSpeedBoostRate = 10f;  // How fast to reach max speed when nitro starts
 
     [Header("Optional: Side zones (auto-created if missing)")]
     public NitroStackZone nitroStackZone;
 
     private float _nitroAmount;
     private bool _isNitroActive;
-    private bool _frontColliderWasEnabled = true;
     private float _originalMass = 1f;
 
     void Start()
     {
         _nitroAmount = 0f;
 
-        if (frontTriggerCollider == null)
-        {
-            Transform front = transform.Find("GameOverTrigger");
-            if (front != null)
-                frontTriggerCollider = front.GetComponent<Collider>();
-        }
-
         if (playerPhysics == null)
             playerPhysics = GetComponent<PlayerPhysics>();
 
         if (playerRigidbody == null)
             playerRigidbody = GetComponent<Rigidbody>();
+
+        if (playerInvincibility == null)
+            playerInvincibility = GetComponent<PlayerInvincibility>();
 
         // Store original mass
         if (playerRigidbody != null)
@@ -112,6 +108,17 @@ public class NitroController : MonoBehaviour
 
         if (_isNitroActive)
         {
+            // Continuously boost speed during nitro for smooth acceleration
+            if (playerPhysics != null)
+            {
+                float targetSpeed = playerPhysics.maxSpeed + (playerPhysics.maxSpeed * (nitroSpeedMultiplier - 1f));
+                playerPhysics.currentSpeed = Mathf.Lerp(
+                    playerPhysics.currentSpeed, 
+                    targetSpeed, 
+                    nitroSpeedBoostRate * Time.deltaTime
+                );
+            }
+            
             _nitroAmount -= nitroDrainPerSecond * Time.deltaTime;
             if (_nitroAmount <= 0f)
             {
@@ -125,19 +132,22 @@ public class NitroController : MonoBehaviour
     {
         _isNitroActive = true;
         
-        // 5x speed boost
+        // Immediately boost current speed to max + bonus
         if (playerPhysics != null)
+        {
             playerPhysics.speedMultiplier = nitroSpeedMultiplier;
+            // Instantly set to max speed for immediate effect
+            playerPhysics.currentSpeed = playerPhysics.maxSpeed;
+        }
         
         // Make player much heavier to push cars
         if (playerRigidbody != null)
             playerRigidbody.mass = _originalMass * nitroMassMultiplier;
         
-        // Disable front collision trigger (invincible)
-        if (frontTriggerCollider != null)
+        // Activate invincibility through PlayerInvincibility component
+        if (playerInvincibility != null)
         {
-            _frontColliderWasEnabled = frontTriggerCollider.enabled;
-            frontTriggerCollider.enabled = false;
+            playerInvincibility.ActivateInvincibility(999f); // Long duration, will be stopped when nitro ends
         }
     }
 
@@ -153,9 +163,11 @@ public class NitroController : MonoBehaviour
         if (playerRigidbody != null)
             playerRigidbody.mass = _originalMass;
         
-        // Re-enable front collision trigger
-        if (frontTriggerCollider != null)
-            frontTriggerCollider.enabled = _frontColliderWasEnabled;
+        // Deactivate invincibility
+        if (playerInvincibility != null)
+        {
+            playerInvincibility.DeactivateInvincibility();
+        }
     }
 
     public void AddNitro(float amount)
@@ -166,6 +178,23 @@ public class NitroController : MonoBehaviour
     public void AddNitroPickup()
     {
         AddNitro(nitroPickupAmount);
+    }
+
+    public void RefreshPlayerReference()
+    {
+        // This method can be called when player vehicle changes
+        if (playerPhysics == null)
+            playerPhysics = GetComponent<PlayerPhysics>();
+
+        if (playerRigidbody == null)
+            playerRigidbody = GetComponent<Rigidbody>();
+
+        if (playerInvincibility == null)
+            playerInvincibility = GetComponent<PlayerInvincibility>();
+
+        // Update original mass
+        if (playerRigidbody != null)
+            _originalMass = playerRigidbody.mass;
     }
 
     public bool IsNitroActive => _isNitroActive;

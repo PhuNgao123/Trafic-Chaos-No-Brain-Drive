@@ -15,6 +15,7 @@ TagManager:
   - Garage
   - Car
   - Car Hit
+  - NitroPickup
   layers:
   - Default
   - TransparentFX

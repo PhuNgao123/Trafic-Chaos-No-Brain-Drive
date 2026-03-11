@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2866000225697755331}
   - component: {fileID: 3847440406755737646}
   - component: {fileID: 1694649570672773543}
-  - component: {fileID: -1176876871693433511}
+  - component: {fileID: 4469858639629526767}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Car
@@ -151,7 +151,7 @@ MonoBehaviour:
   volume: 0.5
   minPitch: 0.8
   maxPitch: 2
---- !u!114 &-1176876871693433511
+--- !u!114 &4469858639629526767
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,12 +160,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 16396815157493227}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55a58f25c68e36146965489d6a6e2af0, type: 3}
+  m_Script: {fileID: 11500000, guid: b85f561916e8a324193ae12b30ccdef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VehicleInfo
   vehicleName: Ford
+  price: 1500
+  isOwned: 1
   vehicleIcon: {fileID: 0}
-  price: 1700
 --- !u!1 &1343106629101617445
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,7 +284,7 @@ Transform:
   m_GameObject: {fileID: 1493601748268640175}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15, z: 1.161}
+  m_LocalPosition: {x: 0, y: 0.15, z: 1.247}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -322,7 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d0cf58145b2af4cbb67939c0dbe6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  nitroController: {fileID: 0}
+  nitroController: {fileID: 7436556082586059860}
 --- !u!1 &1958387103794034699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,6 +1102,8 @@ GameObject:
   - component: {fileID: 5322434881112703732}
   - component: {fileID: 2468602045990032591}
   - component: {fileID: 9136317984897543529}
+  - component: {fileID: 7436556082586059860}
+  - component: {fileID: 8451030009092698814}
   m_Layer: 0
   m_Name: CarPhysic
   m_TagString: Player
@@ -1152,7 +1155,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &7460440223921826479
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1191,7 +1194,7 @@ MonoBehaviour:
   currentSpeed: 30
   minSpeed: 30
   maxSpeed: 70
-  nitroMaxSpeed: 150
+  nitroMaxSpeed: 100
   acceleration: 12
   deceleration: 5
   speedMultiplier: 1
@@ -1258,6 +1261,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreMultiplierController
   currentMultiplier: 1
   isMultiplierActive: 0
+--- !u!114 &7436556082586059860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7030287280378108383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f60718293a4b5c6d7e8f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NitroController
+  playerPhysics: {fileID: 7983802265762091208}
+  playerRigidbody: {fileID: 1951856224310394105}
+  playerInvincibility: {fileID: 0}
+  maxNitroAmount: 100
+  nitroDrainPerSecond: 20
+  nitroSlipstreamAddPerSecond: 50
+  nitroPickupAmount: 30
+  nitroSpeedMultiplier: 1.5
+  nitroMassMultiplier: 10
+  nitroSpeedBoostRate: 10
+  nitroStackZone: {fileID: 0}
+--- !u!114 &8451030009092698814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7030287280378108383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e4d5c6b8a9e1f2a3b4c5d6e7f8a9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NitroCollisionHandler
+  nitroController: {fileID: 7436556082586059860}
+  pushForce: 50
+  upwardForce: 10
+  destroyAfterPush: 1
+  destroyDelay: 2
 --- !u!1 &7114020193263446000
 GameObject:
   m_ObjectHideFlags: 0

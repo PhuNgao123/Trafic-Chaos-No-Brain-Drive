@@ -350,7 +350,7 @@ Transform:
   m_GameObject: {fileID: 2933455466504507335}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.094, y: 0, z: 0.687}
+  m_LocalPosition: {x: 0.094, y: 0, z: 0.862}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -491,8 +491,7 @@ GameObject:
   - component: {fileID: 7910598347319766722}
   - component: {fileID: 6844310199112222395}
   - component: {fileID: 1739305991768024942}
-  - component: {fileID: 8796696799633671728}
-  - component: {fileID: -2999771590296765454}
+  - component: {fileID: 8867699883510683539}
   m_Layer: 0
   m_Name: Player 3
   m_TagString: Player
@@ -632,7 +631,7 @@ MonoBehaviour:
   volume: 0.5
   minPitch: 0.8
   maxPitch: 2
---- !u!114 &8796696799633671728
+--- !u!114 &8867699883510683539
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -641,41 +640,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4871419498508124253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55a58f25c68e36146965489d6a6e2af0, type: 3}
+  m_Script: {fileID: 11500000, guid: b85f561916e8a324193ae12b30ccdef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VehicleInfo
   vehicleName: Muscle Car
-  vehicleIcon: {fileID: 0}
   price: 2000
---- !u!114 &-2999771590296765454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4871419498508124253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fe65cd02c5651346bc5d76d750d6bd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerPhysics
-  roadSpawner: {fileID: 0}
-  roadMover: {fileID: 0}
-  currentSpeed: 10
-  minSpeed: 5
-  maxSpeed: 30
-  nitroMaxSpeed: 150
-  acceleration: 5
-  deceleration: 5
-  speedMultiplier: 1
-  steerSpeed: 8
-  maxSteerVelocity: 15
-  driftAmount: 3
-  fixedZ: 0
-  zNormalizeSpeed: 5
-  lookAheadDistance: 10
-  rotationSmoothSpeed: 10
-  maxHealth: 100
+  isOwned: 0
+  vehicleIcon: {fileID: 0}
 --- !u!1 &6689144836528477807
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,6 +790,7 @@ GameObject:
   - component: {fileID: 1371414294835477898}
   - component: {fileID: 3875682328534376635}
   - component: {fileID: 6293765072485064836}
+  - component: {fileID: 1745417195264757780}
   m_Layer: 0
   m_Name: CarPhysic
   m_TagString: Player
@@ -870,7 +842,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &6830204036832931317
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -976,6 +948,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreMultiplierController
   currentMultiplier: 1
   isMultiplierActive: 0
+--- !u!114 &1745417195264757780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6907355243209671309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f60718293a4b5c6d7e8f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NitroController
+  playerPhysics: {fileID: 3907434505756603792}
+  playerRigidbody: {fileID: 7092978647106851093}
+  playerInvincibility: {fileID: 0}
+  maxNitroAmount: 100
+  nitroDrainPerSecond: 10
+  nitroSlipstreamAddPerSecond: 50
+  nitroPickupAmount: 50
+  nitroSpeedMultiplier: 1.5
+  nitroMassMultiplier: 10
+  nitroSpeedBoostRate: 10
+  nitroStackZone: {fileID: 0}
 --- !u!1 &7867640636775205520
 GameObject:
   m_ObjectHideFlags: 0

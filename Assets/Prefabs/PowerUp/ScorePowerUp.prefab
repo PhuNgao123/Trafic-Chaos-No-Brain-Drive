@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3573406237061029484}
   - component: {fileID: 6164702521864866566}
   - component: {fileID: 1367147189679995501}
+  - component: {fileID: 287522081895589048}
   m_Layer: 0
   m_Name: ScorePowerUp
   m_TagString: Untagged
@@ -166,3 +167,22 @@ MonoBehaviour:
   rotatePickup: 1
   rotationSpeed: 100
   pickupSoundName: PowerUpCollected
+--- !u!114 &287522081895589048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510735205667530948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a39c22f2f465e204b89b694b421a3af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerUpMover
+  fallSpeed: 0.2
+  minHeight: 0.5
+  enableRotation: 1
+  rotationSpeed: 90
+  enableBobbing: 1
+  bobbingAmount: 0.3
+  bobbingSpeed: 2

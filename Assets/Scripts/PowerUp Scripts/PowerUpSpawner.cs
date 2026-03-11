@@ -23,20 +23,14 @@ public class PowerUpSpawner : MonoBehaviour
     public float spawnDistanceAhead = 50f;
 
     [Tooltip("Height above road to spawn")]
-    public float spawnHeight = 6f;
+    public float spawnHeight = 2f;
 
     [Header("=== LANE SETTINGS ===")]
-    [Tooltip("Number of lanes on the road")]
-    public int numberOfLanes = 3;
+    [Tooltip("Fixed lane X positions")]
+    public float[] lanePositions = new float[] { -10.5f, -6.5f, -3f, 3f, 6.5f, 10.5f };
 
-    [Tooltip("Width of each lane")]
-    public float laneWidth = 3f;
-
-    [Tooltip("Center offset of the road (X position)")]
-    public float roadCenterX = 0f;
-
-    [Tooltip("Lanes to exclude from spawning (e.g., middle lane with barrier). Comma separated: 0,1,2")]
-    public string excludedLanes = "1"; // Lane 1 is middle lane (0-indexed)
+    [Tooltip("Lanes to exclude from spawning (0-5). Comma separated: 0,1,2")]
+    public string excludedLanes = ""; // Empty = all lanes available
 
     [Header("=== REFERENCES ===")]
     [Tooltip("Road container to parent power-ups to (so they move with road)")]
@@ -120,15 +114,10 @@ public class PowerUpSpawner : MonoBehaviour
     /// </summary>
     void SpawnPowerUp()
     {
-        Debug.Log("[PowerUpSpawner] SpawnPowerUp called!");
-        
         if (powerUpPrefabs == null || powerUpPrefabs.Length == 0)
         {
-            Debug.LogWarning("[PowerUpSpawner] No power-up prefabs assigned!");
             return;
         }
-
-        Debug.Log($"[PowerUpSpawner] Power-up prefabs count: {powerUpPrefabs.Length}");
 
         // Try to find player if not set
         if (player == null)
@@ -137,11 +126,9 @@ public class PowerUpSpawner : MonoBehaviour
             if (playerPhysics != null)
             {
                 player = playerPhysics.transform;
-                Debug.Log("[PowerUpSpawner] Found player reference!");
             }
             else
             {
-                Debug.LogWarning("[PowerUpSpawner] Player reference not found!");
                 return;
             }
         }
@@ -151,18 +138,14 @@ public class PowerUpSpawner : MonoBehaviour
         
         if (prefab == null)
         {
-            Debug.LogError("[PowerUpSpawner] Selected prefab is null!");
             return;
         }
-
-        Debug.Log($"[PowerUpSpawner] Selected prefab: {prefab.name}");
 
         // Get list of valid lanes (excluding barrier lanes)
         List<int> validLanes = GetValidLanes();
         
         if (validLanes.Count == 0)
         {
-            Debug.LogWarning("[PowerUpSpawner] No valid lanes to spawn in!");
             return;
         }
 
@@ -177,8 +160,6 @@ public class PowerUpSpawner : MonoBehaviour
             player.position.z + spawnDistanceAhead
         );
 
-        Debug.Log($"[PowerUpSpawner] Spawning at position: {spawnPosition}");
-
         // Spawn power-up
         GameObject powerUp = Instantiate(prefab, spawnPosition, Quaternion.identity);
 
@@ -186,14 +167,7 @@ public class PowerUpSpawner : MonoBehaviour
         if (roadContainer != null)
         {
             powerUp.transform.SetParent(roadContainer);
-            Debug.Log($"[PowerUpSpawner] Parented to road container");
         }
-        else
-        {
-            Debug.LogWarning("[PowerUpSpawner] Road container is null! Power-up won't move with road.");
-        }
-
-        Debug.Log($"[PowerUpSpawner] ✓ Spawned {prefab.name} at lane {laneIndex} (X: {laneX}, Z: {spawnPosition.z})");
     }
 
     /// <summary>
@@ -218,7 +192,7 @@ public class PowerUpSpawner : MonoBehaviour
         }
 
         // Add all non-excluded lanes
-        for (int i = 0; i < numberOfLanes; i++)
+        for (int i = 0; i < lanePositions.Length; i++)
         {
             if (!excluded.Contains(i))
             {
@@ -234,11 +208,12 @@ public class PowerUpSpawner : MonoBehaviour
     /// </summary>
     float GetLaneXPosition(int laneIndex)
     {
-        // Calculate X position based on lane index
-        // Center lane is at roadCenterX
-        float totalWidth = numberOfLanes * laneWidth;
-        float startX = roadCenterX - (totalWidth / 2f) + (laneWidth / 2f);
-        return startX + (laneIndex * laneWidth);
+        if (laneIndex >= 0 && laneIndex < lanePositions.Length)
+        {
+            return lanePositions[laneIndex];
+        }
+        
+        return 0f;
     }
 
     /// <summary>
@@ -257,9 +232,9 @@ public class PowerUpSpawner : MonoBehaviour
         Gizmos.color = Color.yellow;
 
         // Draw lane positions
-        for (int i = 0; i < numberOfLanes; i++)
+        for (int i = 0; i < lanePositions.Length; i++)
         {
-            float laneX = GetLaneXPosition(i);
+            float laneX = lanePositions[i];
             Vector3 start = new Vector3(laneX, spawnHeight, -50f);
             Vector3 end = new Vector3(laneX, spawnHeight, 50f);
             Gizmos.DrawLine(start, end);

@@ -107,9 +107,9 @@ public class VehicleSpawner : MonoBehaviour
             );
         }
 
-        // Lerp intervals based on player speed
-        float minInterval = Mathf.Lerp(baseMaxInterval, baseMinInterval, speed01);
-        float maxInterval = Mathf.Lerp(baseMaxInterval * 1.3f, baseMinInterval * 1.3f, speed01);
+        // FIXED: Lerp intervals based on player speed (faster = shorter intervals)
+        float minInterval = Mathf.Lerp(baseMinInterval, baseMaxInterval, 1f - speed01); // Inverted for correct behavior
+        float maxInterval = Mathf.Lerp(baseMinInterval * 1.3f, baseMaxInterval * 1.3f, 1f - speed01); // Inverted
 
         // Apply direction multiplier from controller
         if (enemyController != null)
@@ -119,7 +119,18 @@ public class VehicleSpawner : MonoBehaviour
             maxInterval *= multiplier;
         }
 
-        _nextSpawnTime = Time.time + Random.Range(minInterval, maxInterval);
+        // Ensure min is always less than max
+        if (minInterval > maxInterval)
+        {
+            float temp = minInterval;
+            minInterval = maxInterval;
+            maxInterval = temp;
+        }
+
+        float finalInterval = Random.Range(minInterval, maxInterval);
+        _nextSpawnTime = Time.time + finalInterval;
+        
+        Debug.Log($"[VehicleSpawner] Dir{direction} - Speed: {speed01:F2}, Interval: {finalInterval:F2}s (min:{minInterval:F2}, max:{maxInterval:F2})");
     }
 
     // Checks if spawn location is clear using raycast

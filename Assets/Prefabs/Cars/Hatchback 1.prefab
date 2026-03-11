@@ -518,6 +518,7 @@ MonoBehaviour:
   laneChangeSpeed: 4
   laneChangeCooldown: 1
   maxBounces: 2
+  vehicleAudioSource: {fileID: 0}
 --- !u!82 &2124104582062668938
 AudioSource:
   m_ObjectHideFlags: 0

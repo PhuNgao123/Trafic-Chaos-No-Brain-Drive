@@ -5,6 +5,7 @@ using TMPro;
 
 // Controls death screen UI shown after game over
 // Shows score, coins earned, and restart/menu options
+// Automatically disables animators to prevent unwanted spinning animations
 public class DeathScreenUI : MonoBehaviour
 {
     [Header("UI References")]
@@ -74,6 +75,20 @@ public class DeathScreenUI : MonoBehaviour
                 ShowDeathScreen();
             }
         }
+
+        // Force fix rotation if death panel is active
+        if (_isShowing && deathPanel != null && deathPanel.activeInHierarchy)
+        {
+            // Continuously reset rotation to prevent any spinning
+            if (deathPanel.transform.rotation != Quaternion.identity)
+            {
+                deathPanel.transform.rotation = Quaternion.identity;
+            }
+            if (deathPanel.transform.localRotation != Quaternion.identity)
+            {
+                deathPanel.transform.localRotation = Quaternion.identity;
+            }
+        }
     }
 
     void HideDeathScreen()
@@ -82,7 +97,16 @@ public class DeathScreenUI : MonoBehaviour
             deathCanvas.enabled = false;
 
         if (deathPanel != null)
+        {
+            // Reset rotation before hiding
+            deathPanel.transform.rotation = Quaternion.identity;
+            deathPanel.transform.localRotation = Quaternion.identity;
+            
             deathPanel.SetActive(false);
+            
+            // Also disable animators when hiding to prevent issues
+            DisableAnimators(deathPanel);
+        }
     }
 
     void ShowDeathScreen()
@@ -94,10 +118,35 @@ public class DeathScreenUI : MonoBehaviour
             deathCanvas.enabled = true;
 
         if (deathPanel != null)
+        {
             deathPanel.SetActive(true);
+            
+            // Force reset rotation to prevent spinning
+            deathPanel.transform.rotation = Quaternion.identity;
+            deathPanel.transform.localRotation = Quaternion.identity;
+            
+            // Disable all animators to prevent spinning animations
+            DisableAnimators(deathPanel);
+        }
 
         // Update display with final stats
         UpdateDisplay();
+    }
+
+    void DisableAnimators(GameObject parent)
+    {
+        // Disable animator on the parent object
+        Animator animator = parent.GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.enabled = false;
+        }
+
+        // Recursively disable animators on all children
+        foreach (Transform child in parent.transform)
+        {
+            DisableAnimators(child.gameObject);
+        }
     }
 
     void UpdateDisplay()
@@ -138,17 +187,12 @@ public class DeathScreenUI : MonoBehaviour
     void OnRestartClicked()
     {
         // Restart game by reloading scene
-        Debug.Log("[DeathScreen] Restart clicked - Reloading scene...");
-        
-        // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     void OnQuitClicked()
     {
         // Quit application
-        Debug.Log("[DeathScreen] Quit clicked - Closing game...");
-        
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #else

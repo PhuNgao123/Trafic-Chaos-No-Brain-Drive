@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 294734413456992719}
   - component: {fileID: 6949314992449670361}
   - component: {fileID: 1851708499690353785}
+  - component: {fileID: -5046479070574287836}
   m_Layer: 0
   m_Name: ShieldPowerUp
   m_TagString: Untagged
@@ -243,3 +244,22 @@ MonoBehaviour:
   rotatePickup: 1
   rotationSpeed: 100
   pickupSoundName: PowerUpCollected
+--- !u!114 &-5046479070574287836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5705772321560421092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a39c22f2f465e204b89b694b421a3af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerUpMover
+  fallSpeed: 0.2
+  minHeight: 0.5
+  enableRotation: 1
+  rotationSpeed: 90
+  enableBobbing: 1
+  bobbingAmount: 0.3
+  bobbingSpeed: 2

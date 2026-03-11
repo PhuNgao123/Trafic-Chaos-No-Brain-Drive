@@ -26,7 +26,6 @@ public class PlayerInvincibility : MonoBehaviour
             if (invincibilityTimer <= 0f)
             {
                 invincibilityTimer = 0f;
-                Debug.Log("[PlayerInvincibility] Invincibility ended");
             }
         }
     }
@@ -43,7 +42,6 @@ public class PlayerInvincibility : MonoBehaviour
         }
 
         invincibilityTimer = duration;
-        Debug.Log($"[PlayerInvincibility] Invincibility activated for {duration} seconds");
     }
 
     /// <summary>
@@ -52,6 +50,5 @@ public class PlayerInvincibility : MonoBehaviour
     public void DeactivateInvincibility()
     {
         invincibilityTimer = 0f;
-        Debug.Log("[PlayerInvincibility] Invincibility deactivated");
     }
 }

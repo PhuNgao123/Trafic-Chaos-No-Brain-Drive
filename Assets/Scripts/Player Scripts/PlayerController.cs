@@ -29,14 +29,9 @@ public class PlayerController : MonoBehaviour
             // If nitro is active, destroy the bot car
             if (nitroController != null && nitroController.IsNitroActive)
             {
-                Debug.Log($"Nitro active! Destroying {other.name}");
                 Destroy(other.gameObject);
                 return;
             }
-            
-            // Normal collision - let PlayerDamageHandler handle damage
-            // Don't trigger game over here, let health system handle it
-            Debug.Log($"[PlayerController] Collision with {other.name} - damage will be handled by PlayerDamageHandler");
         }
     }
 }

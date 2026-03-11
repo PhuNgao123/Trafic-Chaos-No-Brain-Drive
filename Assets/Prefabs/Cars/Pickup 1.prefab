@@ -578,6 +578,7 @@ GameObject:
   - component: {fileID: 2527463060163838960}
   - component: {fileID: 1440942069153953274}
   - component: {fileID: 6551436169094354901}
+  - component: {fileID: -7818670605334827449}
   m_Layer: 0
   m_Name: Pickup 1
   m_TagString: Vehicle
@@ -861,6 +862,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VehicleDamage
   damage: 40
+--- !u!114 &-7818670605334827449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6078927281117040608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d99e117eb9ddc4f80ec2383243c199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleAudioController
+  engineAudioSource: {fileID: 2527463060163838960}
+  otherAudioSources: []
+  muteOnCrash: 1
+  fadeOutDuration: 0.5
 --- !u!1 &7100916350813954754
 GameObject:
   m_ObjectHideFlags: 0
