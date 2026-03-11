@@ -795,6 +795,7 @@ GameObject:
   - component: {fileID: 4422674213100155803}
   - component: {fileID: 2232337722082284072}
   - component: {fileID: 6756944240375985389}
+  - component: {fileID: 2121042628095890151}
   m_Layer: 0
   m_Name: Truck
   m_TagString: Untagged
@@ -1088,6 +1089,19 @@ MonoBehaviour:
   volume: 0.5
   minPitch: 0.8
   maxPitch: 1.5
+--- !u!114 &2121042628095890151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6908355773845938043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3543fb1ab2c4043ba3d1fc7445c52c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleDamage
+  damage: 80
 --- !u!1 &7317947838180802132
 GameObject:
   m_ObjectHideFlags: 0

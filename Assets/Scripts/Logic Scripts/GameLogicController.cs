@@ -81,6 +81,11 @@ public class GameLogicController : MonoBehaviour
         if (scoreController != null)
             scoreController.StartGame();
             
+        // Start power-up spawning
+        PowerUpSpawner powerUpSpawner = FindFirstObjectByType<PowerUpSpawner>();
+        if (powerUpSpawner != null)
+            powerUpSpawner.StartSpawning();
+            
         // Start background music playlist when game starts
         if (AudioManager.Instance != null)
         {

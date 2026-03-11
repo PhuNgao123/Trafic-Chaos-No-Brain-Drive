@@ -1,12 +1,10 @@
 using UnityEngine;
 
-// Handles player game over detection
-// Attach this to the trigger collider for gameover detection (small trigger at front of car)
+// Handles player collision detection for nitro destruction
+// Attach this to the trigger collider for collision detection (small trigger at front of car)
 public class PlayerController : MonoBehaviour
 {
     public NitroController nitroController; // Reference to check if nitro is active
-    
-    private bool _hasTriggeredGameOver = false;
 
     void Start()
     {
@@ -25,32 +23,20 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Only trigger game over once
-        if (_hasTriggeredGameOver) return;
-        
         // Check collision with vehicle
         if (other.CompareTag("Vehicle"))
         {
-            // If nitro is active, destroy the bot car instead of game over
+            // If nitro is active, destroy the bot car
             if (nitroController != null && nitroController.IsNitroActive)
             {
                 Debug.Log($"Nitro active! Destroying {other.name}");
                 Destroy(other.gameObject);
-                return; // Don't trigger game over
+                return;
             }
             
-            // Normal collision - trigger game over
-            _hasTriggeredGameOver = true;
-            
-            if (GameLogicController.Instance != null)
-            {
-                // Pass CarPhysic object (parent of this trigger)
-                GameObject carPhysic = transform.parent != null 
-                    ? transform.parent.gameObject 
-                    : gameObject;
-                    
-                GameLogicController.Instance.TriggerGameOver(other.gameObject, carPhysic);
-            }
+            // Normal collision - let PlayerDamageHandler handle damage
+            // Don't trigger game over here, let health system handle it
+            Debug.Log($"[PlayerController] Collision with {other.name} - damage will be handled by PlayerDamageHandler");
         }
     }
 }

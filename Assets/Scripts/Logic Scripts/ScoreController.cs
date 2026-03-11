@@ -9,6 +9,7 @@ public class ScoreController : MonoBehaviour
     [Header("References")]
     public PlayerPhysics playerPhysics;
     public GameLogicController gameLogic;
+    private ScoreMultiplierController _multiplierController;
 
     [Header("Score Settings")]
     public float baseScorePerSecond = 10f;
@@ -65,6 +66,12 @@ public class ScoreController : MonoBehaviour
 
         if (gameLogic == null)
             gameLogic = FindFirstObjectByType<GameLogicController>();
+            
+        // Get multiplier controller from player
+        if (playerPhysics != null)
+        {
+            _multiplierController = playerPhysics.GetComponent<ScoreMultiplierController>();
+        }
             
         Debug.Log("ScoreController: Refreshed player references");
     }
@@ -140,6 +147,12 @@ public class ScoreController : MonoBehaviour
         if (comboMultiplier > 0)
         {
             scoreThisFrame *= comboMultiplier;
+        }
+
+        // Apply score multiplier (x10, etc.)
+        if (_multiplierController != null)
+        {
+            scoreThisFrame *= _multiplierController.GetMultiplier();
         }
 
         _currentScore += scoreThisFrame;
