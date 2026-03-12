@@ -370,7 +370,7 @@ MonoBehaviour:
   minSpawnInterval: 1
   maxSpawnInterval: 5
   spawnDistanceAhead: 100
-  spawnHeight: 3
+  spawnHeight: 2
   lanePositions:
   - -10.5
   - -6.5
@@ -4135,6 +4135,7 @@ Transform:
   - {fileID: 258910502}
   - {fileID: 1915466416}
   - {fileID: 2128641825}
+  - {fileID: 1364531453}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1079842735
@@ -5094,6 +5095,94 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1321852763}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1364531452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1364531453}
+  - component: {fileID: 1364531454}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1364531453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364531452}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -15.79565, y: 0, z: 28.42188}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1036376660}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1364531454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364531452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06aa08251a4e5fc4dad93242cbabace4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  bgmSounds:
+  - name: 
+    clip: {fileID: 8300000, guid: 5be2499a37f5e3a45a61f69b2870ac1a, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    clip: {fileID: 8300000, guid: 6dc5c32949c10c6449cca8f98fffc5c7, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    clip: {fileID: 8300000, guid: b71933bd0b7afb144a949b33260dd05d, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    clip: {fileID: 8300000, guid: e8d9b2547d7e8354daca175c9fbc3916, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    clip: {fileID: 8300000, guid: 37e3d4496b4b41a43be921ddca169a79, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  sfxSounds:
+  - name: VehicleCrash
+    clip: {fileID: 8300000, guid: 042b4da070551a94f924d67a6dcf5a1b, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerCrash
+    clip: {fileID: 8300000, guid: 042b4da070551a94f924d67a6dcf5a1b, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!1 &1365376101
 GameObject:
   m_ObjectHideFlags: 0
@@ -7539,6 +7628,8 @@ MonoBehaviour:
   vehiclePrefabs:
   - {fileID: 16396815157493227, guid: 324936705c1090445a79f3bb16f63a4a, type: 3}
   - {fileID: 4871419498508124253, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
+  - {fileID: 16396815157493227, guid: 9ee7d988014ddc743b6f9899fd78412c, type: 3}
+  - {fileID: 16396815157493227, guid: d9105b8f469c33347a85a76df30fbb9f, type: 3}
   selectedVehicleIndex: 0
 --- !u!1 &1921304889
 GameObject:
