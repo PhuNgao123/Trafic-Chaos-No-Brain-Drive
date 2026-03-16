@@ -96,48 +96,18 @@ public class StartMenuUI : MonoBehaviour
     {
         if (startButton == null) return;
         
-        // Find current vehicle in scene with tag "Car"
         GameObject currentVehicle = GameObject.FindGameObjectWithTag("Car");
         bool canStart = false;
-        int currentVehicleIndex = -1;
         
         if (currentVehicle != null)
         {
-            // Get VehicleInfo from current vehicle
             VehicleInfo vehicleInfo = currentVehicle.GetComponent<VehicleInfo>();
             if (vehicleInfo != null)
-            {
-                canStart = vehicleInfo.isOwned;
-                
-                // Find index of this vehicle in GarageManager for debugging
-                if (GarageManager.Instance != null)
-                {
-                    for (int i = 0; i < GarageManager.Instance.GetVehicleCount(); i++)
-                    {
-                        VehicleInfo prefabInfo = GarageManager.Instance.GetVehicleInfoAt(i);
-                        if (prefabInfo != null && prefabInfo.vehicleName == vehicleInfo.vehicleName)
-                        {
-                            currentVehicleIndex = i;
-                            break;
-                        }
-                    }
-                }
-                
-                Debug.Log($"[StartMenu] Current vehicle: {vehicleInfo.vehicleName} (index {currentVehicleIndex}), owned: {vehicleInfo.isOwned}, can start: {canStart}");
-            }
-            else
-            {
-                Debug.LogWarning("[StartMenu] Current vehicle has no VehicleInfo component");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("[StartMenu] No vehicle with tag 'Car' found in scene");
+                canStart = vehicleInfo.isOwned && vehicleInfo.isReady;
         }
         
         startButton.interactable = canStart;
         
-        // Update button text if needed
         TextMeshProUGUI buttonText = startButton.GetComponentInChildren<TextMeshProUGUI>();
         if (buttonText != null)
         {
@@ -148,6 +118,17 @@ public class StartMenuUI : MonoBehaviour
             }
             else
             {
+                // Find out why
+                if (currentVehicle != null)
+                {
+                    VehicleInfo vi = currentVehicle.GetComponent<VehicleInfo>();
+                    if (vi != null && vi.isOwned && !vi.isReady)
+                    {
+                        buttonText.text = "Vehicle Needs Repair";
+                        buttonText.color = Color.red;
+                        return;
+                    }
+                }
                 buttonText.text = "Vehicle Not Owned";
                 buttonText.color = Color.red;
             }
@@ -156,43 +137,22 @@ public class StartMenuUI : MonoBehaviour
 
     void OnStartButtonClicked()
     {
-        // Find current vehicle in scene with tag "Car"
         GameObject currentVehicle = GameObject.FindGameObjectWithTag("Car");
         
         if (currentVehicle != null)
         {
             VehicleInfo vehicleInfo = currentVehicle.GetComponent<VehicleInfo>();
-            if (vehicleInfo != null)
-            {
-                if (!vehicleInfo.isOwned)
-                {
-                    Debug.Log($"[StartMenu] Cannot start game - current vehicle {vehicleInfo.vehicleName} is not owned");
-                    return;
-                }
-                
-                Debug.Log($"[StartMenu] Starting game with owned vehicle: {vehicleInfo.vehicleName}");
-            }
-            else
-            {
-                Debug.LogWarning("[StartMenu] Current vehicle has no VehicleInfo component");
-                return;
-            }
+            if (vehicleInfo == null) return;
+            if (!vehicleInfo.isOwned || !vehicleInfo.isReady) return;
         }
-        else
-        {
-            Debug.LogWarning("[StartMenu] No vehicle with tag 'Car' found in scene");
-            return;
-        }
+        else return;
         
-        // Hide entire menu canvas
         if (menuCanvas != null)
             menuCanvas.enabled = false;
 
-        // Also hide panel if using panel-based approach
         if (menuPanel != null)
             menuPanel.SetActive(false);
 
-        // Start game
         if (gameLogic != null)
             gameLogic.StartGame();
     }

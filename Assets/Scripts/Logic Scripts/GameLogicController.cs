@@ -70,34 +70,26 @@ public class GameLogicController : MonoBehaviour
     // Call this to start the game
     public void StartGame()
     {
-        // Find current vehicle in scene with tag "Car"
         GameObject currentVehicle = GameObject.FindGameObjectWithTag("Car");
         
         if (currentVehicle != null)
         {
             VehicleInfo vehicleInfo = currentVehicle.GetComponent<VehicleInfo>();
-            if (vehicleInfo != null)
-            {
-                if (!vehicleInfo.isOwned)
-                {
-                    Debug.LogError($"[GameLogic] Cannot start game - current vehicle {vehicleInfo.vehicleName} is not owned!");
-                    return;
-                }
-                
-                Debug.Log($"[GameLogic] Starting game with owned vehicle: {vehicleInfo.vehicleName}");
-            }
-            else
-            {
-                Debug.LogWarning("[GameLogic] Current vehicle has no VehicleInfo component");
-            }
+            if (vehicleInfo != null && (!vehicleInfo.isOwned || !vehicleInfo.isReady))
+                return;
         }
-        else
-        {
-            Debug.LogWarning("[GameLogic] No vehicle with tag 'Car' found in scene");
-        }
+        else return;
         
         isGameStarted = true;
         isGameOver = false;
+
+        // Reset police flags
+        PoliceVehicle.ResetPoliceGameOverFlag();
+        GameLogicController.ResetPolicePenalty();
+        if (NearMissDetector.Instance != null)
+        {
+            NearMissDetector.Instance.ResetPoliceNearMiss();
+        }
 
         // Enable enemy spawner
         if (enemyController != null)
@@ -136,12 +128,19 @@ public class GameLogicController : MonoBehaviour
     }
 
     // Called when player collides with vehicle
-    public void TriggerGameOver(GameObject collidedVehicle, GameObject player)
+    public void TriggerGameOver(GameObject collidedVehicle, GameObject player, bool forcePolice = false)
     {
         if (isGameOver) return;
 
         isGameOver = true;
         _isCrashSlowDown = true;
+        
+        // Mark current vehicle as broken
+        if (GarageManager.Instance != null)
+        {
+            int idx = GarageManager.Instance.selectedVehicleIndex;
+            GarageManager.Instance.BreakVehicle(idx);
+        }
         
         if (AudioManager.Instance != null)
         {
@@ -149,41 +148,44 @@ public class GameLogicController : MonoBehaviour
             AudioManager.Instance.StopBGMPlaylist();
         }
 
-        // Mute audio for crashed vehicles (player muted on game over, enemy muted on crash)
-        Debug.Log($"[GameLogic] Game over - attempting to mute player audio. Player object: {(player != null ? player.name : "NULL")}");
-        MuteVehicleAudio(player); // Player audio muted when game over
+        MuteVehicleAudio(player);
         
         if (collidedVehicle != null && !collidedVehicle.CompareTag("Player"))
-        {
-            Debug.Log($"[GameLogic] Also muting enemy vehicle: {collidedVehicle.name}");
-            MuteVehicleAudio(collidedVehicle); // Enemy audio muted when crashed
-        }
+            MuteVehicleAudio(collidedVehicle);
 
-        // Log game over info
-        Debug.Log("========== GAME OVER ==========");
-        
-        // Log difficulty info from EnemyController
         if (enemyController != null)
-        {
             Debug.Log($"[GameOver] {enemyController.GetDifficultyInfo()}");
-        }
 
-        // Save score and convert to coins
         if (scoreController != null && CurrencyManager.Instance != null)
         {
             float finalScore = scoreController.GetCurrentScore();
-            Debug.Log($"[GameOver] Final Score: {finalScore:F0}");
             
-            // Update high score
             bool isNewHighScore = CurrencyManager.Instance.UpdateHighScore(finalScore);
             
-            // Convert score to coins
-            int coinsEarned = CurrencyManager.Instance.ConvertScoreToCoins(finalScore);
+            int coinsEarned = Mathf.FloorToInt(finalScore / 100f);
             
-            if (isNewHighScore)
+            // Check police: use forcePolice flag OR tag check on collidedVehicle
+            bool isPoliceGameOver = forcePolice
+                || (collidedVehicle != null && collidedVehicle.CompareTag("Police"))
+                || PoliceVehicle.LastGameOverWasPolice;
+
+            int penalty = 0;
+            if (isPoliceGameOver)
             {
-                Debug.Log("[GameOver] 🏆 NEW HIGH SCORE! 🏆");
+                PoliceVehicle.SetPoliceGameOverFlag();
+                penalty = CalculatePolicePenalty(coinsEarned);
             }
+
+            int netCoins = Mathf.Max(0, coinsEarned - penalty);
+            if (netCoins > 0)
+                CurrencyManager.Instance.AddCoins(netCoins);
+
+            LastPolicePenalty = penalty;
+
+            Debug.Log($"[GameOver] Coins earned: {coinsEarned} | Penalty: {penalty} | Net added: {netCoins} | Total coins: {CurrencyManager.Instance.GetCoins()}");
+
+            if (isNewHighScore)
+                Debug.Log("[GameOver] NEW HIGH SCORE!");
         }
         
         Debug.Log("===============================");
@@ -383,4 +385,21 @@ public class GameLogicController : MonoBehaviour
             Debug.LogWarning($"[GameLogic] No audio sources found on {vehicle.name} or its children");
         }
     }
+
+    // Calculate police penalty amount based on earned coins and near misses
+    int CalculatePolicePenalty(int coinsEarned)
+    {
+        int policeNearMisses = NearMissDetector.Instance != null
+            ? NearMissDetector.Instance.GetTotalPoliceNearMiss()
+            : 0;
+
+        int basePenalty = coinsEarned / 2;
+        int nearMissPenalty = policeNearMisses * 10;
+        return basePenalty + nearMissPenalty;
+    }
+
+    // Stores the penalty amount from last game over so DeathScreenUI can display it
+    public static int LastPolicePenalty { get; private set; } = 0;
+
+    public static void ResetPolicePenalty() => LastPolicePenalty = 0;
 }

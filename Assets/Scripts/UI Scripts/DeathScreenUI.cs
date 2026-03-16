@@ -15,10 +15,12 @@ public class DeathScreenUI : MonoBehaviour
     [Header("Display")]
     public TextMeshProUGUI finalScoreText;
     public TextMeshProUGUI coinsEarnedText;
+    public TextMeshProUGUI penaltyText;      // Shows police penalty (hidden if no penalty)
     public TextMeshProUGUI totalCoinsText;
     public TextMeshProUGUI highScoreText;
     public string finalScoreFormat = "Score: {0:N0}";
     public string coinsEarnedFormat = "+{0} Coins";
+    public string penaltyFormat = "Penalty -{0} Coins";
     public string totalCoinsFormat = "Total: {0} Coins";
     public string highScoreFormat = "High Score: {0:N0}";
 
@@ -155,33 +157,38 @@ public class DeathScreenUI : MonoBehaviour
             return;
 
         float finalScore = scoreController.GetCurrentScore();
-        int coinsEarned = Mathf.FloorToInt(finalScore / 100f); // 100 score = 1 coin
+        int coinsEarned = Mathf.FloorToInt(finalScore / 100f);
+        int penalty = GameLogicController.LastPolicePenalty;
+        int netCoins = Mathf.Max(0, coinsEarned - penalty);
         int totalCoins = CurrencyManager.Instance.GetCoins();
         float highScore = CurrencyManager.Instance.GetHighScore();
 
-        // Update final score
         if (finalScoreText != null)
-        {
             finalScoreText.text = string.Format(finalScoreFormat, finalScore);
-        }
 
-        // Update coins earned
         if (coinsEarnedText != null)
+            coinsEarnedText.text = string.Format(coinsEarnedFormat, netCoins);
+
+        // Show penalty line only if there was a police penalty
+        if (penaltyText != null)
         {
-            coinsEarnedText.text = string.Format(coinsEarnedFormat, coinsEarned);
+            if (penalty > 0)
+            {
+                penaltyText.gameObject.SetActive(true);
+                penaltyText.text = string.Format(penaltyFormat, penalty);
+                penaltyText.color = Color.red;
+            }
+            else
+            {
+                penaltyText.gameObject.SetActive(false);
+            }
         }
 
-        // Update total coins
         if (totalCoinsText != null)
-        {
             totalCoinsText.text = string.Format(totalCoinsFormat, totalCoins);
-        }
 
-        // Update high score
         if (highScoreText != null)
-        {
             highScoreText.text = string.Format(highScoreFormat, highScore);
-        }
     }
 
     void OnRestartClicked()

@@ -11,10 +11,12 @@ public class CurrencyManager : MonoBehaviour
     [SerializeField] private bool applyTestCoins = false;
 
     private const string COIN_KEY = "PlayerCoins";
+    private const string DIAMOND_KEY = "PlayerDiamonds";
     private const string HIGHSCORE_KEY = "HighScore";
     private const float SCORE_TO_COIN_RATIO = 100f; // 100 score = 1 coin
 
     private int _currentCoins;
+    private int _currentDiamonds;
     private float _currentHighScore;
 
     void Awake()
@@ -46,6 +48,7 @@ public class CurrencyManager : MonoBehaviour
     void LoadData()
     {
         _currentCoins = PlayerPrefs.GetInt(COIN_KEY, 0);
+        _currentDiamonds = PlayerPrefs.GetInt(DIAMOND_KEY, 0);
         _currentHighScore = PlayerPrefs.GetFloat(HIGHSCORE_KEY, 0f);
     }
 
@@ -53,6 +56,7 @@ public class CurrencyManager : MonoBehaviour
     void SaveData()
     {
         PlayerPrefs.SetInt(COIN_KEY, _currentCoins);
+        PlayerPrefs.SetInt(DIAMOND_KEY, _currentDiamonds);
         PlayerPrefs.SetFloat(HIGHSCORE_KEY, _currentHighScore);
         PlayerPrefs.Save();
     }
@@ -118,12 +122,31 @@ public class CurrencyManager : MonoBehaviour
 
     // Getters
     public int GetCoins() => _currentCoins;
+    public int GetDiamonds() => _currentDiamonds;
     public float GetHighScore() => _currentHighScore;
+
+    public void AddDiamonds(int amount)
+    {
+        _currentDiamonds += amount;
+        SaveData();
+    }
+
+    public bool SpendDiamonds(int amount)
+    {
+        if (_currentDiamonds >= amount)
+        {
+            _currentDiamonds -= amount;
+            SaveData();
+            return true;
+        }
+        return false;
+    }
 
     // For debugging/testing
     public void ResetData()
     {
         _currentCoins = 0;
+        _currentDiamonds = 0;
         _currentHighScore = 0f;
         SaveData();
     }

@@ -29,6 +29,7 @@ public class RoadSpawner : MonoBehaviour
     [Header("Spawn Pattern")]
     public int minNormalBeforeSpecial = 10;
     public int maxNormalBeforeSpecial = 20;
+    public float specialRoadDelay = 10f; // Seconds after game start before special roads can spawn
 
     private Queue<GameObject> _roads = new Queue<GameObject>();
     private Transform _lastEndPoint;
@@ -36,8 +37,9 @@ public class RoadSpawner : MonoBehaviour
     private int _patternIndex;
     private int _normalCount;
     private int _nextSpecialAt;
-    private bool _elevationEnabled = false; // Disable elevation until game starts
-    private float _perlinOffset; // Random offset for Perlin noise
+    private bool _elevationEnabled = false;
+    private float _perlinOffset;
+    private float _gameStartTime = -1f;
 
     void Start()
     {
@@ -63,6 +65,8 @@ public class RoadSpawner : MonoBehaviour
         if (!_elevationEnabled && GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted)
         {
             _elevationEnabled = true;
+            if (_gameStartTime < 0f)
+                _gameStartTime = Time.time;
         }
 
         // Determine delete distance based on game state
@@ -171,18 +175,20 @@ public class RoadSpawner : MonoBehaviour
     }
 
     // Returns next prefab based on pattern: R1-R1-R2-R1-R1-R2
-    // Special roads spawn every 10-20 normal roads
+    // Special roads spawn every 10-20 normal roads, only after game starts
     GameObject GetNextPrefab()
     {
-        // Spawn special road if count reached
-        if (specialRoadPrefabs.Count > 0 && _normalCount >= _nextSpecialAt)
+        bool gameStarted = GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted;
+        bool delayPassed = _gameStartTime >= 0f && (Time.time - _gameStartTime) >= specialRoadDelay;
+
+        // Only spawn special roads after game has started AND delay has passed
+        if (gameStarted && delayPassed && specialRoadPrefabs.Count > 0 && _normalCount >= _nextSpecialAt)
         {
             _normalCount = 0;
             _nextSpecialAt = Random.Range(minNormalBeforeSpecial, maxNormalBeforeSpecial + 1);
             return specialRoadPrefabs[Random.Range(0, specialRoadPrefabs.Count)];
         }
 
-        // Spawn normal road following pattern
         _normalCount++;
 
         GameObject prefab = (_patternIndex == 0 || _patternIndex == 1 || _patternIndex == 3 || _patternIndex == 4)
@@ -214,7 +220,7 @@ public class RoadSpawner : MonoBehaviour
         return new Vector3(x, y, z);
     }
 
-    // Public API: Get direction at specific Z coordinate
+
     public Vector3 GetDirectionAtZ(float z)
     {
         Vector3 current = GetPositionAtZ(z);
@@ -222,7 +228,7 @@ public class RoadSpawner : MonoBehaviour
         return (next - current).normalized;
     }
 
-    // Public API: Get elevation (Y) at specific Z coordinate
+
     public float GetElevationAtZ(float z)
     {
         if (!_elevationEnabled)

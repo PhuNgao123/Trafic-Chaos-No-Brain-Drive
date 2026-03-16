@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 5274290129757117073}
   m_Layer: 0
   m_Name: Police
-  m_TagString: Vehicle
+  m_TagString: Police
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -642,11 +642,12 @@ MonoBehaviour:
   direction: 1
   deleteZ: -50
   detectDistance: 5
-  slowDownFactor: 3
+  slowDownFactor: 1
   laneWidth: 4
   laneChangeSpeed: 2
   laneChangeCooldown: 1
   maxBounces: 2
+  vehicleAudioSource: {fileID: 0}
 --- !u!82 &281029244500939173
 AudioSource:
   m_ObjectHideFlags: 0

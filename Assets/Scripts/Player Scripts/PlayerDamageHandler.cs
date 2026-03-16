@@ -11,6 +11,7 @@ public class PlayerDamageHandler : MonoBehaviour
     private PlayerPhysics playerPhysics;
     private PlayerInvincibility playerInvincibility;
     private GameObject lastCollidedVehicle;
+    private bool _hitPolice = false; // Track police hit independently
 
     void Awake()
     {
@@ -55,40 +56,39 @@ public class PlayerDamageHandler : MonoBehaviour
     /// </summary>
     public void HandleCollision(Collision collision)
     {
-        // Try to find "Vehicle" tag on the collider's GameObject or its parent
         GameObject vehicleObject = null;
-        if (collision.gameObject.CompareTag("Vehicle"))
+        if (collision.gameObject.CompareTag("Vehicle") || collision.gameObject.CompareTag("Police"))
         {
             vehicleObject = collision.gameObject;
         }
-        else if (collision.transform.parent != null && collision.transform.parent.CompareTag("Vehicle"))
+        else if (collision.transform.parent != null && (collision.transform.parent.CompareTag("Vehicle") || collision.transform.parent.CompareTag("Police")))
         {
             vehicleObject = collision.transform.parent.gameObject;
         }
 
-        if (vehicleObject != null)
+        if (vehicleObject == null) return;
+
+        if (playerInvincibility != null && playerInvincibility.IsInvincible) return;
+
+        lastCollidedVehicle = vehicleObject;
+
+        // Track police hit independently - regardless of crash state
+        if (vehicleObject.CompareTag("Police"))
         {
-            // Check invincibility - if invincible then ignore damage
-            if (playerInvincibility != null && playerInvincibility.IsInvincible)
-            {
-                return;
-            }
+            _hitPolice = true;
+            Debug.Log($"[Police] Player hit police! HP before: {playerPhysics?.currentHealth}/{playerPhysics?.maxHealth}");
+        }
 
-            // Store reference to the colliding vehicle for game over handling
-            lastCollidedVehicle = vehicleObject;
+        // Both Police and Vehicle: use VehicleDamage component on the prefab
+        VehicleDamage vehicleDamage = vehicleObject.GetComponent<VehicleDamage>();
+        if (vehicleDamage == null)
+            vehicleDamage = vehicleObject.GetComponentInChildren<VehicleDamage>();
 
-            // Attempt to retrieve VehicleDamage component from the vehicle or its children
-            VehicleDamage vehicleDamage = vehicleObject.GetComponent<VehicleDamage>();
-            if (vehicleDamage == null)
-            {
-                vehicleDamage = vehicleObject.GetComponentInChildren<VehicleDamage>();
-            }
-
-            if (vehicleDamage != null && playerPhysics != null)
-            {
-                // Apply damage to player health
-                playerPhysics.TakeDamage(vehicleDamage.damage);
-            }
+        if (vehicleDamage != null && playerPhysics != null)
+        {
+            if (vehicleObject.CompareTag("Police"))
+                Debug.Log($"[Police] Player hit police! Damage: {vehicleDamage.damage}, HP before: {playerPhysics.currentHealth}/{playerPhysics.maxHealth}");
+            playerPhysics.TakeDamage(vehicleDamage.damage);
         }
     }
 
@@ -97,11 +97,10 @@ public class PlayerDamageHandler : MonoBehaviour
     /// </summary>
     private void HandleHealthDepleted()
     {
-        // Trigger game over through GameLogicController
         if (GameLogicController.Instance != null)
         {
-            // Pass the last collided vehicle and this GameObject (player) to TriggerGameOver
-            GameLogicController.Instance.TriggerGameOver(lastCollidedVehicle, gameObject);
+            // Pass police hit flag so penalty is applied correctly regardless of vehicle crash state
+            GameLogicController.Instance.TriggerGameOver(lastCollidedVehicle, gameObject, _hitPolice);
         }
     }
 }

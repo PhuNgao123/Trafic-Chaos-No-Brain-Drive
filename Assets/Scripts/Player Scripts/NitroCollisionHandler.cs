@@ -27,7 +27,7 @@ public class NitroCollisionHandler : MonoBehaviour
         // If nitro is active and we hit a vehicle, push it away
         if (nitroController != null && nitroController.IsNitroActive)
         {
-            if (collision.gameObject.CompareTag("Vehicle"))
+            if (collision.gameObject.CompareTag("Vehicle") || collision.gameObject.CompareTag("Police"))
             {
                 Debug.Log($"Nitro collision! Pushing {collision.gameObject.name}");
                 

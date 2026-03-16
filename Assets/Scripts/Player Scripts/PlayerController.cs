@@ -23,8 +23,8 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Check collision with vehicle
-        if (other.CompareTag("Vehicle"))
+        // Check collision with vehicle or police
+        if (other.CompareTag("Vehicle") || other.CompareTag("Police"))
         {
             // If nitro is active, destroy the bot car
             if (nitroController != null && nitroController.IsNitroActive)

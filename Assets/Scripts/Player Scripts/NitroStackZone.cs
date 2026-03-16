@@ -19,7 +19,7 @@ public class NitroStackZone : MonoBehaviour
         
         if (GameLogicController.Instance != null && GameLogicController.Instance.isGameOver) return;
 
-        if (other.CompareTag("Vehicle"))
+        if (other.CompareTag("Vehicle") || other.CompareTag("Police"))
         {
             nitroController.AddNitro(nitroAddPerSecond * Time.deltaTime);
             if (enableDebugLogs)

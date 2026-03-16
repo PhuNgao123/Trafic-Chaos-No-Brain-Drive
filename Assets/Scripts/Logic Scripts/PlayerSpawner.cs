@@ -100,6 +100,9 @@ public class PlayerSpawner : MonoBehaviour
             Debug.Log($"[PlayerSpawner] Successfully spawned {info.vehicleName} (owned: {info.isOwned})");
         }
 
+        // Apply upgrade bonus if vehicle is upgraded
+        VehicleUpgrader.ApplyUpgrade(spawnedPlayer);
+
         // Notify all controllers about the new player
         NotifyControllersOfPlayerChange();
     }

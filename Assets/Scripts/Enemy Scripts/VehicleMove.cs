@@ -77,7 +77,7 @@ public class VehicleMove : MonoBehaviour
         {
             Debug.DrawRay(rayOrigin, rayDirection * hit.distance, Color.green);
 
-            if (hit.collider.CompareTag("Vehicle") || hit.collider.CompareTag("Player"))
+            if (hit.collider.CompareTag("Vehicle") || hit.collider.CompareTag("Player") || hit.collider.CompareTag("Police"))
             {
                 obstacleFront = true;
                 // Adjust speed based on direction
@@ -101,8 +101,8 @@ public class VehicleMove : MonoBehaviour
                     }
                 }
 
-                // Try to change lane if cooldown passed (only for vehicles, not player)
-                if (hit.collider.CompareTag("Vehicle") && Time.time - _lastLaneChangeAttempt > laneChangeCooldown)
+                // Try to change lane if cooldown passed (only for vehicles and police, not player)
+                if ((hit.collider.CompareTag("Vehicle") || hit.collider.CompareTag("Police")) && Time.time - _lastLaneChangeAttempt > laneChangeCooldown)
                 {
                     TryChangeLane();
                     _lastLaneChangeAttempt = Time.time;
@@ -170,7 +170,7 @@ public class VehicleMove : MonoBehaviour
                 
                 foreach (var col in colliders)
                 {
-                    if (col.CompareTag("Vehicle") || col.CompareTag("Player"))
+                    if (col.CompareTag("Vehicle") || col.CompareTag("Player") || col.CompareTag("Police"))
                     {
                         isClear = false;
                         break;
@@ -273,7 +273,7 @@ public class VehicleMove : MonoBehaviour
         }
         
         // Collision with Vehicle - check bounce limit and cooldown
-        if (collision.gameObject.CompareTag("Vehicle"))
+        if (collision.gameObject.CompareTag("Vehicle") || collision.gameObject.CompareTag("Police"))
         {
             // Check if max bounces reached
             if (_bounceCount >= maxBounces)

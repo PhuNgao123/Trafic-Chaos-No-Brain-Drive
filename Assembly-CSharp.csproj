@@ -92,6 +92,7 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Rotatable.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\NitroCollisionHandler.cs" />
+    <Compile Include="Assets\Scripts\Enemy Scripts\PoliceVehicle.cs" />
     <Compile Include="Assets\Scripts\Audio Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\PowerUp Scripts\ShieldPowerUp.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\PlayerController.cs" />
@@ -105,11 +106,13 @@
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\IgnoreInInspectorAttribute.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\VehicleAudio.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\ShieldVisual.cs" />
+    <Compile Include="Assets\Scripts\Logic Scripts\VehicleUpgrader.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\VehicleDamage.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\GarageManager.cs" />
     <Compile Include="Assets\Scripts\PowerUp Scripts\NitroPowerUp.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\NitroController.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\ArrayArrangement.cs" />
+    <Compile Include="Assets\FreeAssests\FastMesh\Scripts\SceneViewText.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\DataResetButton.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\GameLogicController.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\ScoreController.cs" />
@@ -121,6 +124,7 @@
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\FreeAssests\FastMesh\README.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />

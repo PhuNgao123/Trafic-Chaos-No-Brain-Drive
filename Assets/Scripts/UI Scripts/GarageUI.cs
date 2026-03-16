@@ -17,6 +17,18 @@ public class GarageUI : MonoBehaviour
     public Button nextButton;
     public Button purchaseButton;
     
+    [Header("Upgrade")]
+    public Button upgradeButton;
+    public TextMeshProUGUI upgradeButtonText;
+    public TextMeshProUGUI diamondBalanceText;
+
+    [Header("Repair")]
+    public Button repairButton;          // Pay coins to start repair timer
+    public Button instantRepairButton;   // Pay diamonds to repair instantly
+    public TextMeshProUGUI repairButtonText;
+    public TextMeshProUGUI instantRepairButtonText;
+    public TextMeshProUGUI repairTimerText; // Shows countdown
+    
     [Header("Format Strings")]
     public string maxSpeedFormat = "Max Speed: {0}";
     public string accelerationFormat = "Acceleration: {0}";
@@ -28,6 +40,7 @@ public class GarageUI : MonoBehaviour
     
     private int currentIndex = 0;
     private Vector3 spawnPosition = new Vector3(6f, 0f, 0f);
+    private float _timerRefresh = 0f;
 
     void Start()
     {
@@ -41,6 +54,15 @@ public class GarageUI : MonoBehaviour
         if (purchaseButton != null)
             purchaseButton.onClick.AddListener(PurchaseCurrentVehicle);
         
+        if (upgradeButton != null)
+            upgradeButton.onClick.AddListener(UpgradeCurrentVehicle);
+        
+        if (repairButton != null)
+            repairButton.onClick.AddListener(RepairCurrentVehicle);
+        
+        if (instantRepairButton != null)
+            instantRepairButton.onClick.AddListener(InstantRepairCurrentVehicle);
+        
         // Load current selection
         if (GarageManager.Instance != null)
         {
@@ -49,6 +71,16 @@ public class GarageUI : MonoBehaviour
         
         // Update display immediately
         UpdateDisplay();
+    }
+
+    void Update()
+    {
+        _timerRefresh += Time.deltaTime;
+        if (_timerRefresh >= 1f)
+        {
+            _timerRefresh = 0f;
+            UpdateRepairTimer();
+        }
     }
 
     void PreviousVehicle()
@@ -149,6 +181,43 @@ public class GarageUI : MonoBehaviour
         // Method removed - auto-select when browsing unlocked vehicles
     }
 
+    void UpgradeCurrentVehicle()
+    {
+        if (GarageManager.Instance == null) return;
+        if (!GarageManager.Instance.IsVehicleOwned(currentIndex)) return;
+        if (GarageManager.Instance.IsVehicleUpgraded(currentIndex)) return;
+
+        bool success = GarageManager.Instance.UpgradeVehicle(currentIndex);
+        if (success)
+        {
+            UpdateDisplay();
+            NotifyStartMenuUpdate();
+        }
+    }
+
+    void RepairCurrentVehicle()
+    {
+        if (GarageManager.Instance == null) return;
+        // Only allow if broken and not already in repair queue
+        if (GarageManager.Instance.IsVehicleReady(currentIndex)) return;
+        if (GarageManager.Instance.GetRepairSecondsRemaining(currentIndex) > 0f) return;
+
+        bool success = GarageManager.Instance.StartRepair(currentIndex);
+        if (success) UpdateDisplay();
+    }
+
+    void InstantRepairCurrentVehicle()
+    {
+        if (GarageManager.Instance == null) return;
+        if (GarageManager.Instance.IsVehicleReady(currentIndex)) return;
+
+        bool success = GarageManager.Instance.InstantRepair(currentIndex);
+        if (success)
+        {
+            UpdateDisplay();
+            NotifyStartMenuUpdate();
+        }
+    }
     void SwapVehicle()
     {
         // Tìm và xóa xe cũ (tag "Car" - parent object)
@@ -207,6 +276,9 @@ public class GarageUI : MonoBehaviour
             
             // Notify các controllers về player mới
             NotifyPlayerChanged(newVehicle);
+            
+            // Apply upgrade bonus if vehicle is upgraded
+            VehicleUpgrader.ApplyUpgrade(newVehicle);
             
             Debug.Log($"Spawned new vehicle: {newVehicle.name} at {spawnPosition}");
         }
@@ -299,35 +371,116 @@ public class GarageUI : MonoBehaviour
         // Update purchase button and status
         bool isOwned = GarageManager.Instance.IsVehicleOwned(currentIndex);
         bool isSelected = currentIndex == GarageManager.Instance.selectedVehicleIndex;
+        bool isUpgraded = GarageManager.Instance.IsVehicleUpgraded(currentIndex);
+        bool isReady = GarageManager.Instance.IsVehicleReady(currentIndex);
+        float repairRemaining = GarageManager.Instance.GetRepairSecondsRemaining(currentIndex);
+        bool isInRepairQueue = repairRemaining > 0f;
         
         bool hasEnoughCoins = info != null && CurrencyManager.Instance != null && CurrencyManager.Instance.GetCoins() >= info.price;
+        bool hasEnoughDiamonds = info != null && CurrencyManager.Instance != null && CurrencyManager.Instance.GetDiamonds() >= info.upgradeCost;
+        bool hasRepairCoins = info != null && CurrencyManager.Instance != null && CurrencyManager.Instance.GetCoins() >= info.GetRepairCost();
+        int instantDiamondCost = GarageManager.Instance.GetInstantRepairDiamondCost(currentIndex);
+        bool hasInstantDiamonds = CurrencyManager.Instance != null && CurrencyManager.Instance.GetDiamonds() >= instantDiamondCost;
         
         if (purchaseButton != null)
         {
             if (isOwned)
             {
-                // Vehicle is owned - hide purchase button
                 purchaseButton.gameObject.SetActive(false);
             }
             else
             {
-                // Vehicle is not owned - show purchase button
                 purchaseButton.gameObject.SetActive(true);
                 purchaseButton.interactable = hasEnoughCoins;
                 
-                // Update button text based on affordability
                 TextMeshProUGUI buttonText = purchaseButton.GetComponentInChildren<TextMeshProUGUI>();
                 if (buttonText != null)
-                {
                     buttonText.text = hasEnoughCoins ? "Purchase" : "Not Enough Coins";
-                }
             }
         }
+
+        // Upgrade button: only show when owned, ready, and not yet upgraded
+        if (upgradeButton != null)
+        {
+            upgradeButton.gameObject.SetActive(isOwned && isReady && !isUpgraded);
+            if (isOwned && isReady && !isUpgraded)
+            {
+                upgradeButton.interactable = hasEnoughDiamonds;
+                if (upgradeButtonText != null)
+                    upgradeButtonText.text = hasEnoughDiamonds
+                        ? $"Upgrade ({info.upgradeCost} 💎)"
+                        : $"Need {info.upgradeCost} 💎";
+            }
+        }
+
+        // Repair buttons: only show when owned and broken
+        if (repairButton != null)
+        {
+            // Show "Pay to Repair" only when broken and NOT already in repair queue
+            repairButton.gameObject.SetActive(isOwned && !isReady && !isInRepairQueue);
+            if (isOwned && !isReady && !isInRepairQueue)
+            {
+                repairButton.interactable = hasRepairCoins;
+                if (repairButtonText != null)
+                    repairButtonText.text = hasRepairCoins
+                        ? $"Repair ({info.GetRepairCost()} coins)"
+                        : $"Need {info.GetRepairCost()} coins";
+            }
+        }
+
+        if (instantRepairButton != null)
+        {
+            // Show instant repair when broken (whether or not in queue)
+            instantRepairButton.gameObject.SetActive(isOwned && !isReady);
+            if (isOwned && !isReady)
+            {
+                instantRepairButton.interactable = hasInstantDiamonds;
+                if (instantRepairButtonText != null)
+                    instantRepairButtonText.text = hasInstantDiamonds
+                        ? $"Fix Now ({instantDiamondCost} 💎)"
+                        : $"Need {instantDiamondCost} 💎";
+            }
+        }
+
+        // Repair timer text
+        if (repairTimerText != null)
+        {
+            if (isOwned && !isReady && isInRepairQueue)
+            {
+                int mins = Mathf.FloorToInt(repairRemaining / 60f);
+                int secs = Mathf.FloorToInt(repairRemaining % 60f);
+                repairTimerText.text = $"Ready in {mins:D2}:{secs:D2}";
+                repairTimerText.gameObject.SetActive(true);
+            }
+            else
+            {
+                repairTimerText.gameObject.SetActive(false);
+            }
+        }
+
+        // Diamond balance display
+        if (diamondBalanceText != null && CurrencyManager.Instance != null)
+            diamondBalanceText.text = $"💎 {CurrencyManager.Instance.GetDiamonds()}";
         
         // Show status text
         if (priceText != null && info != null)
         {
-            if (isSelected)
+            if (!isReady && isOwned)
+            {
+                priceText.text = isInRepairQueue ? "REPAIRING..." : "BROKEN";
+                priceText.color = Color.red;
+            }
+            else if (isUpgraded && isSelected)
+            {
+                priceText.text = "UPGRADED ★";
+                priceText.color = Color.yellow;
+            }
+            else if (isUpgraded)
+            {
+                priceText.text = "UPGRADED";
+                priceText.color = Color.yellow;
+            }
+            else if (isSelected)
             {
                 priceText.text = selectedText;
                 priceText.color = Color.green;
@@ -349,6 +502,26 @@ public class GarageUI : MonoBehaviour
     public void RefreshDisplay()
     {
         UpdateDisplay();
+    }
+    
+    void UpdateRepairTimer()
+    {
+        if (GarageManager.Instance == null) return;
+        bool isReady = GarageManager.Instance.IsVehicleReady(currentIndex);
+        if (isReady) return;
+
+        float remaining = GarageManager.Instance.GetRepairSecondsRemaining(currentIndex);
+        if (remaining > 0f && repairTimerText != null)
+        {
+            int mins = Mathf.FloorToInt(remaining / 60f);
+            int secs = Mathf.FloorToInt(remaining % 60f);
+            repairTimerText.text = $"Ready in {mins:D2}:{secs:D2}";
+        }
+        else if (remaining <= 0f)
+        {
+            // Timer done - refresh full display
+            UpdateDisplay();
+        }
     }
     
     void NotifyStartMenuUpdate()
