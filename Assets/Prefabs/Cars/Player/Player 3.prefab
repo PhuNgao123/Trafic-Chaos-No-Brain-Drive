@@ -650,6 +650,7 @@ MonoBehaviour:
   isUpgraded: 0
   repairDurationSeconds: 200
   isReady: 0
+  repairCost: 150
   vehicleIcon: {fileID: 0}
 --- !u!1 &6689144836528477807
 GameObject:

@@ -4364,6 +4364,7 @@ Transform:
   - {fileID: 1915466416}
   - {fileID: 2128641825}
   - {fileID: 1364531453}
+  - {fileID: 1573939992}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1079842735
@@ -7357,6 +7358,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1511336471}
   m_CullTransparentMesh: 1
+--- !u!1 &1573939991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1573939992}
+  - component: {fileID: 1573939993}
+  m_Layer: 0
+  m_Name: Pursuit Police Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1573939992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573939991}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1036376660}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1573939993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573939991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7baed2d7900537745b275bfaa845a2cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PursuitPoliceController
+  pursuitPolicePrefab: {fileID: 5410792479107042040, guid: 0ba11e0a9d308324e9e3d6accb9d80d6, type: 3}
+  spawnZ: -15
+  followZ: -7
+  despawnZ: -20
+  approachSpeed: 10
+  xFollowSpeed: 3
+  retreatSpeed: 8
+  ramSpeed: 10
+  spawnDelay: 2
+  pursuitDuration: 5
+  respawnCooldown: 5
 --- !u!1 &1585057339
 GameObject:
   m_ObjectHideFlags: 0
@@ -7396,6 +7452,8 @@ MonoBehaviour:
   - {fileID: 1671369942}
   playerPhysics: {fileID: 0}
   scoreController: {fileID: 0}
+  policePenaltyRatio: 0.2
+  policeNearMissPenaltyPerHit: 5
   crashForce: 250
   bounceForce: 20
   crashSpeedDecay: 0.8
@@ -8765,7 +8823,7 @@ MonoBehaviour:
   baseHeight: 0
   perlinScale: 0.005
   perlinInfluence: 0.5
-  minNormalBeforeSpecial: 15
+  minNormalBeforeSpecial: 10
   maxNormalBeforeSpecial: 40
   specialRoadDelay: 10
 --- !u!4 &1853180303
@@ -8916,6 +8974,7 @@ MonoBehaviour:
   - {fileID: 4871419498508124253, guid: c5e73d6e1059184478d9e76ddad12bee, type: 3}
   - {fileID: 16396815157493227, guid: 9ee7d988014ddc743b6f9899fd78412c, type: 3}
   - {fileID: 16396815157493227, guid: d9105b8f469c33347a85a76df30fbb9f, type: 3}
+  upgradeMultiplier: 1.2
   selectedVehicleIndex: 0
 --- !u!1 &1921304889
 GameObject:
