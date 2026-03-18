@@ -344,6 +344,17 @@ public class GarageManager : MonoBehaviour
         return true;
     }
 
+    // Free instant repair via rewarded ad (no cost)
+    public void AdInstantRepair(int index)
+    {
+        VehicleInfo info = GetVehicleInfoAt(index);
+        if (info == null || info.isReady) return;
+        info.isReady = true;
+        PlayerPrefs.DeleteKey(REPAIR_TIME_KEY_PREFIX + index);
+        SaveRepairState();
+        PlayerPrefs.Save();
+    }
+
     // Pay diamonds to finish repair instantly
     public bool InstantRepair(int index)
     {

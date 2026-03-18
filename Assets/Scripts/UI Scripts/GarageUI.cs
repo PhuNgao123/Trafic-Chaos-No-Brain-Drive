@@ -23,8 +23,9 @@ public class GarageUI : MonoBehaviour
     public TextMeshProUGUI diamondBalanceText;
 
     [Header("Repair")]
-    public Button repairButton;          // Pay coins to start repair timer
-    public Button instantRepairButton;   // Pay diamonds to repair instantly
+    public Button repairButton;
+    public Button instantRepairButton;
+    public Button adRepairButton;           // Free instant repair via ad (placeholder)
     public TextMeshProUGUI repairButtonText;
     public TextMeshProUGUI instantRepairButtonText;
     public TextMeshProUGUI repairTimerText; // Shows countdown
@@ -62,6 +63,9 @@ public class GarageUI : MonoBehaviour
         
         if (instantRepairButton != null)
             instantRepairButton.onClick.AddListener(InstantRepairCurrentVehicle);
+
+        if (adRepairButton != null)
+            adRepairButton.onClick.AddListener(AdRepairCurrentVehicle);
         
         // Load current selection
         if (GarageManager.Instance != null)
@@ -224,6 +228,17 @@ public class GarageUI : MonoBehaviour
             UpdateDisplay();
             NotifyStartMenuUpdate();
         }
+    }
+
+    void AdRepairCurrentVehicle()
+    {
+        if (GarageManager.Instance == null) return;
+        if (GarageManager.Instance.IsVehicleReady(currentIndex)) return;
+
+        // TODO: Show rewarded ad here. For now, repair instantly for free.
+        GarageManager.Instance.AdInstantRepair(currentIndex);
+        UpdateDisplay();
+        NotifyStartMenuUpdate();
     }
     void SwapVehicle()
     {
@@ -414,8 +429,8 @@ public class GarageUI : MonoBehaviour
                 upgradeButton.interactable = hasEnoughDiamonds;
                 if (upgradeButtonText != null)
                     upgradeButtonText.text = hasEnoughDiamonds
-                        ? $"Upgrade ({info.upgradeCost} 💎)"
-                        : $"Need {info.upgradeCost} 💎";
+                        ? $"Upgrade ({info.upgradeCost} )"
+                        : $"Need {info.upgradeCost} ";
             }
         }
 
@@ -443,10 +458,13 @@ public class GarageUI : MonoBehaviour
                 instantRepairButton.interactable = hasInstantDiamonds;
                 if (instantRepairButtonText != null)
                     instantRepairButtonText.text = hasInstantDiamonds
-                        ? $"Fix Now ({instantDiamondCost} 💎)"
-                        : $"Need {instantDiamondCost} 💎";
+                        ? $"Fix Now ({instantDiamondCost} )"
+                        : $"Need {instantDiamondCost} ";
             }
         }
+
+        if (adRepairButton != null)
+            adRepairButton.gameObject.SetActive(isOwned && !isReady);
 
         // Repair timer text
         if (repairTimerText != null)
@@ -466,7 +484,7 @@ public class GarageUI : MonoBehaviour
 
         // Diamond balance display
         if (diamondBalanceText != null && CurrencyManager.Instance != null)
-            diamondBalanceText.text = $"💎 {CurrencyManager.Instance.GetDiamonds()}";
+            diamondBalanceText.text = $" {CurrencyManager.Instance.GetDiamonds()}";
         
         // Show status text
         if (priceText != null && info != null)
