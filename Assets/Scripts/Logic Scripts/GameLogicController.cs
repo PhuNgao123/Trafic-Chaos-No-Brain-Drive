@@ -17,7 +17,11 @@ public class GameLogicController : MonoBehaviour
     public PlayerPhysics playerPhysics;
     public ScoreController scoreController;
 
-    [Header("Crash Settings")]
+    [Header("Police Penalty")]
+    [Tooltip("Tỉ lệ phạt dựa trên coins kiếm được (0.5 = 50%)")]
+    public float policePenaltyRatio = 0.5f;
+    [Tooltip("Coins phạt thêm cho mỗi lần near miss xe police")]
+    public int policeNearMissPenaltyPerHit = 10;
     public float crashForce = 5f; // Force applied when vehicles crash (reduced)
     public float bounceForce = 3f; // Upward bounce force (reduced)
     public float crashSpeedDecay = 0.95f; // Speed decay per frame after crash (0.95 = lose 5% per frame)
@@ -45,7 +49,6 @@ public class GameLogicController : MonoBehaviour
     
     public void RefreshPlayerReference()
     {
-        // Auto-find references if not assigned
         if (roadSpawner == null)
             roadSpawner = FindFirstObjectByType<RoadSpawner>();
         
@@ -63,8 +66,6 @@ public class GameLogicController : MonoBehaviour
 
         if (scoreController == null)
             scoreController = FindFirstObjectByType<ScoreController>();
-            
-        Debug.Log("GameLogicController: Refreshed player references");
     }
 
     // Call this to start the game
@@ -84,18 +85,13 @@ public class GameLogicController : MonoBehaviour
         isGameOver = false;
 
         // Reset police flags
-        PoliceVehicle.ResetPoliceGameOverFlag();
         GameLogicController.ResetPolicePenalty();
         if (NearMissDetector.Instance != null)
-        {
             NearMissDetector.Instance.ResetPoliceNearMiss();
-        }
 
         // Enable enemy spawner
         if (enemyController != null)
             enemyController.enabled = true;
-
-        // Start score tracking
         if (scoreController != null)
             scoreController.StartGame();
             
@@ -128,7 +124,7 @@ public class GameLogicController : MonoBehaviour
     }
 
     // Called when player collides with vehicle
-    public void TriggerGameOver(GameObject collidedVehicle, GameObject player, bool forcePolice = false)
+    public void TriggerGameOver(GameObject collidedVehicle, GameObject player)
     {
         if (isGameOver) return;
 
@@ -154,7 +150,7 @@ public class GameLogicController : MonoBehaviour
             MuteVehicleAudio(collidedVehicle);
 
         if (enemyController != null)
-            Debug.Log($"[GameOver] {enemyController.GetDifficultyInfo()}");
+            enemyController.GetDifficultyInfo(); // keep reference valid
 
         if (scoreController != null && CurrencyManager.Instance != null)
         {
@@ -164,31 +160,19 @@ public class GameLogicController : MonoBehaviour
             
             int coinsEarned = Mathf.FloorToInt(finalScore / 100f);
             
-            // Check police: use forcePolice flag OR tag check on collidedVehicle
-            bool isPoliceGameOver = forcePolice
-                || (collidedVehicle != null && collidedVehicle.CompareTag("Police"))
-                || PoliceVehicle.LastGameOverWasPolice;
+            // Penalty chỉ tính khi xe cuối cùng đâm player là Police
+            bool isPoliceGameOver = collidedVehicle != null && collidedVehicle.CompareTag("Police");
 
             int penalty = 0;
             if (isPoliceGameOver)
-            {
-                PoliceVehicle.SetPoliceGameOverFlag();
                 penalty = CalculatePolicePenalty(coinsEarned);
-            }
 
             int netCoins = Mathf.Max(0, coinsEarned - penalty);
             if (netCoins > 0)
                 CurrencyManager.Instance.AddCoins(netCoins);
 
             LastPolicePenalty = penalty;
-
-            Debug.Log($"[GameOver] Coins earned: {coinsEarned} | Penalty: {penalty} | Net added: {netCoins} | Total coins: {CurrencyManager.Instance.GetCoins()}");
-
-            if (isNewHighScore)
-                Debug.Log("[GameOver] NEW HIGH SCORE!");
         }
-        
-        Debug.Log("===============================");
 
         // Disable player movement input
         if (playerPhysics != null)
@@ -359,30 +343,11 @@ public class GameLogicController : MonoBehaviour
     // Mute audio for a crashed vehicle
     void MuteVehicleAudio(GameObject vehicle)
     {
-        if (vehicle == null) 
-        {
-            Debug.LogWarning("[GameLogic] Cannot mute audio - vehicle is null");
-            return;
-        }
-        
-        // Simple approach: find and mute all audio sources on the vehicle
+        if (vehicle == null) return;
         AudioSource[] audioSources = vehicle.GetComponentsInChildren<AudioSource>();
-        
-        Debug.Log($"[GameLogic] Attempting to mute audio for {vehicle.name} - found {audioSources.Length} audio sources");
-        
         foreach (AudioSource source in audioSources)
         {
-            if (source != null)
-            {
-                float originalVolume = source.volume;
-                source.volume = 0f;
-                Debug.Log($"[GameLogic] Muted audio source on {source.gameObject.name} (was {originalVolume:F2}, now {source.volume:F2})");
-            }
-        }
-        
-        if (audioSources.Length == 0)
-        {
-            Debug.LogWarning($"[GameLogic] No audio sources found on {vehicle.name} or its children");
+            if (source != null) source.volume = 0f;
         }
     }
 
@@ -393,8 +358,8 @@ public class GameLogicController : MonoBehaviour
             ? NearMissDetector.Instance.GetTotalPoliceNearMiss()
             : 0;
 
-        int basePenalty = coinsEarned / 2;
-        int nearMissPenalty = policeNearMisses * 10;
+        int basePenalty = Mathf.RoundToInt(coinsEarned * policePenaltyRatio);
+        int nearMissPenalty = policeNearMisses * policeNearMissPenaltyPerHit;
         return basePenalty + nearMissPenalty;
     }
 

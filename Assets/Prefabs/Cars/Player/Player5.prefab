@@ -34,10 +34,6 @@ Transform:
   m_Children:
   - {fileID: 1490317689920158961}
   - {fileID: 6301778998289008072}
-  - {fileID: 181982837088333129}
-  - {fileID: 1906432437475593764}
-  - {fileID: 8871812590899895547}
-  - {fileID: 6480155405836205677}
   - {fileID: 8169363074123400545}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -170,6 +166,10 @@ MonoBehaviour:
   vehicleName: G63
   price: 1700
   isOwned: 0
+  upgradeCost: 25
+  isUpgraded: 0
+  repairDurationSeconds: 170
+  isReady: 1
   vehicleIcon: {fileID: 0}
 --- !u!1 &1343106629101617445
 GameObject:
@@ -355,11 +355,11 @@ Transform:
   m_GameObject: {fileID: 1772214410416924084}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.02, y: 1.259, z: -2.595}
-  m_LocalScale: {x: 1, y: 1.07143, z: 1}
+  m_LocalPosition: {x: 0.68, y: 0.039333265, z: -1.73}
+  m_LocalScale: {x: 0.6666667, y: 0.7142867, z: 0.6666667}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2866000225697755331}
+  m_Father: {fileID: 6301778998289008072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &5128679640532005025
 Light:
@@ -482,11 +482,11 @@ Transform:
   m_GameObject: {fileID: 3841578320207275686}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.826, y: 1.468, z: 2.455}
-  m_LocalScale: {x: 1, y: 1.07143, z: 1}
+  m_LocalPosition: {x: -0.5506667, y: 0.17866668, z: 1.6366667}
+  m_LocalScale: {x: 0.6666667, y: 0.7142867, z: 0.6666667}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2866000225697755331}
+  m_Father: {fileID: 6301778998289008072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &3882014933341085384
 Light:
@@ -609,11 +609,11 @@ Transform:
   m_GameObject: {fileID: 6810667117371919503}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.853, y: 1.424, z: 2.4}
-  m_LocalScale: {x: 1, y: 1.07143, z: 1}
+  m_LocalPosition: {x: 0.5686667, y: 0.14933333, z: 1.6000001}
+  m_LocalScale: {x: 0.6666667, y: 0.7142867, z: 0.6666667}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2866000225697755331}
+  m_Father: {fileID: 6301778998289008072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &7740420036867789205
 Light:
@@ -1020,11 +1020,11 @@ Transform:
   m_GameObject: {fileID: 9125149966178038350}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.061, y: 1.266, z: -2.696}
-  m_LocalScale: {x: 1, y: 1.07143, z: 1}
+  m_LocalPosition: {x: -0.7073333, y: 0.043999992, z: -1.7973335}
+  m_LocalScale: {x: 0.6666667, y: 0.7142867, z: 0.6666667}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2866000225697755331}
+  m_Father: {fileID: 6301778998289008072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &897506403855298899
 Light:
@@ -1190,7 +1190,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 344d33e51fe319c4c9568dabc486c3ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 181982837088333129}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 344d33e51fe319c4c9568dabc486c3ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1906432437475593764}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 344d33e51fe319c4c9568dabc486c3ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8871812590899895547}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 344d33e51fe319c4c9568dabc486c3ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6480155405836205677}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 344d33e51fe319c4c9568dabc486c3ff, type: 3}
       insertIndex: -1

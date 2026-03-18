@@ -11,7 +11,6 @@ public class PlayerDamageHandler : MonoBehaviour
     private PlayerPhysics playerPhysics;
     private PlayerInvincibility playerInvincibility;
     private GameObject lastCollidedVehicle;
-    private bool _hitPolice = false; // Track police hit independently
 
     void Awake()
     {
@@ -70,13 +69,20 @@ public class PlayerDamageHandler : MonoBehaviour
 
         if (playerInvincibility != null && playerInvincibility.IsInvincible) return;
 
+        // Ignore the pursuit car itself - PursuitPoliceCollision handles that separately
+        if (vehicleObject.GetComponent<PursuitPoliceCollision>() != null) return;
+
         lastCollidedVehicle = vehicleObject;
 
-        // Track police hit independently - regardless of crash state
         if (vehicleObject.CompareTag("Police"))
         {
-            _hitPolice = true;
-            Debug.Log($"[Police] Player hit police! HP before: {playerPhysics?.currentHealth}/{playerPhysics?.maxHealth}");
+            if (PursuitPoliceController.Instance != null)
+            {
+                if (PursuitPoliceController.isAlive)
+                    PursuitPoliceController.Instance.NotifyPlayerHitPoliceDuringPursuit();
+                else
+                    PursuitPoliceController.Instance.OnPlayerHitPolice();
+            }
         }
 
         // Both Police and Vehicle: use VehicleDamage component on the prefab
@@ -85,11 +91,7 @@ public class PlayerDamageHandler : MonoBehaviour
             vehicleDamage = vehicleObject.GetComponentInChildren<VehicleDamage>();
 
         if (vehicleDamage != null && playerPhysics != null)
-        {
-            if (vehicleObject.CompareTag("Police"))
-                Debug.Log($"[Police] Player hit police! Damage: {vehicleDamage.damage}, HP before: {playerPhysics.currentHealth}/{playerPhysics.maxHealth}");
             playerPhysics.TakeDamage(vehicleDamage.damage);
-        }
     }
 
     /// <summary>
@@ -98,9 +100,6 @@ public class PlayerDamageHandler : MonoBehaviour
     private void HandleHealthDepleted()
     {
         if (GameLogicController.Instance != null)
-        {
-            // Pass police hit flag so penalty is applied correctly regardless of vehicle crash state
-            GameLogicController.Instance.TriggerGameOver(lastCollidedVehicle, gameObject, _hitPolice);
-        }
+            GameLogicController.Instance.TriggerGameOver(lastCollidedVehicle, gameObject);
     }
 }

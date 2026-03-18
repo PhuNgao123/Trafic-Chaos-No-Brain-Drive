@@ -8,7 +8,11 @@ public class GarageManager : MonoBehaviour
     [Header("Vehicle Prefabs")]
     [Tooltip("Kéo các prefab xe vào đây. Prefab phải có component VehicleInfo và PlayerPhysics")]
     public List<GameObject> vehiclePrefabs = new List<GameObject>();
-    
+
+    [Header("Upgrade")]
+    [Tooltip("Stat multiplier when vehicle is upgraded (1.2 = +20%, 1.5 = +50%)")]
+    public float upgradeMultiplier = 1.2f;
+
     [Header("Current Selection")]
     public int selectedVehicleIndex = 0;
     

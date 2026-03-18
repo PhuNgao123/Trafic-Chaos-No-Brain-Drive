@@ -166,6 +166,10 @@ MonoBehaviour:
   vehicleName: Ford
   price: 1500
   isOwned: 1
+  upgradeCost: 25
+  isUpgraded: 0
+  repairDurationSeconds: 10
+  isReady: 0
   vehicleIcon: {fileID: 0}
 --- !u!1 &1343106629101617445
 GameObject:

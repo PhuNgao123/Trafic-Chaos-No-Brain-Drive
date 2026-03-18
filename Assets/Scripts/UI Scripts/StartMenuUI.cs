@@ -14,8 +14,10 @@ public class StartMenuUI : MonoBehaviour
 
     [Header("Display")]
     public TextMeshProUGUI coinsText;
+    public TextMeshProUGUI diamondsText;
     public TextMeshProUGUI highScoreText;
     public string coinsFormat = "Coins: {0}";
+    public string diamondsFormat = "💎 {0}";
     public string highScoreFormat = "High Score: {0:N0}";
 
     [Header("References")]
@@ -49,6 +51,9 @@ public class StartMenuUI : MonoBehaviour
         ShowMenu();
         UpdateDisplay();
         
+        // Delay first update to ensure PlayerSpawner has spawned the vehicle
+        Invoke(nameof(UpdateDisplay), 0.1f);
+        
         // Update display periodically to catch vehicle changes
         InvokeRepeating(nameof(UpdateDisplay), 0.5f, 0.5f);
     }
@@ -72,9 +77,10 @@ public class StartMenuUI : MonoBehaviour
     {
         // Update coins display
         if (coinsText != null && CurrencyManager.Instance != null)
-        {
             coinsText.text = string.Format(coinsFormat, CurrencyManager.Instance.GetCoins());
-        }
+
+        if (diamondsText != null && CurrencyManager.Instance != null)
+            diamondsText.text = string.Format(diamondsFormat, CurrencyManager.Instance.GetDiamonds());
 
         // Update high score display
         if (highScoreText != null && CurrencyManager.Instance != null)
@@ -111,27 +117,8 @@ public class StartMenuUI : MonoBehaviour
         TextMeshProUGUI buttonText = startButton.GetComponentInChildren<TextMeshProUGUI>();
         if (buttonText != null)
         {
-            if (canStart)
-            {
-                buttonText.text = "Start Game";
-                buttonText.color = Color.white;
-            }
-            else
-            {
-                // Find out why
-                if (currentVehicle != null)
-                {
-                    VehicleInfo vi = currentVehicle.GetComponent<VehicleInfo>();
-                    if (vi != null && vi.isOwned && !vi.isReady)
-                    {
-                        buttonText.text = "Vehicle Needs Repair";
-                        buttonText.color = Color.red;
-                        return;
-                    }
-                }
-                buttonText.text = "Vehicle Not Owned";
-                buttonText.color = Color.red;
-            }
+            buttonText.text = canStart ? "Start Game" : "Vehicle Unavailable";
+            buttonText.color = canStart ? Color.white : Color.red;
         }
     }
 

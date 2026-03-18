@@ -190,6 +190,13 @@ public class GarageUI : MonoBehaviour
         bool success = GarageManager.Instance.UpgradeVehicle(currentIndex);
         if (success)
         {
+            // Apply to scene instance if this is the currently selected vehicle
+            if (currentIndex == GarageManager.Instance.selectedVehicleIndex)
+            {
+                GameObject sceneInstance = GameObject.FindGameObjectWithTag("Car");
+                if (sceneInstance != null)
+                    VehicleUpgrader.ApplyUpgrade(sceneInstance);
+            }
             UpdateDisplay();
             NotifyStartMenuUpdate();
         }
@@ -277,7 +284,7 @@ public class GarageUI : MonoBehaviour
             // Notify các controllers về player mới
             NotifyPlayerChanged(newVehicle);
             
-            // Apply upgrade bonus if vehicle is upgraded
+            // Apply upgrade bonus to scene instance
             VehicleUpgrader.ApplyUpgrade(newVehicle);
             
             Debug.Log($"Spawned new vehicle: {newVehicle.name} at {spawnPosition}");
@@ -338,15 +345,14 @@ public class GarageUI : MonoBehaviour
     void UpdateDisplay()
     {
         if (GarageManager.Instance == null) return;
-        
-        // Lấy thông tin từ prefab
+
         VehicleInfo info = GarageManager.Instance.GetVehicleInfoAt(currentIndex);
+        if (info == null) return;
+
+        // Stats: always read from prefab (base stats), apply multiplier if upgraded
         PlayerPhysics physics = GarageManager.Instance.GetVehiclePhysicsAt(currentIndex);
-        
-        if (info == null)
-        {
-            return;
-        }
+        float displayMultiplier = (info.isUpgraded && GarageManager.Instance != null)
+            ? GarageManager.Instance.upgradeMultiplier : 1f;
         
         // Update vehicle info
         if (vehicleNameText != null)
@@ -356,16 +362,16 @@ public class GarageUI : MonoBehaviour
         if (physics != null)
         {
             if (maxSpeedText != null)
-                maxSpeedText.text = string.Format(maxSpeedFormat, physics.maxSpeed);
-            
+                maxSpeedText.text = string.Format(maxSpeedFormat, physics.maxSpeed * displayMultiplier);
+
             if (accelerationText != null)
-                accelerationText.text = string.Format(accelerationFormat, physics.acceleration);
-            
+                accelerationText.text = string.Format(accelerationFormat, physics.acceleration * displayMultiplier);
+
             if (steeringText != null)
-                steeringText.text = string.Format(steeringFormat, physics.steerSpeed);
-            
+                steeringText.text = string.Format(steeringFormat, physics.steerSpeed * displayMultiplier);
+
             if (handlingText != null)
-                handlingText.text = string.Format(handlingFormat, physics.maxSteerVelocity);
+                handlingText.text = string.Format(handlingFormat, physics.maxSteerVelocity * displayMultiplier);
         }
         
         // Update purchase button and status
@@ -498,6 +504,16 @@ public class GarageUI : MonoBehaviour
         }
     }
     
+    // Finds first child (recursive) with the given tag
+    GameObject FindChildWithTag(GameObject parent, string tag)
+    {
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>())
+        {
+            if (child.CompareTag(tag)) return child.gameObject;
+        }
+        return null;
+    }
+
     // Public method để refresh display từ bên ngoài (vd: khi mua thêm coin)
     public void RefreshDisplay()
     {

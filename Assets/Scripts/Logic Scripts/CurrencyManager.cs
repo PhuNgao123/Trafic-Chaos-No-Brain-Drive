@@ -9,6 +9,8 @@ public class CurrencyManager : MonoBehaviour
     [Header("Testing (Editor Only)")]
     [SerializeField] private int testCoins = 1000;
     [SerializeField] private bool applyTestCoins = false;
+    [SerializeField] private int testDiamonds = 100;
+    [SerializeField] private bool applyTestDiamonds = false;
 
     private const string COIN_KEY = "PlayerCoins";
     private const string DIAMOND_KEY = "PlayerDiamonds";
@@ -40,7 +42,12 @@ public class CurrencyManager : MonoBehaviour
         {
             applyTestCoins = false;
             SetCoins(testCoins);
-            Debug.Log($"Applied test coins: {testCoins}");
+        }
+
+        if (applyTestDiamonds)
+        {
+            applyTestDiamonds = false;
+            SetDiamonds(testDiamonds);
         }
     }
 
@@ -162,7 +169,12 @@ public class CurrencyManager : MonoBehaviour
     {
         _currentCoins = amount;
         SaveData();
-        Debug.Log($"[Currency] Set coins to {amount} (for testing)");
+    }
+
+    public void SetDiamonds(int amount)
+    {
+        _currentDiamonds = amount;
+        SaveData();
     }
 
     // Add coins directly (for testing)

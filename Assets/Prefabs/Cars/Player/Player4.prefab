@@ -34,10 +34,6 @@ Transform:
   m_Children:
   - {fileID: 1490317689920158961}
   - {fileID: 7838963939428863277}
-  - {fileID: 2518200249094953501}
-  - {fileID: 1587682146998915127}
-  - {fileID: 4475947848423004079}
-  - {fileID: 3429831212205803054}
   - {fileID: 8169363074123400545}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -170,6 +166,10 @@ MonoBehaviour:
   vehicleName: Bumble Bee
   price: 2500
   isOwned: 1
+  upgradeCost: 50
+  isUpgraded: 0
+  repairDurationSeconds: 250
+  isReady: 1
   vehicleIcon: {fileID: 0}
 --- !u!1 &1343106629101617445
 GameObject:
@@ -359,7 +359,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.07143, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2866000225697755331}
+  m_Father: {fileID: 7838963939428863277}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &7687787410000135182
 Light:
@@ -486,7 +486,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.07143, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2866000225697755331}
+  m_Father: {fileID: 7838963939428863277}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &5374429129228481213
 Light:
@@ -613,7 +613,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.07143, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2866000225697755331}
+  m_Father: {fileID: 7838963939428863277}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &2445724353096060588
 Light:
@@ -740,7 +740,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.07143, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2866000225697755331}
+  m_Father: {fileID: 7838963939428863277}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &5828006675312905260
 Light:
@@ -943,7 +943,7 @@ MonoBehaviour:
   roadMover: {fileID: 0}
   currentSpeed: 30
   minSpeed: 30
-  maxSpeed: 70
+  maxSpeed: 90
   nitroMaxSpeed: 100
   acceleration: 12
   deceleration: 5
@@ -1174,7 +1174,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1880317207959290724, guid: c4cad50aa03bbca42938fe318344950b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2518200249094953501}
+    - targetCorrespondingSourceObject: {fileID: 1880317207959290724, guid: c4cad50aa03bbca42938fe318344950b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1587682146998915127}
+    - targetCorrespondingSourceObject: {fileID: 1880317207959290724, guid: c4cad50aa03bbca42938fe318344950b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4475947848423004079}
+    - targetCorrespondingSourceObject: {fileID: 1880317207959290724, guid: c4cad50aa03bbca42938fe318344950b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3429831212205803054}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1248598967819147742, guid: c4cad50aa03bbca42938fe318344950b, type: 3}
       insertIndex: -1

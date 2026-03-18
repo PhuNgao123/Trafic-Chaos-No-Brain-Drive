@@ -52,8 +52,10 @@
     <Compile Include="Assets\Scripts\Enemy Scripts\VehicleSpawner.cs" />
     <Compile Include="Assets\Scripts\Logic Scripts\DayNightCycle.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\Inspector\KiiValuePair.cs" />
+    <Compile Include="Assets\Scripts\Enemy Scripts\PursuitPoliceCollision.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\RoadSpawner.cs" />
     <Compile Include="Assets\Scripts\Road Scripts\RoadMover.cs" />
+    <Compile Include="Assets\Scripts\Enemy Scripts\PursuitPoliceController.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\ScoreMultiplierUI.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\RotatableObject.cs" />
     <Compile Include="Assets\FreeAssests\Fries and Seagull\City 03\Scene Props\Scripts\GlowLight.cs" />

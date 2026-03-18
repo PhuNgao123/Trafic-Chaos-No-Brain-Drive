@@ -645,7 +645,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VehicleInfo
   vehicleName: Muscle Car
   price: 2000
-  isOwned: 0
+  isOwned: 1
+  upgradeCost: 40
+  isUpgraded: 0
+  repairDurationSeconds: 200
+  isReady: 0
   vehicleIcon: {fileID: 0}
 --- !u!1 &6689144836528477807
 GameObject:
