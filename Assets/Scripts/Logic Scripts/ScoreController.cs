@@ -55,29 +55,22 @@ public class ScoreController : MonoBehaviour
 
     void Start()
     {
-        RefreshPlayerReference();
+        Invoke(nameof(RefreshPlayerReference), 0.1f);
     }
     
     public void RefreshPlayerReference()
     {
-        // Auto-find references
-        if (playerPhysics == null)
-            playerPhysics = FindFirstObjectByType<PlayerPhysics>();
+        playerPhysics = FindFirstObjectByType<PlayerPhysics>();
+        gameLogic = FindFirstObjectByType<GameLogicController>();
 
-        if (gameLogic == null)
-            gameLogic = FindFirstObjectByType<GameLogicController>();
-            
-        // Get multiplier controller from player
         if (playerPhysics != null)
-        {
             _multiplierController = playerPhysics.GetComponent<ScoreMultiplierController>();
-        }
-            
-        Debug.Log("ScoreController: Refreshed player references");
     }
 
     void Update()
     {
+        if (playerPhysics == null) { RefreshPlayerReference(); return; }
+
         if (!_isGameStarted || (gameLogic != null && gameLogic.isGameOver))
             return;
 

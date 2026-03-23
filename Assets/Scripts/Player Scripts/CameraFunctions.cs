@@ -56,45 +56,43 @@ public class CameraFunctions : MonoBehaviour
 
     void Start()
     {
-        RefreshPlayerReference();
-        
         if (cam == null)
             cam = GetComponent<Camera>();
-
-        if (target != null)
-            _lastTargetPos = target.position;
 
         _currentFOV = baseFOV;
         if (cam != null)
             cam.fieldOfView = _currentFOV;
-        
+
         _currentZoomMultiplier = 1f;
 
         // Set initial menu position
         transform.position = menuPosition;
         transform.eulerAngles = menuRotation;
+
+        // Delay refresh to ensure PlayerSpawner has spawned the vehicle first
+        Invoke(nameof(RefreshPlayerReference), 0.1f);
     }
     
     public void RefreshPlayerReference()
     {
-        // Auto-find PlayerPhysics if not set
-        if (playerPhysics == null)
-            playerPhysics = FindFirstObjectByType<PlayerPhysics>();
+        playerPhysics = FindFirstObjectByType<PlayerPhysics>();
+        nitroController = FindFirstObjectByType<NitroController>();
 
-        // Auto-find NitroController if not set
-        if (nitroController == null)
-            nitroController = FindFirstObjectByType<NitroController>();
-
-        // Use PlayerPhysics as target if not set
-        if (target == null && playerPhysics != null)
+        if (playerPhysics != null)
+        {
             target = playerPhysics.transform;
-            
-        Debug.Log("CameraFunctions: Refreshed player references");
+            _lastTargetPos = target.position;
+        }
     }
 
     void LateUpdate()
     {
-        if (target == null) return;
+        // Retry finding player if not found yet
+        if (target == null)
+        {
+            RefreshPlayerReference();
+            return;
+        }
 
         // Check if game started
         if (_isInMenuMode && GameLogicController.Instance != null && GameLogicController.Instance.isGameStarted)
