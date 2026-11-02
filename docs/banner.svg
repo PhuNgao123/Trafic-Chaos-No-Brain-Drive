@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 440" width="1280" height="440">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#05010f"/>
+      <stop offset="0.45" stop-color="#1b0638"/>
+      <stop offset="0.85" stop-color="#4a0d5c"/>
+      <stop offset="1" stop-color="#ff2e88"/>
+    </linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe259"/>
+      <stop offset="0.55" stop-color="#ff7b39"/>
+      <stop offset="1" stop-color="#ff2e88"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6c2"/>
+      <stop offset="0.45" stop-color="#ffd23f"/>
+      <stop offset="0.75" stop-color="#ff7b39"/>
+      <stop offset="1" stop-color="#ff2e88"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a0433"/>
+      <stop offset="1" stop-color="#07010f"/>
+    </linearGradient>
+    <linearGradient id="asphalt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1b2e"/>
+      <stop offset="1" stop-color="#0d0c16"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.3" stop-color="#7ef9ff"/>
+      <stop offset="1" stop-color="#00a2ff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="sunStripes">
+      <rect x="0" y="0" width="1280" height="440" fill="#fff"/>
+      <rect x="0" y="206" width="1280" height="4" fill="#000"/>
+      <rect x="0" y="220" width="1280" height="6" fill="#000"/>
+      <rect x="0" y="235" width="1280" height="8" fill="#000"/>
+      <rect x="0" y="251" width="1280" height="10" fill="#000"/>
+    </mask>
+    <clipPath id="aboveHorizon"><rect x="0" y="0" width="1280" height="262"/></clipPath>
+    <clipPath id="frame"><rect x="0" y="0" width="1280" height="440" rx="22"/></clipPath>
+    <filter id="glow" x="-20%" y="-50%" width="140%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="bigGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+
+    <!-- Oncoming traffic car, front view, centred on 0,0 -->
+    <g id="car">
+      <ellipse cx="0" cy="30" rx="66" ry="8" fill="#000" opacity="0.5"/>
+      <path d="M-40 -34 L40 -34 L52 -6 L-52 -6 Z" fill="#2b2f4a"/>
+      <path d="M-34 -29 L34 -29 L43 -9 L-43 -9 Z" fill="#7ad7ff" opacity="0.35"/>
+      <rect x="-62" y="-8" width="124" height="34" rx="9" fill="currentColor"/>
+      <rect x="-56" y="16" width="112" height="6" rx="3" fill="#000" opacity="0.35"/>
+      <rect x="-54" y="0" width="24" height="9" rx="4" fill="#fffbe0" filter="url(#softGlow)"/>
+      <rect x="30" y="0" width="24" height="9" rx="4" fill="#fffbe0" filter="url(#softGlow)"/>
+      <rect x="-18" y="4" width="36" height="8" rx="2" fill="#000" opacity="0.4"/>
+      <rect x="-58" y="24" width="18" height="12" rx="3" fill="#0b0b12"/>
+      <rect x="40" y="24" width="18" height="12" rx="3" fill="#0b0b12"/>
+    </g>
+
+    <!-- Player car, rear view -->
+    <g id="player">
+      <ellipse cx="0" cy="38" rx="80" ry="10" fill="#000" opacity="0.6"/>
+      <path d="M-46 -40 L46 -40 L60 -8 L-60 -8 Z" fill="#14d9ff"/>
+      <path d="M-38 -34 L38 -34 L48 -12 L-48 -12 Z" fill="#0a1a2e"/>
+      <rect x="-74" y="-10" width="148" height="40" rx="11" fill="#00b8e6"/>
+      <rect x="-74" y="-10" width="148" height="10" rx="5" fill="#5cf0ff" opacity="0.6"/>
+      <rect x="-66" y="2" width="36" height="9" rx="4" fill="#ff2e55" filter="url(#softGlow)"/>
+      <rect x="30" y="2" width="36" height="9" rx="4" fill="#ff2e55" filter="url(#softGlow)"/>
+      <rect x="-22" y="6" width="44" height="12" rx="2" fill="#ffd23f"/>
+      <rect x="-70" y="28" width="22" height="14" rx="3" fill="#0b0b12"/>
+      <rect x="48" y="28" width="22" height="14" rx="3" fill="#0b0b12"/>
+      <path class="flame" d="M-38 30 Q-32 74 -26 30 Z" fill="url(#flame)" filter="url(#softGlow)"/>
+      <path class="flame f2" d="M26 30 Q32 74 38 30 Z" fill="url(#flame)" filter="url(#softGlow)"/>
+    </g>
+
+    <style>
+      .dash { stroke-dasharray: 26 34; animation: road 0.45s linear infinite; }
+      @keyframes road { to { stroke-dashoffset: -60; } }
+      .twinkle { animation: tw 3s ease-in-out infinite; }
+      .twinkle:nth-child(2n) { animation-delay: -1.2s; }
+      .twinkle:nth-child(3n) { animation-delay: -2.1s; animation-duration: 4s; }
+      @keyframes tw { 0%,100% { opacity: .15; } 50% { opacity: 1; } }
+      .c1 { animation: lane1 2.6s cubic-bezier(.55,0,.9,.6) infinite; }
+      .c2 { animation: lane3 3.1s cubic-bezier(.55,0,.9,.6) infinite -1.3s; }
+      .c3 { animation: lane4 2.3s cubic-bezier(.55,0,.9,.6) infinite -0.5s; }
+      .c4 { animation: lane3 3.1s cubic-bezier(.55,0,.9,.6) infinite -2.85s; }
+      @keyframes lane1 { from { transform: translate(628px,262px) scale(.04); } to { transform: translate(150px,520px) scale(1.55); } }
+      @keyframes lane3 { from { transform: translate(652px,262px) scale(.04); } to { transform: translate(890px,520px) scale(1.55); } }
+      @keyframes lane4 { from { transform: translate(664px,262px) scale(.04); } to { transform: translate(1130px,520px) scale(1.55); } }
+      .sway { animation: sway 3.4s ease-in-out infinite; }
+      @keyframes sway { 0%,100% { transform: translate(470px,392px); } 50% { transform: translate(520px,392px); } }
+      .flame { animation: flick .12s steps(2) infinite alternate; transform-origin: 0 30px; }
+      .f2 { animation-delay: .06s; }
+      @keyframes flick { from { transform: scaleY(.65); opacity: .7; } to { transform: scaleY(1.15); opacity: 1; } }
+      .pulse { animation: pulse 2.4s ease-in-out infinite; }
+      @keyframes pulse { 0%,100% { opacity: .55; } 50% { opacity: .9; } }
+      .sub { letter-spacing: 14px; }
+      .siren { animation: siren .5s steps(1) infinite; }
+      @keyframes siren { 0% { fill: #ff2e55; } 50% { fill: #2e7bff; } }
+    </style>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <!-- Sky -->
+    <rect width="1280" height="440" fill="url(#sky)"/>
+    <g fill="#fff">
+      <circle class="twinkle" cx="90" cy="40" r="1.6"/><circle class="twinkle" cx="210" cy="92" r="1.2"/>
+      <circle class="twinkle" cx="330" cy="30" r="1.4"/><circle class="twinkle" cx="420" cy="110" r="1"/>
+      <circle class="twinkle" cx="530" cy="55" r="1.3"/><circle class="twinkle" cx="760" cy="38" r="1.5"/>
+      <circle class="twinkle" cx="860" cy="100" r="1.1"/><circle class="twinkle" cx="960" cy="48" r="1.6"/>
+      <circle class="twinkle" cx="1060" cy="88" r="1.2"/><circle class="twinkle" cx="1180" cy="34" r="1.5"/>
+      <circle class="twinkle" cx="1230" cy="120" r="1"/><circle class="twinkle" cx="40" cy="140" r="1.2"/>
+      <circle class="twinkle" cx="1130" cy="160" r="1.1"/><circle class="twinkle" cx="160" cy="175" r="1"/>
+    </g>
+
+    <!-- Sun -->
+    <circle class="pulse" cx="640" cy="232" r="170" fill="#ff2e88" filter="url(#bigGlow)"/>
+    <g clip-path="url(#aboveHorizon)">
+      <circle cx="640" cy="232" r="128" fill="url(#sun)" mask="url(#sunStripes)"/>
+    </g>
+
+    <!-- Skyline -->
+    <g fill="#0c0220" clip-path="url(#aboveHorizon)">
+      <path d="M0 262 V200 H40 V170 H70 V210 H100 V150 H140 V190 H170 V130 H200 V120 H215 V130 H240 V200 H280 V175 H320 V215 H350 V160 H390 V205 H430 V185 H470 V230 H510 V262 Z"/>
+      <path d="M770 262 V225 H800 V180 H840 V200 H870 V140 H905 V128 H920 V140 H950 V195 H990 V165 H1030 V210 H1060 V150 H1100 V185 H1140 V120 H1170 V110 H1185 V120 H1210 V200 H1250 V170 H1280 V262 Z"/>
+    </g>
+    <g fill="#ffd23f" opacity="0.75">
+      <rect x="110" y="165" width="4" height="5"/><rect x="122" y="180" width="4" height="5"/><rect x="180" y="145" width="4" height="5"/>
+      <rect x="190" y="170" width="4" height="5"/><rect x="225" y="150" width="4" height="5"/><rect x="360" y="175" width="4" height="5"/>
+      <rect x="880" y="160" width="4" height="5"/><rect x="895" y="185" width="4" height="5"/><rect x="1070" y="170" width="4" height="5"/>
+      <rect x="1150" y="140" width="4" height="5"/><rect x="1160" y="165" width="4" height="5"/><rect x="1225" y="185" width="4" height="5"/>
+    </g>
+    <g fill="#ff2e55" filter="url(#softGlow)">
+      <circle cx="207" cy="118" r="2.5" class="twinkle"/><circle cx="912" cy="126" r="2.5" class="twinkle"/><circle cx="1177" cy="108" r="2.5" class="twinkle"/>
+    </g>
+
+    <!-- Ground + neon grid -->
+    <rect x="0" y="262" width="1280" height="178" fill="url(#ground)"/>
+    <g stroke="#ff2e88" stroke-width="1.2" opacity="0.55">
+      <line x1="0" y1="270" x2="1280" y2="270"/><line x1="0" y1="282" x2="1280" y2="282"/>
+      <line x1="0" y1="298" x2="1280" y2="298"/><line x1="0" y1="320" x2="1280" y2="320"/>
+      <line x1="0" y1="350" x2="1280" y2="350"/><line x1="0" y1="392" x2="1280" y2="392"/>
+      <line x1="560" y1="262" x2="-700" y2="440"/><line x1="580" y1="262" x2="-300" y2="440"/>
+      <line x1="600" y1="262" x2="0" y2="440"/><line x1="680" y1="262" x2="1280" y2="440"/>
+      <line x1="700" y1="262" x2="1580" y2="440"/><line x1="720" y1="262" x2="1980" y2="440"/>
+    </g>
+
+    <!-- Road -->
+    <path d="M622 262 L658 262 L1290 440 L-10 440 Z" fill="url(#asphalt)"/>
+    <g stroke="#00e5ff" stroke-width="4" filter="url(#softGlow)">
+      <line x1="622" y1="262" x2="-10" y2="440"/>
+      <line x1="658" y1="262" x2="1290" y2="440"/>
+    </g>
+    <g stroke="#ffd23f" stroke-width="5" opacity="0.9">
+      <line class="dash" x1="631" y1="262" x2="310" y2="440"/>
+      <line class="dash" x1="640" y1="262" x2="640" y2="440"/>
+      <line class="dash" x1="649" y1="262" x2="970" y2="440"/>
+    </g>
+
+    <!-- Traffic -->
+    <use href="#car" class="c1" color="#ff7b39"/>
+    <use href="#car" class="c2" color="#b14dff"/>
+    <use href="#car" class="c3" color="#f5f5f5"/>
+    <g class="c4">
+      <use href="#car" color="#1d2a6b"/>
+      <rect x="-22" y="-42" width="20" height="8" rx="2" class="siren"/>
+      <rect x="2" y="-42" width="20" height="8" rx="2" fill="#2e7bff" class="siren" style="animation-delay:.25s"/>
+    </g>
+
+    <!-- Player -->
+    <g class="sway"><use href="#player"/></g>
+
+    <!-- Title -->
+    <g text-anchor="middle" font-family="'Arial Black','Segoe UI Black',Impact,'Helvetica Neue',sans-serif" font-weight="900">
+      <text x="640" y="118" font-size="92" font-style="italic" fill="#ff2e88" opacity="0.65" filter="url(#glow)" transform="translate(4 5)">TRAFFIC CHAOS</text>
+      <text x="640" y="118" font-size="92" font-style="italic" fill="url(#title)" stroke="#2a0845" stroke-width="2.5" paint-order="stroke">TRAFFIC CHAOS</text>
+      <text x="640" y="166" font-size="24" class="sub" fill="#7ef9ff" filter="url(#softGlow)">NO · BRAIN · DRIVE</text>
+    </g>
+  </g>
+  <rect x="1" y="1" width="1278" height="438" rx="22" fill="none" stroke="#ff2e88" stroke-opacity="0.35" stroke-width="2"/>
+</svg>
