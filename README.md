@@ -3,7 +3,7 @@
 <img src="docs/banner.svg" width="100%" alt="Traffic Chaos: No Brain Drive"/>
 
 <a href="#-gameplay">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=22&duration=2600&pause=700&color=FF2E88&center=true&vCenter=true&width=760&lines=Weave+through+rush-hour+traffic+%F0%9F%9A%97%F0%9F%92%A8;Skim+past+cars+for+NEAR-MISS+combos+%F0%9F%98%AE%E2%80%8D%F0%9F%92%A8;Draft+traffic+%E2%86%92+charge+NITRO+%E2%86%92+smash+through+%F0%9F%94%A5;Hit+a+cop%3F+Here+comes+the+pursuit+%F0%9F%9A%A8;Cash+in%2C+upgrade%2C+repeat+%F0%9F%94%A7" alt="Typing animation"/>
+  <img src="docs/headgif.gif" width="100%" alt="Gameplay preview"/>
 </a>
 
 <p>
@@ -282,6 +282,6 @@ git clone https://github.com/PhuNgao123/Trafic-Chaos-No-Brain-Drive.git
 <br/>
 
 <div align="center">
-  <img src="docs/footer.svg" width="100%" alt="Drive fast, dodge smart, no brain required"/>
+  <img src="docs/tailgif.gif" width="100%" alt="Drive fast, dodge smart, no brain required"/>
   <sub>Built with Unity 6 · Made with ❤️ and questionable driving decisions</sub>
 </div>
