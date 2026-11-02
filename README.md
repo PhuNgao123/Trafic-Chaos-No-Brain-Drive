@@ -1,6 +1,5 @@
 <div align="center">
 
-<img src="docs/banner.svg" width="100%" alt="Traffic Chaos: No Brain Drive"/>
 
 <a href="#-gameplay">
   <img src="docs/headgif.gif" width="100%" alt="Gameplay preview"/>
